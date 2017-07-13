@@ -17,11 +17,15 @@ import rx.functions.Func1;
 
 public abstract class StringListener implements Callback {
 
-    public abstract void onSuccess (String  s) throws IOException;
+    public abstract void onSuccess (String s) throws IOException;
     public abstract void onFailure (String e);
 
     @Override
     public void onFailure(Call call, IOException e) {
+        if(e.getMessage() == null){
+            onFailure("unknown error");
+            return;
+        }
         Observable.just(e.getMessage())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<String>() {
@@ -56,7 +60,9 @@ public abstract class StringListener implements Callback {
 
                     @Override
                     public void onError(Throwable e) {
-                        onFailure(e.getMessage());
+                        if(e.getMessage() != null){
+                            onFailure(e.getMessage());
+                        }
                     }
 
                     @Override

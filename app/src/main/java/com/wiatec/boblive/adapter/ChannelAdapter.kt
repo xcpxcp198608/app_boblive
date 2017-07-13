@@ -14,10 +14,10 @@ import com.wiatec.boblive.utils.Zoom
  * Created by patrick on 19/06/2017.
  * create time : 9:54 AM
  */
-class ChannelAdapter(val channelInfoList: ArrayList<ChannelInfo>,
-                     val onItemClickListener: OnItemClickListener): RecyclerView.Adapter<ChannelAdapterViewHolder>() {
+class ChannelAdapter(val channelInfoList: ArrayList<ChannelInfo>): RecyclerView.Adapter<ChannelAdapterViewHolder>() {
 
     var context: Context? = null
+    private var onItemClickListener: OnItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ChannelAdapterViewHolder {
         context = parent!!.context
@@ -35,7 +35,11 @@ class ChannelAdapter(val channelInfoList: ArrayList<ChannelInfo>,
                 .error(R.drawable.logo_live)
                 .dontAnimate()
                 .into(holder.ivIcon)
-        holder.itemView.setOnClickListener { v -> onItemClickListener.onItemClick(v, position)}
+        holder.itemView.setOnClickListener { v ->
+            if (onItemClickListener != null) {
+                onItemClickListener!!.onItemClick(v, position)
+            }
+        }
         holder.itemView.setOnFocusChangeListener { v, hasFocus ->
             if(hasFocus){
                 holder.tvName.isSelected = true
@@ -53,5 +57,9 @@ class ChannelAdapter(val channelInfoList: ArrayList<ChannelInfo>,
 
     interface OnItemClickListener{
         fun onItemClick(view: View, position: Int)
+    }
+
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener){
+        this.onItemClickListener = onItemClickListener
     }
 }

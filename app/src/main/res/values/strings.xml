@@ -33,8 +33,9 @@
     <string name="copyright">All resources are from internet, for educational purpose only</string>
     <string name="live">Live</string>
     <string name="confirm_exit">Do you confirm exit?</string>
-    <string name="data_loading">data loading... :)</string>
-    <string name="data_load_error">data load error :(</string>
+    <string name="data_loading">Loading...</string>
+    <string name="data_load_error">data load error, please try again later</string>
+    <string name="retry">Retry</string>
     <string name="back">Press back exit</string>
     <string name="update_notice">Update Notice</string>
     <string name="login_notice">"You have no login , press 'Confirm' continue to login"</string>

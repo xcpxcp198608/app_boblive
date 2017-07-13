@@ -42,24 +42,7 @@ class MainActivity : BaseActivity<IMainActivity, MainPresenter>(), IMainActivity
     }
 
     override fun loadChannelType(channelTypeInfoList: ArrayList<ChannelTypeInfo>) {
-        val channelTypeAdapter = ChannelTypeAdapter(channelTypeInfoList, object: ChannelTypeAdapter.OnItemSelectListener{
-            override fun onItemSelected(view: View, position: Int, hasFocus: Boolean) {
-                rcvChannelType.forEachChild { v ->  v.setBackgroundResource(R.drawable.bg_item_channel_type)}
-                view.setBackgroundResource(R.drawable.bg_item_channel_type_focus)
-                if (hasFocus) {
-                    val channelTypeInfo = channelTypeInfoList[position]
-                    isLock = channelTypeInfo.isLock
-                    val country = channelTypeInfo.name
-                    rcvChannel.visibility = View.GONE
-                    tvLoading.visibility = View.VISIBLE
-                    tvLoading.text = getString(R.string.data_loading)
-                    if (channelTypeInfo.flag == 0) {
-                        presenter!!.loadChannel(country)
-                    }
-                    SPUtil.put(this@MainActivity, "channelType", country)
-                }
-            }
-        })
+        val channelTypeAdapter = ChannelTypeAdapter(channelTypeInfoList)
         rcvChannelType.adapter = channelTypeAdapter
         rcvChannelType.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
@@ -69,11 +52,7 @@ class MainActivity : BaseActivity<IMainActivity, MainPresenter>(), IMainActivity
         if(country == channelInfoList[0].country){
             rcvChannel.visibility = View.VISIBLE
             tvLoading.visibility = View.GONE
-            val channelAdapter: ChannelAdapter = ChannelAdapter(channelInfoList, object : ChannelAdapter.OnItemClickListener{
-                override fun onItemClick(view: View, position: Int) {
-                    play(channelInfoList , position)
-                }
-            })
+            val channelAdapter: ChannelAdapter = ChannelAdapter(channelInfoList)
             rcvChannel.adapter = channelAdapter
             rcvChannel.layoutManager = GridLayoutManager(this@MainActivity, 5)
         }

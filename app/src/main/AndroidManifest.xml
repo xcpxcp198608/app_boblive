@@ -34,10 +34,10 @@
             android:name="com.wiatec.boblive.view.UpdateActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".view.LoginActivity"
+            android:name=".view.ChannelTypeActivity"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="landscape" />
-        <activity android:name=".view.RegisterActivity"
+        <activity android:name=".view.ChannelActivity"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="landscape" />
         <activity android:name="com.wiatec.boblive.view.PlayActivity" android:screenOrientation="landscape"/>

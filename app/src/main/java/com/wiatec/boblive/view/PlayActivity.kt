@@ -7,6 +7,7 @@ import android.view.KeyEvent
 import android.view.SurfaceHolder
 import android.view.View
 import com.px.kotlin.utils.Logger
+import com.wiatec.boblive.KEY_CHANNEL_LIST
 import com.wiatec.boblive.KEY_POSITION
 
 import com.wiatec.boblive.R
@@ -25,7 +26,7 @@ class PlayActivity : AppCompatActivity(), SurfaceHolder.Callback{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play)
-        channelInfoList = intent.getSerializableExtra("channelInfoList") as ArrayList<ChannelInfo>?
+        channelInfoList = intent.getSerializableExtra(KEY_CHANNEL_LIST) as ArrayList<ChannelInfo>?
         position = intent.getIntExtra(KEY_POSITION, -1)
         if(channelInfoList == null || position < 0){
             return

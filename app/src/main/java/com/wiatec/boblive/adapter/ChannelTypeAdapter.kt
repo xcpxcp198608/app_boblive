@@ -9,10 +9,12 @@ import com.bumptech.glide.Glide
 import com.wiatec.boblive.R
 import com.wiatec.boblive.pojo.ChannelTypeInfo
 
-class ChannelTypeAdapter(val channelTypeInfoList: ArrayList<ChannelTypeInfo>,
-                         val onItemSelectListener: OnItemSelectListener): RecyclerView.Adapter<ChannelTypeAdapterViewHolder>() {
+class ChannelTypeAdapter(val channelTypeInfoList: ArrayList<ChannelTypeInfo>)
+    : RecyclerView.Adapter<ChannelTypeAdapterViewHolder>() {
 
     private var context: Context? = null
+    private var onItemClickListener:OnItemClickListener? = null
+    private var onItemFocusListener:OnItemFocusListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ChannelTypeAdapterViewHolder {
         context = parent!!.context
@@ -31,8 +33,13 @@ class ChannelTypeAdapter(val channelTypeInfoList: ArrayList<ChannelTypeInfo>,
                 .dontAnimate()
                 .into(holder.ivIcon)
         holder.itemView.setOnFocusChangeListener { v, hasFocus ->
-            if(hasFocus){
-                onItemSelectListener.onItemSelected(v, position, hasFocus)
+            if(onItemFocusListener != null) {
+                onItemFocusListener!!.onFocus(v, position, hasFocus)
+            }
+        }
+        holder.itemView.setOnClickListener { v ->
+            if(onItemClickListener != null){
+                onItemClickListener!!.onClick(v, position)
             }
         }
     }
@@ -41,8 +48,20 @@ class ChannelTypeAdapter(val channelTypeInfoList: ArrayList<ChannelTypeInfo>,
         return channelTypeInfoList.size
     }
 
-    interface OnItemSelectListener{
-        fun onItemSelected(view: View, position: Int, hasFocus: Boolean)
+    interface OnItemFocusListener{
+        fun onFocus(view: View, position: Int, hasFocus: Boolean)
+    }
+
+    fun setOnItemFocusListener(onItemFocusListener: OnItemFocusListener){
+        this.onItemFocusListener = onItemFocusListener
+    }
+
+    interface OnItemClickListener{
+        fun onClick(view: View, position: Int)
+    }
+
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener){
+        this.onItemClickListener = onItemClickListener
     }
 
 }

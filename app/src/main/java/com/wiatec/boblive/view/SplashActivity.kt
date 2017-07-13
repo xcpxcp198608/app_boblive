@@ -29,7 +29,7 @@ import com.wiatec.boblive.utils.SysUtil
  * 1.check: is there app update
  * 2.check: is there user login
  */
-class SplashActivity : BaseActivity<ISplashActivity, SplashPresenter>(), ISplashActivity {
+class SplashActivity : BaseActivity<Splash, SplashPresenter>(), Splash {
 
     override fun createPresenter(): SplashPresenter {
         return SplashPresenter(this)
@@ -50,11 +50,11 @@ class SplashActivity : BaseActivity<ISplashActivity, SplashPresenter>(), ISplash
     /**
      * check the app update
      * YES: show update confirm dialog
-     * NO:  run checkUser()
+     * NO:  run authorization()
      */
-    override fun checkUpgrade(update: Boolean, upgradeInfo: UpgradeInfo) {
-        if(update){
-            showUpgradeDialog(upgradeInfo)
+    override fun checkUpgrade(execute: Boolean, upgradeInfo: UpgradeInfo?) {
+        if(execute){
+            showUpgradeDialog(upgradeInfo!!)
         }else{
             authorization()
         }
@@ -84,8 +84,8 @@ class SplashActivity : BaseActivity<ISplashActivity, SplashPresenter>(), ISplash
 
     /**
      *  Is there key active system ?
-     *  YES: start MainActivity
-     *  NO:  show login dialog
+     *  YES: validate
+     *  NO:  showAuthorizationDialog
      */
     private fun authorization() {
         val authorization: String = SPUtil.get(this, "authorization", "").toString()
@@ -93,7 +93,7 @@ class SplashActivity : BaseActivity<ISplashActivity, SplashPresenter>(), ISplash
             showAuthorizationDialog()
             return
         }else{
-            validateAuthorization(authorization)
+            presenter!!.validateAuthorization(authorization)
         }
     }
 
@@ -115,73 +115,41 @@ class SplashActivity : BaseActivity<ISplashActivity, SplashPresenter>(), ISplash
             if(TextUtils.isEmpty(activeKey) || activeKey.length < 16){
                 EmojiToast.show(getString(R.string.error_key_format), EmojiToast.EMOJI_SAD)
             }else {
-                activeAuthorization(activeKey)
+                presenter!!.activeAuthorization(activeKey)
             }
         }
     }
 
-    fun activeAuthorization(authorization: String){
-        OkMaster.post(URL_ACTIVE)
-                .parames(KEY_KEY, authorization)
-                .parames(KEY_MAC, SysUtil.getWifiMac())
-                .enqueue(object : StringListener(){
-                    override fun onSuccess(s: String?) {
-                        if(s == null){
-                            EmojiToast.show(getString(R.string.error_server), EmojiToast.EMOJI_SAD)
-                            return
-                        }
-                        val resultInfo:ResultInfo<AuthorizationInfo> = Gson().fromJson(s, object : TypeToken<ResultInfo<AuthorizationInfo>>(){}.type)
-                        Logger.d(resultInfo)
-                        if(resultInfo.code == CODE_OK){
-                            val authorizationInfo:AuthorizationInfo = resultInfo.data[0]
-                            SPUtil.put(Application.context!!, KEY_AUTHORIZATION, authorizationInfo.key)
-                            SPUtil.put(Application.context!!, KEY_LEVEL, authorizationInfo.level.toString())
-                            startActivity(Intent(Application.context!!, MainActivity::class.java))
-                            finish()
-                        }else{
-                            EmojiToast.show(resultInfo.message, EmojiToast.EMOJI_SAD)
-                        }
-                    }
-
-                    override fun onFailure(e: String?) {
-                        if(e != null) Logger.d(e)
-                        EmojiToast.show(getString(R.string.error_server), EmojiToast.EMOJI_SAD)
-                    }
-                })
+    override fun activeAuthorization(execute: Boolean, resultInfo: ResultInfo<AuthorizationInfo>?) {
+        if(!execute) return
+        Logger.d(resultInfo!!)
+        if(resultInfo.code == CODE_OK){
+            val authorizationInfo:AuthorizationInfo = resultInfo.data[0]
+            SPUtil.put(Application.context!!, KEY_AUTHORIZATION, authorizationInfo.key!!)
+            SPUtil.put(Application.context!!, KEY_LEVEL, authorizationInfo.level.toString())
+            startActivity(Intent(Application.context!!, ChannelTypeActivity::class.java))
+            finish()
+        }else{
+            EmojiToast.show(resultInfo.message, EmojiToast.EMOJI_SAD)
+        }
     }
 
-    private fun validateAuthorization(authorization: String) {
-        OkMaster.post(URL_VALIDATE)
-                .parames(KEY_KEY, authorization)
-                .parames(KEY_MAC, SysUtil.getWifiMac())
-                .enqueue(object : StringListener(){
-                    override fun onSuccess(s: String?) {
-                        if(s == null){
-                            EmojiToast.show(getString(R.string.error_server), EmojiToast.EMOJI_SAD)
-                            return
-                        }
-                        val resultInfo:ResultInfo<AuthorizationInfo> = Gson().fromJson(s, object : TypeToken<ResultInfo<AuthorizationInfo>>(){}.type)
-                        Logger.d(resultInfo)
-                        if(resultInfo.code == CODE_OK){
-                            val authorizationInfo:AuthorizationInfo = resultInfo.data[0]
-                            SPUtil.put(Application.context!!, KEY_AUTHORIZATION, authorizationInfo.key)
-                            SPUtil.put(Application.context!!, KEY_LEVEL, authorizationInfo.level.toString())
-                            SPUtil.put(Application.context!!, KEY_EXPERIENCE, resultInfo.message)
-                            if(authorizationInfo.level > 0) {
-                                startActivity(Intent(Application.context!!, MainActivity::class.java))
-                                finish()
-                            }else{
-                                EmojiToast.show(getString(R.string.authorization_error), EmojiToast.EMOJI_SAD)
-                            }
-                        }else{
-                            EmojiToast.show(resultInfo.message, EmojiToast.EMOJI_SAD)
-                        }
-                    }
-
-                    override fun onFailure(e: String?) {
-                        if(e != null) Logger.d(e)
-                        EmojiToast.show(getString(R.string.error_server), EmojiToast.EMOJI_SAD)
-                    }
-                })
+    override fun validateAuthorization(execute: Boolean, resultInfo: ResultInfo<AuthorizationInfo>?) {
+        if(!execute) return
+        Logger.d(resultInfo!!)
+        if(resultInfo.code == CODE_OK){
+            val authorizationInfo:AuthorizationInfo = resultInfo.data[0]
+            SPUtil.put(Application.context!!, KEY_AUTHORIZATION, authorizationInfo.key!!)
+            SPUtil.put(Application.context!!, KEY_LEVEL, authorizationInfo.level.toString())
+            SPUtil.put(Application.context!!, KEY_EXPERIENCE, resultInfo.message)
+            if(authorizationInfo.level > 0) {
+                startActivity(Intent(Application.context!!, ChannelTypeActivity::class.java))
+                finish()
+            }else{
+                EmojiToast.show(getString(R.string.authorization_error), EmojiToast.EMOJI_SAD)
+            }
+        }else{
+            EmojiToast.show(resultInfo.message, EmojiToast.EMOJI_SAD)
+        }
     }
 }
