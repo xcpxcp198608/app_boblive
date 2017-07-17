@@ -1,5 +1,6 @@
 package com.wiatec.boblive.view
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
@@ -40,9 +41,11 @@ class ChannelActivity : BaseActivity<Channel, ChannelPresenter> (), Channel {
             btRetry.visibility = View.VISIBLE
             btRetry.requestFocus()
             return
-        }else{
-            llLoading.visibility = View.GONE
         }
+        llLoading.visibility = View.GONE
+        tvPosition.text = "1"
+        tvSplit.visibility = View.VISIBLE
+        tvTotal.text = channelList!!.size.toString()
         val channelAdapter: ChannelAdapter = ChannelAdapter(channelList!!)
         rcvChannel.adapter = channelAdapter
         rcvChannel.layoutManager = GridLayoutManager(this, 5, GridLayoutManager.VERTICAL, false)
@@ -52,6 +55,11 @@ class ChannelActivity : BaseActivity<Channel, ChannelPresenter> (), Channel {
                 intent.putExtra(KEY_CHANNEL_LIST, channelList as Serializable)
                 intent.putExtra(KEY_POSITION, position)
                 startActivity(intent)
+            }
+        })
+        channelAdapter.setOnItemFocusListener(object: ChannelAdapter.OnItemFocusListener{
+            override fun onFocus(view: View, position: Int, hasFocus: Boolean) {
+                tvPosition.text = (position+1).toString()
             }
         })
     }

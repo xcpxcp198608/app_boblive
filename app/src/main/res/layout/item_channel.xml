@@ -4,11 +4,12 @@
     android:orientation="vertical"
     android:focusable="true"
     android:layout_margin="10dp"
+    android:padding="2dp"
     android:focusableInTouchMode="true"
     android:clipChildren="false"
     android:clipToPadding="false"
     android:background="@drawable/bg_item_channel"
-    android:layout_width="wrap_content"
+    android:layout_width="214dp"
     android:layout_height="wrap_content">
 
     <ImageView
@@ -23,6 +24,7 @@
 
     <TextView
         android:id="@+id/tvName"
+        android:padding="5dp"
         android:gravity="center"
         tool:text="CCTV-1sdfdsfdsfdsfds"
         android:textSize="16sp"

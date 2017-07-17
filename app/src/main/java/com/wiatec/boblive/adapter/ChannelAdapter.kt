@@ -18,6 +18,7 @@ class ChannelAdapter(val channelInfoList: ArrayList<ChannelInfo>): RecyclerView.
 
     var context: Context? = null
     private var onItemClickListener: OnItemClickListener? = null
+    private var onItemFocusListener: OnItemFocusListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ChannelAdapterViewHolder {
         context = parent!!.context
@@ -41,6 +42,9 @@ class ChannelAdapter(val channelInfoList: ArrayList<ChannelInfo>): RecyclerView.
             }
         }
         holder.itemView.setOnFocusChangeListener { v, hasFocus ->
+            if (onItemFocusListener != null) {
+                onItemFocusListener!!.onFocus(v, position, hasFocus)
+            }
             if(hasFocus){
                 holder.tvName.isSelected = true
                 Zoom.zoomIn10to11(v)
@@ -61,5 +65,13 @@ class ChannelAdapter(val channelInfoList: ArrayList<ChannelInfo>): RecyclerView.
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener){
         this.onItemClickListener = onItemClickListener
+    }
+
+    interface OnItemFocusListener{
+        fun onFocus(view: View, position: Int, hasFocus: Boolean)
+    }
+
+    fun setOnItemFocusListener(onItemFocusListener: OnItemFocusListener){
+        this.onItemFocusListener = onItemFocusListener
     }
 }
