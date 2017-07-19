@@ -4,11 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import com.bumptech.glide.Glide
 import com.px.kotlin.utils.Logger
 import com.wiatec.boblive.R
 import com.wiatec.boblive.TYPE_CHANNEL
 import com.wiatec.boblive.adapter.ChannelTypeAdapter
 import com.wiatec.boblive.pojo.ChannelTypeInfo
+import com.wiatec.boblive.pojo.ImageInfo
 import com.wiatec.boblive.presenter.ChannelTypePresenter
 import com.wiatec.boblive.utils.Zoom
 import kotlinx.android.synthetic.main.activity_channel_type.*
@@ -27,6 +29,12 @@ class ChannelTypeActivity : BaseActivity<ChannelType, ChannelTypePresenter>() , 
         setContentView(R.layout.activity_channel_type)
         presenter!!.loadChannelType()
         btRetry.setOnClickListener { presenter!!.loadChannelType() }
+    }
+
+    override fun loadAdImage(execute: Boolean, imagePath: String?) {
+        if(execute){
+            Glide.with(this@ChannelTypeActivity).load(imagePath).dontAnimate().into(ivBackground)
+        }
     }
 
     override fun loadChannelType(execute: Boolean, channelTypeList: ArrayList<ChannelTypeInfo>?) {
@@ -54,6 +62,7 @@ class ChannelTypeActivity : BaseActivity<ChannelType, ChannelTypePresenter>() , 
                 override fun onFocus(view: View, position: Int, hasFocus: Boolean) {
                     if(hasFocus) {
                         Zoom.zoomIn10to11(view)
+                        presenter!!.loadAdImage()
                     }else{
                         Zoom.zoomIn11to10(view)
                     }

@@ -2,6 +2,7 @@ package com.wiatec.boblive
 
 import android.content.Context
 import com.px.kotlin.utils.Logger
+import com.wiatec.boblive.task.DownloadAdImage
 import com.wiatec.boblive.task.ValidateAuth
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -23,6 +24,7 @@ class Application : android.app.Application() {
         context = applicationContext
         val executorService:ExecutorService = Executors.newCachedThreadPool()
         executorService.execute(ValidateAuth())
+        executorService.execute(DownloadAdImage())
     }
 
 

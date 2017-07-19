@@ -6,6 +6,7 @@ package com.wiatec.boblive
 const val URL_UPDATE = "http://www.ldlegacy.com:8080/boblive/upgrade/"
 const val URL_CHANNEL_TYPE = "http://www.ldlegacy.com:8080/boblive/channel_type"
 const val URL_CHANNEL = "http://www.ldlegacy.com:8080/boblive/channel/"
+const val URL_AD_IMAGE = "http://www.ldlegacy.com:8080/boblive/adimage/"
 const val TOKEN = "/9B67E88314F416F2092AB8ECA6A7C8EDCCE3D6D85A816E6E6F9F919B2E6C277D"
 
 const val URL_ACTIVE = "http://www.ldlegacy.com:8080/boblive/auth/active"
@@ -32,6 +33,6 @@ const val HUNDRED_PERCENT = "100%"
 object Constant{
 
     fun image_path(): String{
-        return Application.context!!.getExternalFilesDir("files").absolutePath
+        return Application.context!!.getExternalFilesDir("adimages").absolutePath
     }
 }
