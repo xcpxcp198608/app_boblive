@@ -6,7 +6,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.wiatec.bobplay"
+        applicationId "com.wiatec.boblive"
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 100
@@ -16,7 +16,7 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file("/KeyStore/234.jks")
+            storeFile file("/KeyStore/platform_s905.keystore")
             storePassword  KEYSTORE_PASSWORD
             keyAlias "234"
             keyPassword KEY_PASSWORD
