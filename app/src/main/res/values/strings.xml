@@ -2,6 +2,7 @@
     <string name="app_name">BobLive</string>
 
     <string name="app_name1">BOBLIVE</string>
+    <string name="language">Language:</string>
     <string name="notice">Notice</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>

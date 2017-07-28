@@ -10,16 +10,16 @@ import java.security.PrivateKey
  */
 object SPUtil{
 
-    fun put(context:Context, key:String , any:Any){
+    fun put(context:Context, key:String , value:Any){
         val sharedPreferences:SharedPreferences = context.getSharedPreferences("sp" , Context.MODE_PRIVATE)
         val editor:SharedPreferences.Editor = sharedPreferences.edit()
-        when(any){
-            is String -> editor.putString(key, any)
-            is Int -> editor.putInt(key, any)
-            is Float -> editor.putFloat(key, any)
-            is Long -> editor.putLong(key, any)
-            is Boolean -> editor.putBoolean(key, any)
-            else -> editor.putString(key, any as String)
+        when(value){
+            is String -> editor.putString(key, value)
+            is Int -> editor.putInt(key, value)
+            is Float -> editor.putFloat(key, value)
+            is Long -> editor.putLong(key, value)
+            is Boolean -> editor.putBoolean(key, value)
+            else -> editor.putString(key, value as String)
         }
         editor.apply()
     }

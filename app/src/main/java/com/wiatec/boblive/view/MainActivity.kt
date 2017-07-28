@@ -30,6 +30,7 @@ import java.io.Serializable
 class MainActivity : BaseActivity<IMainActivity, MainPresenter>(), IMainActivity {
 
     var isLock: Int = 0
+    var isFirstBoot: Boolean = true
 
     override fun createPresenter(): MainPresenter {
         return MainPresenter(this)
@@ -37,7 +38,13 @@ class MainActivity : BaseActivity<IMainActivity, MainPresenter>(), IMainActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        isFirstBoot = SPUtil.get(this@MainActivity, "isFirstBoot", true) as Boolean
+        if(isFirstBoot){
+            startActivity(Intent(this@MainActivity, LanguageSettingActivity::class.java))
+            finish()
+        }else {
+            setContentView(R.layout.activity_main)
+        }
         presenter!!.loadChannelType()
     }
 
