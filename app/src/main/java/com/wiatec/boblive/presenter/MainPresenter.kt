@@ -1,59 +1,54 @@
 package com.wiatec.boblive.presenter
 
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.px.kotlin.utils.HttpMaster
-import com.px.kotlin.utils.Logger
-import com.wiatec.boblive.TOKEN
-import com.wiatec.boblive.URL_CHANNEL
-import com.wiatec.boblive.URL_CHANNEL_TYPE
-import com.wiatec.boblive.entity.CODE_OK
+import com.wiatec.boblive.*
 import com.wiatec.boblive.entity.ResultInfo
-import com.wiatec.boblive.pojo.ChannelInfo
-import com.wiatec.boblive.pojo.ChannelTypeInfo
-import com.wiatec.boblive.utils.OkHttp.Listener.StringListener
-import com.wiatec.boblive.utils.OkHttp.OkMaster
-import com.wiatec.boblive.view.IMainActivity
+import com.wiatec.boblive.model.AuthorizationProvider
+import com.wiatec.boblive.model.Loadable
+import com.wiatec.boblive.model.LoadableWithParams
+import com.wiatec.boblive.model.UpgradeProvider
+import com.wiatec.boblive.pojo.AuthorizationInfo
+import com.wiatec.boblive.pojo.UpgradeInfo
+import com.wiatec.boblive.utils.AppUtil
+import com.wiatec.boblive.view.Main
 
 /**
  * Created by patrick on 19/06/2017.
  * create time : 3:40 PM
  */
-class MainPresenter(val iMainActivity: IMainActivity): BasePresenter<IMainActivity>() {
+class MainPresenter(val main: Main): BasePresenter<Main>() {
 
-    fun loadChannelType(){
-        HttpMaster(URL_CHANNEL_TYPE + TOKEN).execute(object :HttpMaster.OnLoadListener{
-            override fun onSuccess(s: String) {
-                val resultInfo:ResultInfo<ChannelTypeInfo> = Gson().fromJson(s, object:TypeToken<ResultInfo<ChannelTypeInfo>>(){}.type)
-                if(resultInfo.code == CODE_OK){
-                    val channelTypeList: ArrayList<ChannelTypeInfo> = resultInfo.data
-                    if(channelTypeList.size > 0)
-                    iMainActivity.loadChannelType(channelTypeList)
+    val upgradeProvider: UpgradeProvider = UpgradeProvider()
+    val authorizationProvider: AuthorizationProvider = AuthorizationProvider()
+
+    fun checkUpgrade(){
+        upgradeProvider.onLoad(object : Loadable.OnLoadListener<UpgradeInfo>{
+            override fun onSuccess(execute: Boolean, t: UpgradeInfo?) {
+                if(!execute) {
+                    main.checkUpgrade(false, t)
+                    return
                 }
-            }
-
-            override fun onFailure(e: String) {
-                Logger.d(e)
+                val execute1 = AppUtil.isNeedUpdate(Application.context!!, t!!.code)
+                main.checkUpgrade(execute1, t)
             }
         })
     }
 
-    fun loadChannel(country: String){
-        OkMaster.get(URL_CHANNEL + country + TOKEN).enqueue(object :StringListener(){
-            override fun onSuccess(s: String) {
-                val resultInfo:ResultInfo<ChannelInfo> = Gson().fromJson(s, object : TypeToken<ResultInfo<ChannelInfo>>(){}.type)
-                if(resultInfo.code == CODE_OK){
-                    val channelInfoList:ArrayList<ChannelInfo> = resultInfo.data
-                    if(channelInfoList.size > 0){
-                        iMainActivity.loadChannel(channelInfoList)
+    fun activeAuthorization(authorization: String){
+        authorizationProvider.onLoad(URL_ACTIVE, authorization,
+                object : LoadableWithParams.OnLoadListener<ResultInfo<AuthorizationInfo>>{
+                    override fun onSuccess(execute: Boolean, t: ResultInfo<AuthorizationInfo>?) {
+                        main.activeAuthorization(execute, t)
                     }
-                }
+                })
+    }
 
-            }
 
-            override fun onFailure(e: String) {
-                Logger.d(e)
-            }
-        })
+    fun validateAuthorization(authorization: String){
+        authorizationProvider.onLoad(URL_VALIDATE, authorization,
+                object : LoadableWithParams.OnLoadListener<ResultInfo<AuthorizationInfo>>{
+                    override fun onSuccess(execute: Boolean, t: ResultInfo<AuthorizationInfo>?) {
+                        main.validateAuthorization(execute, t)
+                    }
+                })
     }
 }

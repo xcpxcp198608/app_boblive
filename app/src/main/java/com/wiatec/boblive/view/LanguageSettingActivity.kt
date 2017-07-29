@@ -1,12 +1,14 @@
 package com.wiatec.boblive.view
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.px.kotlin.utils.Logger
 import com.px.kotlin.utils.SPUtil
-import com.wiatec.boblive.R
+import com.wiatec.boblive.*
+import com.wiatec.boblive.manager.LanguageManager
 import kotlinx.android.synthetic.main.activity_language_setting.*
 import java.util.*
 
@@ -19,27 +21,24 @@ class LanguageSettingActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_language_setting)
-        btSK.setOnClickListener { setLanguage(Locale("SK", "sk", "")) }
-        btCZ.setOnClickListener { setLanguage(Locale("CZ", "cs", "")) }
+        btSK.setOnClickListener { onClick(LANGUAGE_SK) }
+        btCZ.setOnClickListener { onClick(LANGUAGE_CS) }
     }
 
-    private fun setLanguage(locale: Locale) {
-//        SPUtil.put(this@LanguageSettingActivity, "isFirstBoot", false)
-        try {
-            val classActivityManagerNative = Class.forName("android.app.ActivityManagerNative")
-            val getDefault = classActivityManagerNative.getDeclaredMethod("getDefault")
-            val objIActivityManager = getDefault.invoke(classActivityManagerNative)
-            val classIActivityManager = Class.forName("android.app.IActivityManager")
-            val getConfiguration = classIActivityManager.getDeclaredMethod("getConfiguration")
-            val config = getConfiguration.invoke(objIActivityManager) as Configuration
-            config.locale = locale
-            val clzParams = arrayOf<Class<*>>(Configuration::class.java)
-            val updateConfiguration = classIActivityManager.getDeclaredMethod("updateConfiguration", *clzParams)
-            updateConfiguration.invoke(objIActivityManager, config)
-        } catch (e: Exception) {
-            if(e.message != null) {
-                Logger.d(e.message!!)
-            }
-        }
+    private fun onClick(language: String){
+        setCache(language)
+        LanguageManager.setLanguage(this@LanguageSettingActivity, language)
+        val intent: Intent =  Intent(this@LanguageSettingActivity, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+//        // 杀掉进程
+//        android.os.Process.killProcess(android.os.Process.myPid());
+//        System.exit(0)
+    }
+
+    private fun setCache(language: String){
+        SPUtil.put(this@LanguageSettingActivity, KEY_FIRST_BOOT, false)
+        SPUtil.put(this@LanguageSettingActivity, KEY_LANGUAGE, language)
     }
 }

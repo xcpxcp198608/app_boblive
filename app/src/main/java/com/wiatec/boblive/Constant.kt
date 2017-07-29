@@ -24,7 +24,15 @@ const val KEY_LEVEL = "level"
 const val KEY_POSITION = "position"
 const val KEY_CHANNEL_LIST = "channelInfoList"
 const val KEY_EXPERIENCE = "experience"
+const val KEY_LANGUAGE = "language"
+const val KEY_FIRST_BOOT = "isFirstBoot"
 const val KEY_AUTHORIZATION = "authorization"
+
+const val LANGUAGE_SK = "sk"
+const val LANGUAGE_CS = "cs"
+
+const val COUNTRY_SK = "SK"
+const val COUNTRY_CS = "CZ"
 
 const val PERCENT = "%"
 const val ZERO_PERCENT = "0%"

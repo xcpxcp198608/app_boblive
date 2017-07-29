@@ -7,7 +7,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.wiatec.boblive"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 25
         versionCode 100
         versionName "1.0.0"

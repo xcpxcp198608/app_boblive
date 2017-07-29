@@ -13,7 +13,7 @@
 
     <ImageView
         android:id="@+id/ivIcon"
-        android:src="@drawable/logo_live"
+        android:src="@drawable/logo"
         android:layout_width="400dp"
         android:layout_height="200dp" />
 

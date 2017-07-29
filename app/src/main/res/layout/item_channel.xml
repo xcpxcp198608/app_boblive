@@ -13,10 +13,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:scaleType="centerInside"
-        android:cropToPadding="true"
-        android:padding="30dp"
-        android:src="@drawable/logo_live"
+        android:src="@drawable/logo"
         android:adjustViewBounds="true"
         android:id="@+id/ivIcon"
         android:layout_width="210dp"

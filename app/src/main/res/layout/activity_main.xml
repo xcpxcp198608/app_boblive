@@ -2,41 +2,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="30dp"
+    android:gravity="center_horizontal|bottom"
+    android:paddingBottom="150dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_main"
-    tools:context="com.wiatec.boblive.view.MainActivity">
+    android:background="@drawable/img_main1"
+    tools:context="com.wiatec.boblive.view.Main">
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_marginTop="20dp"
-        android:id="@+id/rcvChannelType"
-        android:scrollbars="none"
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"/>
+    <ImageButton
+        android:id="@+id/btBasic"
+        android:background="@drawable/bg_basic"
+        android:layout_width="200dp"
+        android:layout_height="50dp" />
 
-    <FrameLayout
-        android:layout_weight="3"
-        android:layout_width="0dp"
-        android:layout_height="match_parent">
+    <ImageButton
+        android:id="@+id/btPremium"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/bg_premium"
+        android:layout_width="200dp"
+        android:layout_height="50dp" />
 
-        <TextView
-            android:id="@+id/tvLoading"
-            android:textSize="50sp"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            tools:text="data loading"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-
-        <android.support.v7.widget.RecyclerView
-            android:padding="5dp"
-            android:id="@+id/rcvChannel"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-    </FrameLayout>
+    <ImageButton
+        android:id="@+id/btMovies"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/bg_movies"
+        android:layout_width="200dp"
+        android:layout_height="50dp" />
 
 </LinearLayout>
