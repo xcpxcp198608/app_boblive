@@ -10,8 +10,9 @@ import com.wiatec.boblive.pojo.UpgradeInfo
  * Created by patrick on 19/06/2017.
  * create time : 3:40 PM
  */
-interface Main {
+interface IMain {
     fun checkUpgrade(execute: Boolean, upgradeInfo: UpgradeInfo?)
     fun activeAuthorization(execute: Boolean, resultInfo: ResultInfo<AuthorizationInfo>?)
     fun validateAuthorization(execute: Boolean, resultInfo: ResultInfo<AuthorizationInfo>?)
+    fun loadAdImage(execute: Boolean, imagePath: String?)
 }

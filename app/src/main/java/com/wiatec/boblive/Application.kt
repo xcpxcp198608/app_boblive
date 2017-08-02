@@ -5,6 +5,7 @@ import com.px.kotlin.utils.Logger
 import com.px.kotlin.utils.SPUtil
 import com.wiatec.boblive.manager.LanguageManager
 import com.wiatec.boblive.task.DownloadAdImage
+import com.wiatec.boblive.task.LoadInstalledApp
 import com.wiatec.boblive.task.ValidateAuth
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -29,6 +30,7 @@ class Application : android.app.Application() {
         val executorService:ExecutorService = Executors.newCachedThreadPool()
         executorService.execute(ValidateAuth())
         executorService.execute(DownloadAdImage())
+        executorService.execute(LoadInstalledApp())
     }
 
 

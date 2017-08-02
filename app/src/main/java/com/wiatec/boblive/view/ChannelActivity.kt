@@ -1,6 +1,5 @@
 package com.wiatec.boblive.view
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
@@ -19,7 +18,7 @@ import java.io.Serializable
  * Created by patrick on 13/07/2017.
  * create time : 10:19 AM
  */
-class ChannelActivity : BaseActivity<Channel, ChannelPresenter> (), Channel {
+class ChannelActivity : BaseActivity<IChannel, ChannelPresenter> (), IChannel {
 
     override fun createPresenter(): ChannelPresenter {
         return ChannelPresenter(this)

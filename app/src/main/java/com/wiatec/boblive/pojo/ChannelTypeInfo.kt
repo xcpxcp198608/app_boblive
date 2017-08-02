@@ -1,7 +1,7 @@
 package com.wiatec.boblive.pojo
 
 /**
- * Channel type
+ * IChannel type
  */
 data class ChannelTypeInfo (val id: Int,
                             val name: String,

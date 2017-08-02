@@ -5,12 +5,10 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.bumptech.glide.Glide
-import com.px.kotlin.utils.Logger
 import com.wiatec.boblive.R
 import com.wiatec.boblive.TYPE_CHANNEL
 import com.wiatec.boblive.adapter.ChannelTypeAdapter
 import com.wiatec.boblive.pojo.ChannelTypeInfo
-import com.wiatec.boblive.pojo.ImageInfo
 import com.wiatec.boblive.presenter.ChannelTypePresenter
 import com.wiatec.boblive.utils.Zoom
 import kotlinx.android.synthetic.main.activity_channel_type.*
@@ -19,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_channel_type.*
  * Created by patrick on 13/07/2017.
  * create time : 10:18 AM
  */
-class ChannelTypeActivity : BaseActivity<ChannelType, ChannelTypePresenter>() , ChannelType{
+class ChannelTypeActivity : BaseActivity<IChannelType, ChannelTypePresenter>() , IChannelType {
     override fun createPresenter(): ChannelTypePresenter {
         return ChannelTypePresenter(this)
     }

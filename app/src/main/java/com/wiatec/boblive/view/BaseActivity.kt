@@ -63,7 +63,7 @@ abstract class BaseActivity<V, T : BasePresenter<V>> : AppCompatActivity() {
         tvInfo.text = getString(R.string.authorization_error) + "(" + message + ")"
         btConfirm.setOnClickListener {
             SPUtil.put(Application.context!!, "authorization" , "")
-            startActivity(Intent(Application.context!!, SplashActivity::class.java))
+            startActivity(Intent(Application.context!!, MainActivity::class.java))
             finish()
         }
         btCancel.setOnClickListener { finish() }

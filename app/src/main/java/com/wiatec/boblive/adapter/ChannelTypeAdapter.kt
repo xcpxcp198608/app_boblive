@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.wiatec.boblive.R
 import com.wiatec.boblive.pojo.ChannelTypeInfo
+import com.wiatec.boblive.utils.Zoom
 
 class ChannelTypeAdapter(val channelTypeInfoList: ArrayList<ChannelTypeInfo>)
     : RecyclerView.Adapter<ChannelTypeAdapterViewHolder>() {
@@ -28,13 +29,18 @@ class ChannelTypeAdapter(val channelTypeInfoList: ArrayList<ChannelTypeInfo>)
         holder.tvName.text = channelTypeInfo.name
         Glide.with(context)
                 .load(channelTypeInfo.icon)
-                .placeholder(R.drawable.logo)
-                .error(R.drawable.logo)
+                .placeholder(R.drawable.img_hold1)
+                .error(R.drawable.img_hold1)
                 .dontAnimate()
                 .into(holder.ivIcon)
         holder.itemView.setOnFocusChangeListener { v, hasFocus ->
             if(onItemFocusListener != null) {
                 onItemFocusListener!!.onFocus(v, position, hasFocus)
+            }
+            if(hasFocus){
+                Zoom.zoomIn10to11(v)
+            }else{
+                Zoom.zoomIn11to10(v)
             }
         }
         holder.itemView.setOnClickListener { v ->

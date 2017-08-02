@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.View
@@ -16,17 +17,20 @@ import com.px.kotlin.utils.Logger
 import com.wiatec.boblive.presenter.MainPresenter
 import com.px.kotlin.utils.SPUtil
 import com.wiatec.boblive.*
+import com.wiatec.boblive.adapter.ChannelTypeAdapter
 import com.wiatec.boblive.entity.CODE_OK
 import com.wiatec.boblive.entity.ResultInfo
-import com.wiatec.boblive.manager.LanguageManager
 import com.wiatec.boblive.pojo.AuthorizationInfo
+import com.wiatec.boblive.pojo.ChannelTypeInfo
 import com.wiatec.boblive.pojo.UpgradeInfo
+import com.wiatec.boblive.utils.AppUtil
 import com.wiatec.boblive.utils.EmojiToast
+import com.wiatec.boblive.utils.NetUtil
 import com.wiatec.boblive.utils.Zoom
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : BaseActivity<Main, MainPresenter>(), Main, View.OnFocusChangeListener {
+class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusChangeListener {
 
     var isFirstBoot: Boolean = true
 
@@ -42,29 +46,60 @@ class MainActivity : BaseActivity<Main, MainPresenter>(), Main, View.OnFocusChan
             finish()
         }else {
             setContentView(R.layout.activity_main)
+            authorization()
+            initChannelType()
+            btMenu.setOnClickListener { startActivity(Intent(this, BasicActivity::class.java)) }
+            btMenu.onFocusChangeListener = this
         }
     }
 
     override fun onStart() {
         super.onStart()
-        if(presenter != null) {
-            presenter!!.checkUpgrade()
-        }
-        btBasic.setOnClickListener{}
-        btPremium.setOnClickListener { startActivity(Intent(this@MainActivity,
-                ChannelTypeActivity::class.java)) }
-        btMovies.setOnClickListener {  }
-        btBasic.onFocusChangeListener = this
-        btPremium.onFocusChangeListener = this
-        btMovies.onFocusChangeListener = this
+        presenter!!.checkUpgrade()
+        presenter!!.loadAdImage()
+    }
+
+    fun makeChannelTypeData(): ArrayList<ChannelTypeInfo> {
+        val c1 = ChannelTypeInfo(0, CHANNEL_TYPE_BASIC, "", 1, 0)
+        val c2 = ChannelTypeInfo(0, CHANNEL_TYPE_PREMIUM, "", 1, 0)
+        val c3 = ChannelTypeInfo(0, CHANNEL_TYPE_ADULT, "", 1, 0)
+        val channelTypeList = ArrayList<ChannelTypeInfo>()
+        channelTypeList.add(c1)
+        channelTypeList.add(c2)
+        channelTypeList.add(c3)
+        return channelTypeList
+    }
+
+    fun initChannelType(){
+        val channelTypeList = makeChannelTypeData()
+        val channelTypeAdapter = ChannelTypeAdapter(channelTypeList)
+        rcvMain.adapter = channelTypeAdapter
+        rcvMain.layoutManager = LinearLayoutManager(this@MainActivity,
+                LinearLayoutManager.HORIZONTAL, false)
+        channelTypeAdapter.setOnItemClickListener(object: ChannelTypeAdapter.OnItemClickListener{
+            override fun onClick(view: View, position: Int) {
+                val authorization: String = SPUtil.get(this@MainActivity, KEY_AUTHORIZATION, "").toString()
+                if(TextUtils.isEmpty(authorization)){
+                    showAuthorizationDialog()
+                    return
+                }
+                val intent: Intent = Intent(this@MainActivity, ChannelActivity::class.java)
+                intent.putExtra(TYPE_CHANNEL, channelTypeList[position].name)
+                startActivity(intent)
+            }
+        })
     }
 
     override fun checkUpgrade(execute: Boolean, upgradeInfo: UpgradeInfo?) {
         if(execute){
             showUpgradeDialog(upgradeInfo!!)
-        }else{
-            authorization()
         }
+    }
+
+    override fun loadAdImage(execute: Boolean, imagePath: String?) {
+//        if(execute){
+//            Glide.with(this@MainActivity).load(imagePath).dontAnimate().into(ivMain)
+//        }
     }
 
     /**
@@ -83,7 +118,7 @@ class MainActivity : BaseActivity<Main, MainPresenter>(), Main, View.OnFocusChan
         val btCancel: Button = window.findViewById(R.id.btCancel) as Button
         tvInfo.text = upgradeInfo.info
         btConfirm.setOnClickListener {
-            val intent:Intent = Intent(this, UpdateActivity::class.java)
+            val intent:Intent = Intent(this, UpgradeActivity::class.java)
             intent.putExtra("url", upgradeInfo.url)
             startActivity(intent)}
         btCancel.setOnClickListener { finish() }
@@ -96,6 +131,7 @@ class MainActivity : BaseActivity<Main, MainPresenter>(), Main, View.OnFocusChan
      */
     private fun authorization() {
         val authorization: String = SPUtil.get(this, KEY_AUTHORIZATION, "").toString()
+        Logger.d(authorization)
         if(TextUtils.isEmpty(authorization)){
             showAuthorizationDialog()
             return
@@ -119,11 +155,17 @@ class MainActivity : BaseActivity<Main, MainPresenter>(), Main, View.OnFocusChan
         val btConfirm:Button = window.findViewById(R.id.btConfirm) as Button
         btConfirm.setOnClickListener {
             val activeKey = etAuthorization.text.toString()
-            if(TextUtils.isEmpty(activeKey) || activeKey.length < 16){
+            if(activeKey != "wiatec" && (TextUtils.isEmpty(activeKey) || activeKey.length < 16)){
                 EmojiToast.show(getString(R.string.error_key_format), EmojiToast.EMOJI_SAD)
             }else {
-                presenter!!.activeAuthorization(activeKey)
-                dialog.dismiss()
+                if(!NetUtil.isConnected){
+                    EmojiToast.show(getString(R.string.no_network), EmojiToast.EMOJI_SAD)
+                    AppUtil.launchApp(this@MainActivity, PACKAGE_NAME_SETTINGS)
+                }else {
+                    presenter!!.activeAuthorization(activeKey)
+                    dialog.dismiss()
+                }
+
             }
         }
     }
@@ -133,6 +175,7 @@ class MainActivity : BaseActivity<Main, MainPresenter>(), Main, View.OnFocusChan
         Logger.d(resultInfo!!)
         if(resultInfo.code == CODE_OK){
             val authorizationInfo:AuthorizationInfo = resultInfo.data[0]
+            EmojiToast.show(getString(R.string.active_success), EmojiToast.EMOJI_SMILE)
             SPUtil.put(Application.context!!, KEY_AUTHORIZATION, authorizationInfo.key!!)
             SPUtil.put(Application.context!!, KEY_LEVEL, authorizationInfo.level.toString())
         }else{
@@ -159,7 +202,7 @@ class MainActivity : BaseActivity<Main, MainPresenter>(), Main, View.OnFocusChan
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if(event!!.keyCode == KeyEvent.KEYCODE_BACK || event!!.keyCode == KeyEvent.KEYCODE_HOME) {
+        if(event!!.keyCode == KeyEvent.KEYCODE_BACK || event.keyCode == KeyEvent.KEYCODE_HOME) {
             return true
         }
         return super.onKeyDown(keyCode, event)

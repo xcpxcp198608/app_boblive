@@ -1,7 +1,11 @@
 package com.wiatec.boblive.view
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.content.FileProvider
 import android.view.KeyEvent
 import android.view.View
 import com.px.kotlin.utils.Logger
@@ -11,17 +15,18 @@ import com.wiatec.boblive.utils.AppUtil
 import com.wiatec.boblive.utils.OkHttp.Bean.DownloadInfo
 import com.wiatec.boblive.utils.OkHttp.Listener.DownloadListener
 import com.wiatec.boblive.utils.OkHttp.OkMaster
-import kotlinx.android.synthetic.main.activity_update.*
+import kotlinx.android.synthetic.main.activity_upgrade.*
+import java.io.File
 
-class UpdateActivity : AppCompatActivity() {
+class UpgradeActivity : AppCompatActivity() {
 
     var url:String? = null
     var path:String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_update)
-        path = getExternalFilesDir("files").absolutePath+"/download"
+        setContentView(R.layout.activity_upgrade)
+        path = getExternalFilesDir("download").absolutePath
         url = intent.getStringExtra(KEY_URL)
         if(url != null){
             startDownload()
@@ -57,7 +62,8 @@ class UpdateActivity : AppCompatActivity() {
                         progressBar.progress = 100
                         tvProgress.visibility = View.GONE
                         progressBar.visibility = View.GONE
-                        AppUtil.installApk(Application.context!!, downloadInfo!!.path, downloadInfo.name)
+                        AppUtil.installApk(Application.context!!, downloadInfo!!.path,
+                                downloadInfo.name, "com.wiatec.boblive.fileprovider")
                     }
 
                     override fun onCancel(downloadInfo: DownloadInfo?) {
@@ -75,4 +81,5 @@ class UpdateActivity : AppCompatActivity() {
         }
         return super.onKeyDown(keyCode, event)
     }
+
 }

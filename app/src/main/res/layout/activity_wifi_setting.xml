@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="50dp"
+    android:clipChildren="false"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:textSize="40sp"
+        android:gravity="center"
+        android:textColor="@android:color/darker_gray"
+        android:text="@string/wifi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:layout_marginTop="5dp"
+        android:background="@drawable/bg_line"
+        android:layout_width="match_parent"
+        android:layout_height="2dp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:clipChildren="false"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="300dp"
+        android:layout_marginRight="300dp"
+        android:id="@+id/rcvWifi"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_splash"
-    tools:context="com.wiatec.boblive.view.UpdateActivity">
+    android:background="@drawable/img_main1"
+    tools:context="com.wiatec.boblive.view.UpgradeActivity">
 
     <ImageView
         android:id="@+id/ivAd"
@@ -14,7 +14,8 @@
 
     <LinearLayout
         android:padding="30dp"
-        android:gravity="center"
+        android:gravity="bottom"
+        android:layout_marginBottom="80dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

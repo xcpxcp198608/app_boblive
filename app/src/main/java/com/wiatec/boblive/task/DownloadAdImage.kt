@@ -7,8 +7,10 @@ import com.wiatec.boblive.Application
 import com.wiatec.boblive.Constant
 import com.wiatec.boblive.URL_AD_IMAGE
 import com.wiatec.boblive.pojo.ImageInfo
+import com.wiatec.boblive.utils.NetUtil
 import com.wiatec.boblive.utils.OkHttp.Listener.StringListener
 import com.wiatec.boblive.utils.OkHttp.OkMaster
+import com.wiatec.boblive.utils.SysUtil
 import java.io.File
 
 /**
@@ -18,7 +20,11 @@ import java.io.File
 class DownloadAdImage: Runnable {
 
     override fun run() {
-        load()
+        do{
+            if(NetUtil.isConnected) {
+                load()
+            }
+        }while (!NetUtil.isConnected)
     }
 
     fun load(){

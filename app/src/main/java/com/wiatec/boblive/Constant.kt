@@ -15,7 +15,7 @@ const val URL_VALIDATE = "http://www.ldlegacy.com:8080/boblive/auth/validate"
 const val TYPE_LIVE = "live"
 const val TYPE_APP = "app"
 const val TYPE_RADIO = "radio"
-const val TYPE_CHANNEL = "channelType"
+const val TYPE_CHANNEL = "IChannelType"
 
 const val KEY_KEY = "key"
 const val KEY_MAC = "mac"
@@ -37,6 +37,12 @@ const val COUNTRY_CS = "CZ"
 const val PERCENT = "%"
 const val ZERO_PERCENT = "0%"
 const val HUNDRED_PERCENT = "100%"
+
+const val PACKAGE_NAME_SETTINGS = "com.android.settings"
+
+const val CHANNEL_TYPE_BASIC = "BASIC"
+const val CHANNEL_TYPE_PREMIUM = "PREMIUM"
+const val CHANNEL_TYPE_ADULT = "ADULT"
 
 object Constant{
 

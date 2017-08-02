@@ -5,13 +5,13 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.px.kotlin.utils.Logger
 import com.px.kotlin.utils.SPUtil
-import com.wiatec.boblive.Application
-import com.wiatec.boblive.URL_VALIDATE
+import com.wiatec.boblive.*
 import com.wiatec.boblive.entity.CODE_OK
 import com.wiatec.boblive.entity.CODE_UNAUTHORIZED
 import com.wiatec.boblive.entity.ResultInfo
 import com.wiatec.boblive.pojo.AuthorizationInfo
 import com.wiatec.boblive.rxevent.ValidateEvent
+import com.wiatec.boblive.utils.NetUtil
 import com.wiatec.boblive.utils.OkHttp.OkMaster
 import com.wiatec.boblive.utils.RxBus
 import com.wiatec.boblive.utils.SysUtil
@@ -33,11 +33,12 @@ class ValidateAuth : Runnable {
     }
 
     private fun check(){
-        val authorization: String = SPUtil.get(Application.context!!, "authorization", "").toString()
+        if(!NetUtil.isConnected) return
+        val authorization: String = SPUtil.get(Application.context!!, KEY_AUTHORIZATION, "").toString()
         if (TextUtils.isEmpty(authorization)) return
         OkMaster.post(URL_VALIDATE)
-                .parames("key", authorization)
-                .parames("mac", SysUtil.getWifiMac())
+                .parames(KEY_KEY, authorization)
+                .parames(KEY_MAC, SysUtil.getWifiMac())
                 .enqueue(object: Callback{
                     override fun onFailure(call: Call?, e: IOException?) {
                         if(e != null){
@@ -52,8 +53,8 @@ class ValidateAuth : Runnable {
                         Logger.d(resultInfo)
                         if(resultInfo.code == CODE_OK){
                             val authorizationInfo: AuthorizationInfo = resultInfo.data[0]
-                            SPUtil.put(Application.context!!, "experience", resultInfo.message)
-                            SPUtil.put(Application.context!!, "level", authorizationInfo.level.toString())
+                            SPUtil.put(Application.context!!, KEY_EXPERIENCE, resultInfo.message)
+                            SPUtil.put(Application.context!!, KEY_LEVEL, authorizationInfo.level.toString())
                             if(authorizationInfo.level.toInt() == 0 ){
                                 RxBus.default!!.post(ValidateEvent("level limit"))
                             }

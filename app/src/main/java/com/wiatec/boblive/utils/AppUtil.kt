@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.support.v4.content.FileProvider
 import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
@@ -207,6 +208,19 @@ object AppUtil{
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.action = Intent.ACTION_VIEW
         intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive")
+        context.startActivity(intent)
+    }
+
+    /**
+     * install apk file under android 7.0 and more
+     */
+    fun installApk(context: Context, path: String, name: String, authorities: String){
+        val file = File(path, name)
+        val uri = FileProvider.getUriForFile(context, authorities, file)
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK;
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setDataAndType(uri, "application/vnd.android.package-archive")
         context.startActivity(intent)
     }
 

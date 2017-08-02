@@ -6,6 +6,6 @@ import com.wiatec.boblive.pojo.ChannelInfo
  * Created by patrick on 13/07/2017.
  * create time : 10:20 AM
  */
-interface Channel {
+interface IChannel {
     fun loadChannel(execute: Boolean, channelList: ArrayList<ChannelInfo>?)
 }

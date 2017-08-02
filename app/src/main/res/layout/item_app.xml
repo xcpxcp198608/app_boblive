@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:focusable="true"
+    android:layout_margin="10dp"
+    android:padding="2dp"
+    android:focusableInTouchMode="true"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:background="@drawable/bg_item_channel"
+    android:layout_width="164dp"
+    android:layout_height="129dp">
+
+    <ImageView
+        android:src="@drawable/logo"
+        android:padding="10dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:id="@+id/imageView"
+        android:layout_width="160dp"
+        android:layout_height="95dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:padding="5dp"
+        android:gravity="center"
+        tool:text="CCTV-1sdfdsfdsfdsfds"
+        android:textSize="16sp"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:textColor="@color/colorWhite"
+        android:background="@color/colorTranslucent5"
+        android:layout_width="160dp"
+        android:layout_height="30dp" />
+
+</LinearLayout>

@@ -1,4 +1,4 @@
-package com.wiatec.boblive.play
+package com.wiatec.boblive.helper
 
 import com.wiatec.boblive.TYPE_LIVE
 import com.wiatec.boblive.pojo.ChannelInfo
@@ -6,7 +6,7 @@ import com.wiatec.boblive.pojo.ChannelInfo
 /**
  * play manager
  */
-class PlayManager(var channelInfoList: ArrayList<ChannelInfo>, var position: Int) {
+class PlayHelper(var channelInfoList: ArrayList<ChannelInfo>, var position: Int) {
 
     var channelInfo: ChannelInfo? = null
 
@@ -18,7 +18,7 @@ class PlayManager(var channelInfoList: ArrayList<ChannelInfo>, var position: Int
         }
     }
 
-    fun perviousChannel(){
+    fun previousChannel(){
         position --
         if (position < 0) position = channelInfoList.size - 1
         dispatchPlay()

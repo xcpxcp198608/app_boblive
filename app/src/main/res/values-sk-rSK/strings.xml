@@ -3,6 +3,7 @@
 
     <string name="app_name1">BOBLIVE</string>
     <string name="language">Choose Language:</string>
+    <string name="wifi">Choose Wifi:</string>
     <string name="notice">Notice</string>
     <string name="confirm">potrditev</string>
     <string name="cancel">Cancel</string>
@@ -41,7 +42,10 @@
     <string name="update_notice">Update Notice</string>
     <string name="login_notice">"You have no login , press 'Confirm' continue to login"</string>
     <string name="active_key">"tip v aktivno ključ."</string>
+    <string name="active_success">"Active success"</string>
+    <string name="type_in_password">"Type in password"</string>
     <string name="error_server">"Server error , please try again later"</string>
     <string name="error_key_format">"Active key format error"</string>
+    <string name="no_network">"Network invalidate, please check network first"</string>
     <string name="authorization_error">"Authorization key error, press 'confirm' type int another key, please contact customer service if it is not work"</string>
 </resources>

@@ -7,7 +7,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.wiatec.boblive"
-        minSdkVersion 17
+        minSdkVersion 16
         targetSdkVersion 25
         versionCode 100
         versionName "1.0.0"
@@ -17,7 +17,7 @@ android {
     signingConfigs {
         release {
             storeFile file("/KeyStore/platform_s905.keystore")
-            storePassword  KEYSTORE_PASSWORD
+            storePassword KEYSTORE_PASSWORD
             keyAlias "234"
             keyPassword KEY_PASSWORD
         }
