@@ -3,8 +3,8 @@ package com.wiatec.boblive.pojo
 /**
  * IChannel type
  */
-data class ChannelTypeInfo (val id: Int,
-                            val name: String,
-                            val icon: String,
-                            val flag: Int,
-                            val isLock: Int)
+data class ChannelTypeInfo (var id: Int,
+                            var name: String,
+                            var icon: String,
+                            var flag: Int,
+                            var isLock: Int)

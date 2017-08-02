@@ -29,8 +29,8 @@ class ChannelTypeAdapter(val channelTypeInfoList: ArrayList<ChannelTypeInfo>)
         holder.tvName.text = channelTypeInfo.name
         Glide.with(context)
                 .load(channelTypeInfo.icon)
-                .placeholder(R.drawable.img_hold1)
-                .error(R.drawable.img_hold1)
+                .placeholder(R.drawable.img_channel_type_hold)
+                .error(R.drawable.img_channel_type_hold)
                 .dontAnimate()
                 .into(holder.ivIcon)
         holder.itemView.setOnFocusChangeListener { v, hasFocus ->

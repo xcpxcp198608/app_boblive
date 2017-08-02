@@ -48,7 +48,7 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
             setContentView(R.layout.activity_main)
             authorization()
             initChannelType()
-            btMenu.setOnClickListener { startActivity(Intent(this, BasicActivity::class.java)) }
+            btMenu.setOnClickListener { startActivity(Intent(this, AppsActivity::class.java)) }
             btMenu.onFocusChangeListener = this
         }
     }
@@ -163,8 +163,8 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
                     AppUtil.launchApp(this@MainActivity, PACKAGE_NAME_SETTINGS)
                 }else {
                     presenter!!.activeAuthorization(activeKey)
-                    dialog.dismiss()
                 }
+                dialog.dismiss()
 
             }
         }

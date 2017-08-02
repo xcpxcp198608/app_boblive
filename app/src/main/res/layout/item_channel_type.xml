@@ -13,7 +13,7 @@
 
     <ImageView
         android:id="@+id/ivIcon"
-        android:src="@drawable/img_hold1"
+        android:src="@drawable/img_channel_type_hold"
         android:layout_width="400dp"
         android:layout_height="200dp" />
 

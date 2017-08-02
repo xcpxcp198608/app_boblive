@@ -45,7 +45,7 @@
             android:name=".view.UpgradeActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".view.BasicActivity"
+            android:name=".view.AppsActivity"
             android:screenOrientation="landscape" />
         <activity android:name=".view.MoviesActivity"
             android:screenOrientation="landscape"/>

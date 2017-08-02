@@ -13,7 +13,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:src="@drawable/logo"
+        android:src="@drawable/img_channel_hold"
         android:adjustViewBounds="true"
         android:id="@+id/ivIcon"
         android:layout_width="210dp"

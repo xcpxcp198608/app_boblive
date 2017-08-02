@@ -13,7 +13,6 @@
     android:layout_height="129dp">
 
     <ImageView
-        android:src="@drawable/logo"
         android:padding="10dp"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"

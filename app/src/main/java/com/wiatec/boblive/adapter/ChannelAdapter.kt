@@ -32,8 +32,8 @@ class ChannelAdapter(val channelInfoList: ArrayList<ChannelInfo>): RecyclerView.
         holder.tvName.text = channelInfo.name
         Glide.with(context)
                 .load(channelInfo.url)
-                .placeholder(R.drawable.logo1)
-                .error(R.drawable.logo1)
+                .placeholder(R.drawable.img_channel_hold)
+                .error(R.drawable.img_channel_hold)
                 .dontAnimate()
                 .into(holder.ivIcon)
         holder.itemView.setOnClickListener { v ->
