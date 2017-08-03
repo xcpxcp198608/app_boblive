@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/tvToast"
-        android:drawableLeft="@drawable/ic_smile_face"
+        android:drawableLeft="@drawable/ic_face_smile"
         tools:text="teststeste23423423432432234st"
         android:textSize="18sp"
         android:gravity="center"

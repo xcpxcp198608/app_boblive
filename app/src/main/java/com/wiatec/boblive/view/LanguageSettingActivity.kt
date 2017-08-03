@@ -1,12 +1,19 @@
 package com.wiatec.boblive.view
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.KeyEvent
+import android.view.Window
+import android.widget.Button
+import android.widget.TextView
 import com.px.kotlin.utils.SPUtil
 import com.wiatec.boblive.*
 import com.wiatec.boblive.manager.LanguageManager
+import com.wiatec.boblive.utils.AppUtil
+import com.wiatec.boblive.utils.NetUtil
 import kotlinx.android.synthetic.main.activity_language_setting.*
 
 /**
@@ -25,7 +32,33 @@ class LanguageSettingActivity: AppCompatActivity() {
     private fun onClick(language: String){
         setCache(language)
         LanguageManager.setLanguage(this@LanguageSettingActivity, language)
-        val intent: Intent =  Intent(this@LanguageSettingActivity, MainActivity::class.java)
+        if(!NetUtil.isConnected){
+            showGoSettingDialog()
+        }else {
+            startMain()
+        }
+    }
+
+    private fun showGoSettingDialog() {
+        val dialog: Dialog = AlertDialog.Builder(this).create()
+        dialog.show()
+        dialog.setCancelable(false)
+        val window: Window = dialog.window
+        window.setContentView(R.layout.dialog_update)
+        val tvInfo: TextView = window.findViewById(R.id.tvInfo) as TextView
+        val btConfirm: Button = window.findViewById(R.id.btConfirm) as Button
+        val btCancel: Button = window.findViewById(R.id.btCancel) as Button
+        tvInfo.text = getString(R.string.set_wifi)
+        btConfirm.setOnClickListener {
+            AppUtil.launchApp(this@LanguageSettingActivity, PACKAGE_NAME_SETTINGS)
+            dialog.dismiss()
+            finish()
+        }
+        btCancel.setOnClickListener { startMain() }
+    }
+
+    private fun startMain(){
+        val intent: Intent = Intent(this@LanguageSettingActivity, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)

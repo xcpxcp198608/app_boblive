@@ -21,9 +21,9 @@ object EmojiToast {
         textView.text = message
         var drawable: Drawable?
         if (emoji == EMOJI_SAD) {
-            drawable = context!!.resources.getDrawable(R.drawable.ic_sad_face)
+            drawable = context!!.resources.getDrawable(R.drawable.ic_face_sad)
         } else {
-            drawable = context!!.resources.getDrawable(R.drawable.ic_smile_face)
+            drawable = context!!.resources.getDrawable(R.drawable.ic_face_smile)
         }
         drawable!!.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
         textView.setCompoundDrawables(drawable, null, null, null)

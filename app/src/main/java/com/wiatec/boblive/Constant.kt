@@ -40,13 +40,11 @@ const val HUNDRED_PERCENT = "100%"
 
 const val PACKAGE_NAME_SETTINGS = "com.android.settings"
 
-const val CHANNEL_TYPE_BASIC = "BASIC"
-const val CHANNEL_TYPE_PREMIUM = "PREMIUM"
-const val CHANNEL_TYPE_ADULT = "ADULT"
+const val TEST_ACTIVITY_KEY = "wiatec"
 
 object Constant{
 
-    fun image_path(): String{
+    fun adimage_path(): String{
         return Application.context!!.getExternalFilesDir("adimages").absolutePath
     }
 }

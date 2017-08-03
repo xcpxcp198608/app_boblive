@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.TextView
 import com.px.kotlin.utils.SPUtil
 import com.wiatec.boblive.Application
+import com.wiatec.boblive.KEY_AUTHORIZATION
 import com.wiatec.boblive.R
 
 import com.wiatec.boblive.presenter.BasePresenter
@@ -62,7 +63,7 @@ abstract class BaseActivity<V, T : BasePresenter<V>> : AppCompatActivity() {
         val btCancel: Button = window.findViewById(R.id.btCancel) as Button
         tvInfo.text = getString(R.string.authorization_error) + "(" + message + ")"
         btConfirm.setOnClickListener {
-            SPUtil.put(Application.context!!, "authorization" , "")
+            SPUtil.put(Application.context!!, KEY_AUTHORIZATION , "")
             startActivity(Intent(Application.context!!, MainActivity::class.java))
             finish()
         }

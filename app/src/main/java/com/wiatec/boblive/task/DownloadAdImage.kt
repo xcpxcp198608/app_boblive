@@ -10,7 +10,6 @@ import com.wiatec.boblive.pojo.ImageInfo
 import com.wiatec.boblive.utils.NetUtil
 import com.wiatec.boblive.utils.OkHttp.Listener.StringListener
 import com.wiatec.boblive.utils.OkHttp.OkMaster
-import com.wiatec.boblive.utils.SysUtil
 import java.io.File
 
 /**
@@ -40,7 +39,7 @@ class DownloadAdImage: Runnable {
                                     OkMaster.download(Application.context)
                                             .name(name)
                                             .url(url)
-                                            .path(Constant.image_path())
+                                            .path(Constant.adimage_path())
                                             .startDownload(null)
                                     fileNameList.add(name)
                                 }
@@ -56,7 +55,7 @@ class DownloadAdImage: Runnable {
     }
 
     fun delete(fileNameList: ArrayList<String>){
-        val file: File = File(Constant.image_path())
+        val file: File = File(Constant.adimage_path())
         if(file.exists()){
             val files: Array<File> = file.listFiles()
             if(files.isNotEmpty()){

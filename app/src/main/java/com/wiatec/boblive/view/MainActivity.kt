@@ -12,6 +12,7 @@ import android.view.Window
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.px.kotlin.utils.Logger
 
 import com.wiatec.boblive.presenter.MainPresenter
@@ -60,9 +61,9 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
     }
 
     fun makeChannelTypeData(): ArrayList<ChannelTypeInfo> {
-        val c1 = ChannelTypeInfo(0, CHANNEL_TYPE_BASIC, "", 1, 0)
-        val c2 = ChannelTypeInfo(0, CHANNEL_TYPE_PREMIUM, "", 1, 0)
-        val c3 = ChannelTypeInfo(0, CHANNEL_TYPE_ADULT, "", 1, 0)
+        val c1 = ChannelTypeInfo(0, getString(R.string.basic), "", 1, 0)
+        val c2 = ChannelTypeInfo(0, getString(R.string.premium), "", 1, 0)
+        val c3 = ChannelTypeInfo(0, getString(R.string.adult), "", 1, 0)
         val channelTypeList = ArrayList<ChannelTypeInfo>()
         channelTypeList.add(c1)
         channelTypeList.add(c2)
@@ -88,6 +89,11 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
                 startActivity(intent)
             }
         })
+        channelTypeAdapter.setOnItemFocusListener(object: ChannelTypeAdapter.OnItemFocusListener{
+            override fun onFocus(view: View, position: Int, hasFocus: Boolean) {
+                presenter!!.loadAdImage()
+            }
+        })
     }
 
     override fun checkUpgrade(execute: Boolean, upgradeInfo: UpgradeInfo?) {
@@ -97,9 +103,9 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
     }
 
     override fun loadAdImage(execute: Boolean, imagePath: String?) {
-//        if(execute){
+        if(execute){
 //            Glide.with(this@MainActivity).load(imagePath).dontAnimate().into(ivMain)
-//        }
+        }
     }
 
     /**
@@ -119,7 +125,7 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         tvInfo.text = upgradeInfo.info
         btConfirm.setOnClickListener {
             val intent:Intent = Intent(this, UpgradeActivity::class.java)
-            intent.putExtra("url", upgradeInfo.url)
+            intent.putExtra(KEY_URL, upgradeInfo.url)
             startActivity(intent)}
         btCancel.setOnClickListener { finish() }
     }
@@ -155,7 +161,7 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         val btConfirm:Button = window.findViewById(R.id.btConfirm) as Button
         btConfirm.setOnClickListener {
             val activeKey = etAuthorization.text.toString()
-            if(activeKey != "wiatec" && (TextUtils.isEmpty(activeKey) || activeKey.length < 16)){
+            if(activeKey != TEST_ACTIVITY_KEY && (TextUtils.isEmpty(activeKey) || activeKey.length < 16)){
                 EmojiToast.show(getString(R.string.error_key_format), EmojiToast.EMOJI_SAD)
             }else {
                 if(!NetUtil.isConnected){

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
+import com.px.kotlin.utils.Logger
 import com.wiatec.boblive.KEY_CHANNEL_LIST
 import com.wiatec.boblive.KEY_POSITION
 import com.wiatec.boblive.R
@@ -29,7 +30,14 @@ class ChannelActivity : BaseActivity<IChannel, ChannelPresenter> (), IChannel {
         setContentView(R.layout.activity_channel)
         val type: String = intent.getStringExtra(TYPE_CHANNEL)
         presenter!!.loadChannel(type)
+        presenter!!.loadAdImage()
         btRetry.setOnClickListener { presenter!!.loadChannel(type) }
+    }
+
+    override fun loadAdImage(execute: Boolean, imagePath: String?) {
+        if(execute){
+
+        }
     }
 
     override fun loadChannel(execute: Boolean, channelList: ArrayList<ChannelInfo>?) {

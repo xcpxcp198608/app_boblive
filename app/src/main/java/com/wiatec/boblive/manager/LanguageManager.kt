@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.util.DisplayMetrics
-import com.px.kotlin.utils.Logger
 import com.wiatec.boblive.COUNTRY_CS
 import com.wiatec.boblive.COUNTRY_SK
 import com.wiatec.boblive.LANGUAGE_CS
@@ -20,9 +19,9 @@ object LanguageManager{
      fun setLanguage(context: Context, language: String) {
          val locale: Locale
          if(LANGUAGE_SK == language){
-            locale = Locale(COUNTRY_SK, LANGUAGE_SK, "")
+            locale = Locale(LANGUAGE_SK, COUNTRY_SK, "")
          }else if(LANGUAGE_CS == language){
-            locale = Locale(COUNTRY_CS, LANGUAGE_CS, "")
+            locale = Locale(LANGUAGE_CS, COUNTRY_CS, "")
          }else{
              locale = Locale.ENGLISH
          }
