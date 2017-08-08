@@ -20,7 +20,7 @@ class ChannelInfo : Serializable {
     var country: String? = null
     var style: String? = null
     var visible: Int = 0
-    var europe: Int = 0
+    var locked: Boolean = false
 
     override fun toString(): String {
         return "ChannelInfo{" +
@@ -35,7 +35,7 @@ class ChannelInfo : Serializable {
                 ", country='" + country + '\'' +
                 ", style='" + style + '\'' +
                 ", visible=" + visible +
-                ", europe=" + europe +
+                ", locked=" + locked +
                 '}'
     }
 }

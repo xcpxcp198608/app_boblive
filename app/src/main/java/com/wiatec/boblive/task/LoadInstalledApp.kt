@@ -2,7 +2,7 @@ package com.wiatec.boblive.task
 
 import android.content.Intent
 import android.content.pm.ResolveInfo
-import com.wiatec.boblive.Application
+import com.wiatec.boblive.instance.Application
 import com.wiatec.boblive.pojo.AppInfo
 import com.wiatec.boblive.sql.AppDao
 
@@ -29,6 +29,10 @@ class LoadInstalledApp: Runnable {
             appInfo.packageName = resolveInfo.activityInfo.packageName
             //通过包名过滤不需要显示的app
             if("com.android.tv.settings" != appInfo.packageName &&
+                    "eu.chainfire.supersu" != appInfo.packageName &&
+                    "com.droidlogic.appinstall" != appInfo.packageName &&
+                    "com.android.inputmethod.latin" != appInfo.packageName &&
+                    "com.droidlogic.readlog" != appInfo.packageName &&
                     "com.wiatec.boblive" != appInfo.packageName ){
                     appDao.insertOrUpdate(appInfo)
             }

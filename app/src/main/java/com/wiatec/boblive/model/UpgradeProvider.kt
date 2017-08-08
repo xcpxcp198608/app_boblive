@@ -3,8 +3,8 @@ package com.wiatec.boblive.model
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.px.kotlin.utils.Logger
-import com.wiatec.boblive.Application
-import com.wiatec.boblive.URL_UPDATE
+import com.wiatec.boblive.instance.Application
+import com.wiatec.boblive.instance.URL_UPDATE
 import com.wiatec.boblive.pojo.UpgradeInfo
 import com.wiatec.boblive.utils.AppUtil
 import com.wiatec.boblive.utils.OkHttp.Listener.StringListener

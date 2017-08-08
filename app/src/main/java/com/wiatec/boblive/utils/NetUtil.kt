@@ -3,10 +3,9 @@ package com.wiatec.boblive.utils
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
-import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 
-import com.wiatec.boblive.Application
+import com.wiatec.boblive.instance.Application
 
 /**
  * network utils

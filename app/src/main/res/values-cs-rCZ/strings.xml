@@ -52,4 +52,8 @@
     <string name="no_network">"Network invalidate, please check network first"</string>
     <string name="authorization_error">"Authorization key error, press 'confirm' type int another key, please contact customer service if it is not work"</string>
     <string name="set_wifi">"Have no network connection, set wifi now?"</string>
+    <string name="error_msg1">can not play</string>
+    <string name="error_msg2">show error information</string>
+    <string name="error_msg3">the video play fluently</string>
+    <string name="send">Send</string>
 </resources>

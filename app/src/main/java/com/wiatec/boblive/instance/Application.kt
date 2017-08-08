@@ -1,4 +1,4 @@
-package com.wiatec.boblive
+package com.wiatec.boblive.instance
 
 import android.content.Context
 import com.px.kotlin.utils.Logger

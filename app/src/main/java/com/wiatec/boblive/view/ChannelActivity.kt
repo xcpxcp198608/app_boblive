@@ -4,11 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
-import com.px.kotlin.utils.Logger
-import com.wiatec.boblive.KEY_CHANNEL_LIST
-import com.wiatec.boblive.KEY_POSITION
+import com.wiatec.boblive.instance.KEY_CHANNEL_LIST
+import com.wiatec.boblive.instance.KEY_POSITION
 import com.wiatec.boblive.R
-import com.wiatec.boblive.TYPE_CHANNEL
+import com.wiatec.boblive.instance.TYPE_CHANNEL
 import com.wiatec.boblive.adapter.ChannelAdapter
 import com.wiatec.boblive.pojo.ChannelInfo
 import com.wiatec.boblive.presenter.ChannelPresenter

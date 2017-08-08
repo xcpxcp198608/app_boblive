@@ -1,10 +1,11 @@
 package com.wiatec.boblive.presenter
 
-import com.wiatec.boblive.*
 import com.wiatec.boblive.entity.ResultInfo
+import com.wiatec.boblive.instance.Application
+import com.wiatec.boblive.instance.URL_ACTIVE
+import com.wiatec.boblive.instance.URL_VALIDATE
 import com.wiatec.boblive.model.*
 import com.wiatec.boblive.pojo.AuthorizationInfo
-import com.wiatec.boblive.pojo.ChannelTypeInfo
 import com.wiatec.boblive.pojo.UpgradeInfo
 import com.wiatec.boblive.utils.AppUtil
 import com.wiatec.boblive.view.IMain

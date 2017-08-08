@@ -5,7 +5,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.TextView
 import android.widget.Toast
-import com.wiatec.boblive.Application
+import com.wiatec.boblive.instance.Application
 
 import com.wiatec.boblive.R
 

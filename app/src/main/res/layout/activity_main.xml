@@ -21,6 +21,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <ImageButton
+        android:id="@+id/btSetting"
+        android:background="@drawable/bg_button_setting"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="80dp"
+        android:layout_gravity="right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <LinearLayout
         android:clipChildren="false"
         android:background="@color/colorTranslucent5"

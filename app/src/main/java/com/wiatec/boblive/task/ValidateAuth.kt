@@ -5,10 +5,10 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.px.kotlin.utils.Logger
 import com.px.kotlin.utils.SPUtil
-import com.wiatec.boblive.*
 import com.wiatec.boblive.entity.CODE_OK
 import com.wiatec.boblive.entity.CODE_UNAUTHORIZED
 import com.wiatec.boblive.entity.ResultInfo
+import com.wiatec.boblive.instance.*
 import com.wiatec.boblive.pojo.AuthorizationInfo
 import com.wiatec.boblive.rxevent.ValidateEvent
 import com.wiatec.boblive.utils.NetUtil
@@ -50,7 +50,7 @@ class ValidateAuth : Runnable {
                         if(response == null) return
                         val s:String = response.body().string()
                         val resultInfo: ResultInfo<AuthorizationInfo> = Gson().fromJson(s, object :TypeToken<ResultInfo<AuthorizationInfo>>(){}.type) ?: return
-                        Logger.d(resultInfo)
+//                        Logger.d(resultInfo)
                         if(resultInfo.code == CODE_OK){
                             val authorizationInfo: AuthorizationInfo = resultInfo.data[0]
                             SPUtil.put(Application.context!!, KEY_EXPERIENCE, resultInfo.message)

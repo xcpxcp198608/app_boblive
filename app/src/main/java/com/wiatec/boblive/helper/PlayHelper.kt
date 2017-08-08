@@ -1,6 +1,6 @@
 package com.wiatec.boblive.helper
 
-import com.wiatec.boblive.TYPE_LIVE
+import com.wiatec.boblive.instance.TYPE_LIVE
 import com.wiatec.boblive.pojo.ChannelInfo
 
 /**

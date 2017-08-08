@@ -4,10 +4,10 @@ import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.util.DisplayMetrics
-import com.wiatec.boblive.COUNTRY_CS
-import com.wiatec.boblive.COUNTRY_SK
-import com.wiatec.boblive.LANGUAGE_CS
-import com.wiatec.boblive.LANGUAGE_SK
+import com.wiatec.boblive.instance.COUNTRY_CS
+import com.wiatec.boblive.instance.COUNTRY_SK
+import com.wiatec.boblive.instance.LANGUAGE_CS
+import com.wiatec.boblive.instance.LANGUAGE_SK
 import java.util.*
 
 /**

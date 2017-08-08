@@ -3,8 +3,8 @@ package com.wiatec.boblive.model
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.px.kotlin.utils.Logger
-import com.wiatec.boblive.TOKEN
-import com.wiatec.boblive.URL_CHANNEL_TYPE
+import com.wiatec.boblive.instance.TOKEN
+import com.wiatec.boblive.instance.URL_CHANNEL_TYPE
 import com.wiatec.boblive.entity.CODE_OK
 import com.wiatec.boblive.entity.ResultInfo
 import com.wiatec.boblive.pojo.ChannelTypeInfo

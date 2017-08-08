@@ -1,6 +1,6 @@
 package com.wiatec.boblive.model
 
-import com.wiatec.boblive.Constant
+import com.wiatec.boblive.instance.Constant
 import java.io.File
 import java.util.*
 

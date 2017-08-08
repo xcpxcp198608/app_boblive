@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.bumptech.glide.Glide
 import com.wiatec.boblive.R
-import com.wiatec.boblive.TYPE_CHANNEL
+import com.wiatec.boblive.instance.TYPE_CHANNEL
 import com.wiatec.boblive.adapter.ChannelTypeAdapter
 import com.wiatec.boblive.pojo.ChannelTypeInfo
 import com.wiatec.boblive.presenter.ChannelTypePresenter

@@ -12,7 +12,6 @@ import android.view.Window
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import com.bumptech.glide.Glide
 import com.px.kotlin.utils.Logger
 
 import com.wiatec.boblive.presenter.MainPresenter
@@ -21,6 +20,7 @@ import com.wiatec.boblive.*
 import com.wiatec.boblive.adapter.ChannelTypeAdapter
 import com.wiatec.boblive.entity.CODE_OK
 import com.wiatec.boblive.entity.ResultInfo
+import com.wiatec.boblive.instance.*
 import com.wiatec.boblive.pojo.AuthorizationInfo
 import com.wiatec.boblive.pojo.ChannelTypeInfo
 import com.wiatec.boblive.pojo.UpgradeInfo
@@ -50,7 +50,9 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
             authorization()
             initChannelType()
             btMenu.setOnClickListener { startActivity(Intent(this, AppsActivity::class.java)) }
+            btSetting.setOnClickListener { AppUtil.launchApp(this, PACKAGE_NAME_SETTINGS) }
             btMenu.onFocusChangeListener = this
+            btSetting.onFocusChangeListener = this
         }
     }
 

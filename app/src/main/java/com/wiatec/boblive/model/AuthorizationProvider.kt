@@ -3,14 +3,10 @@ package com.wiatec.boblive.model
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.px.kotlin.utils.Logger
-import com.px.kotlin.utils.SPUtil
-import com.wiatec.boblive.KEY_AUTHORIZATION
-import com.wiatec.boblive.KEY_KEY
-import com.wiatec.boblive.KEY_MAC
-import com.wiatec.boblive.R
+import com.wiatec.boblive.instance.KEY_KEY
+import com.wiatec.boblive.instance.KEY_MAC
 import com.wiatec.boblive.entity.ResultInfo
 import com.wiatec.boblive.pojo.AuthorizationInfo
-import com.wiatec.boblive.utils.EmojiToast
 import com.wiatec.boblive.utils.OkHttp.Listener.StringListener
 import com.wiatec.boblive.utils.OkHttp.OkMaster
 import com.wiatec.boblive.utils.SysUtil

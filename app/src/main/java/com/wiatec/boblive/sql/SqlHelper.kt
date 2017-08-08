@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper
  * create time : 3:47 PM
  */
 const val DATABASE_NAME = "boblive"
-const val VERSION = 1
+const val VERSION = 2
 const val TABLE_APP = "app"
 const val CREATE_TABLE_APP = "create table if not exists "+ TABLE_APP+"(_id integer primary key autoincrement," +
         "name text, packageName text)"

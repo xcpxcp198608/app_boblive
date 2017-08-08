@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.TextView
 import com.px.kotlin.utils.SPUtil
 import com.wiatec.boblive.*
+import com.wiatec.boblive.instance.*
 import com.wiatec.boblive.manager.LanguageManager
 import com.wiatec.boblive.utils.AppUtil
 import com.wiatec.boblive.utils.NetUtil

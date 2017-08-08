@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.wiatec.boblive.Application
+import com.wiatec.boblive.instance.Application
 import com.wiatec.boblive.R
 import com.wiatec.boblive.pojo.AppInfo
 import com.wiatec.boblive.utils.AppUtil

@@ -3,7 +3,7 @@ package com.wiatec.boblive.sql
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import com.wiatec.boblive.Application
+import com.wiatec.boblive.instance.Application
 import com.wiatec.boblive.pojo.AppInfo
 
 /**
