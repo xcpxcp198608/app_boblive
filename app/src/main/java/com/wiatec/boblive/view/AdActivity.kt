@@ -19,6 +19,10 @@ class AdActivity : BaseActivity<ICommon, AdPresenter>(), ICommon {
         setContentView(R.layout.activity_ad)
     }
 
+    override fun onStart() {
+        super.onStart()
+        checkValidate(this)
+    }
 
     override fun loadAdImage(execute: Boolean, imagePath: String?) {
         if(execute){

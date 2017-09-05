@@ -32,7 +32,7 @@ class LanguageSettingActivity: AppCompatActivity() {
 
     private fun onClick(language: String){
         setCache(language)
-        LanguageManager.setLanguage(this@LanguageSettingActivity, language)
+        LanguageManager.setLanguage(language)
         if(!NetUtil.isConnected){
             showGoSettingDialog()
         }else {

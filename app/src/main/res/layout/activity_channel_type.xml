@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:clipChildren="false"
+    android:background="@drawable/img_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -44,16 +45,19 @@
 
     <FrameLayout
         android:clipChildren="false"
-        android:background="@color/colorTranslucentA"
+        android:background="@color/colorTranslucent5"
         android:layout_gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.RecyclerView
-            android:layout_margin="40dp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
             android:layout_gravity="center"
             android:id="@+id/rcvChannelType"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
     </FrameLayout>

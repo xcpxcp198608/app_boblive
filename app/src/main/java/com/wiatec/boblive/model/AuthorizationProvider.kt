@@ -20,7 +20,7 @@ class AuthorizationProvider : LoadableWithParams<ResultInfo<AuthorizationInfo>>{
                         onLoadListener: LoadableWithParams.OnLoadListener<ResultInfo<AuthorizationInfo>>) {
         OkMaster.post(url)
                 .parames(KEY_KEY, authorization)
-                .parames(KEY_MAC, SysUtil.getWifiMac())
+                .parames(KEY_MAC, SysUtil.getEthernetMac())
                 .enqueue(object : StringListener(){
                     override fun onSuccess(s: String?) {
                         val resultInfo:ResultInfo<AuthorizationInfo> = Gson().fromJson(s,

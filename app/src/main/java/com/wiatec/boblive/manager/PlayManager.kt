@@ -25,42 +25,90 @@ class PlayManager (var channelInfoList:List<ChannelInfo>, var currentPosition: I
         val type: String = channelInfo!!.type!!
         val url: String = AESUtil.decrypt(channelInfo!!.url, AESUtil.KEY)
         val level: Int = Integer.parseInt(SPUtil.get(Application.context!!, KEY_LEVEL, "1") as String)
-        val experience: String = SPUtil.get(Application.context!!, KEY_EXPERIENCE, "") as String
+        val temporary: Boolean = SPUtil.get(Application.context!!, KEY_TEMPORARY, false) as Boolean
         if(type == KEY_LIVE){
-            if(channelInfo!!.locked){
-                if(level >= 2){
-                    if(playListener != null){
-                        playListener!!.play(url)
-                    }
-                }else{
-                    if(experience == "true"){
-                        relayUrl(url)
-                    }else {
-                        if (playListener != null) {
-                            playListener!!.jumpToAd()
-                        }
-                    }
-                }
-            }else{
+            if(temporary){
                 if(playListener != null){
                     playListener!!.play(url)
                 }
-            }
-        }else if (type == KEY_RELAY){
-            if(channelInfo!!.locked){
-                if(level >= 2){
-                    relayUrl(url)
-                }else{
-                    if(experience == "true"){
-                        relayUrl(url)
-                    }else {
-                        if (playListener != null) {
-                            playListener!!.jumpToAd()
+            }else{
+                when (channelInfo!!.country){
+                    TYPE_BASIC -> {
+                        if(playListener != null){
+                            playListener!!.play(url)
+                        }
+                    }
+                    TYPE_PREMIUM -> {
+                        if(level == 2){
+                            if(playListener != null){
+                                playListener!!.play(url)
+                            }
+                        } else{
+                            if (playListener != null) {
+                                playListener!!.jumpToAd()
+                            }
+                        }
+                    }
+                    TYPE_ADULT ->{
+                        if(level == 3){
+                            if(playListener != null){
+                                playListener!!.play(url)
+                            }
+                        } else{
+                            if (playListener != null) {
+                                playListener!!.jumpToAd()
+                            }
+                        }
+                    }
+                    TYPE_FILMY ->{
+                        if(level == 4){
+                            if(playListener != null){
+                                playListener!!.play(url)
+                            }
+                        } else{
+                            if (playListener != null) {
+                                playListener!!.jumpToAd()
+                            }
                         }
                     }
                 }
-            }else{
+            }
+        }else if (type == KEY_RELAY){
+            if(temporary){
                 relayUrl(url)
+            }else{
+                when (channelInfo!!.country){
+                    TYPE_BASIC -> {
+                        relayUrl(url)
+                    }
+                    TYPE_PREMIUM -> {
+                        if(level == 2 || level == 5 || level == 6 || level == 8){
+                            relayUrl(url)
+                        } else{
+                            if (playListener != null) {
+                                playListener!!.jumpToAd()
+                            }
+                        }
+                    }
+                    TYPE_ADULT ->{
+                        if(level == 3 || level == 5 || level == 7 || level == 8){
+                            relayUrl(url)
+                        } else{
+                            if (playListener != null) {
+                                playListener!!.jumpToAd()
+                            }
+                        }
+                    }
+                    TYPE_FILMY ->{
+                        if(level == 4 || level == 6 || level == 7 || level == 8){
+                            relayUrl(url)
+                        } else{
+                            if (playListener != null) {
+                                playListener!!.jumpToAd()
+                            }
+                        }
+                    }
+                }
             }
         }else{
             Logger.d("channel type error")

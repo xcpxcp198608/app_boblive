@@ -11,8 +11,8 @@ import java.util.*
 class AdImageProvider: Loadable<String>{
 
     override fun onLoad(onLoadListener: Loadable.OnLoadListener<String>) {
-        val file: File = File(Constant.adimage_path())
-        val files: Array<File> = file.listFiles();
+        val file = File(Constant.adimage_path())
+        val files: Array<File> = file.listFiles()
         if(files.isNotEmpty()){
             val i = Random().nextInt(files.size)
             val file1 = files[i]

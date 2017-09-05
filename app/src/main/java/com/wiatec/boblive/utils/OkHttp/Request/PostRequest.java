@@ -4,7 +4,9 @@ import java.util.Map;
 
 import okhttp3.FormBody;
 import okhttp3.Headers;
+import okhttp3.MediaType;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 
 /**
  * Created by patrick on 2016/12/23.
@@ -26,11 +28,13 @@ public class PostRequest extends RequestMaster {
             builder.headers(headers);
         }
         if(parameters != null){
-            FormBody.Builder builder1 = new FormBody.Builder();
+            MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
+            StringBuilder stringBuilder = new StringBuilder();
             for (Map.Entry<String ,String > entry : parameters.stringMap.entrySet()){
-                builder1.add(entry.getKey() ,entry.getValue());
+                stringBuilder.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
             }
-            builder.post(builder1.build());
+            RequestBody requestBody = RequestBody.create(mediaType, stringBuilder.toString());
+            builder.post(requestBody);
         }
         if(tag != null){
             builder.tag(tag);

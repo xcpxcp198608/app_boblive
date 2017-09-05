@@ -1,6 +1,7 @@
 package com.wiatec.boblive.view
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -28,7 +29,7 @@ abstract class BaseActivity<V, T : BasePresenter<V>> : AppCompatActivity() {
 
     abstract fun createPresenter(): T
     var presenter: T? = null
-    var validateSubscription:Subscription? = null
+    private var validateSubscription:Subscription? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,34 +41,33 @@ abstract class BaseActivity<V, T : BasePresenter<V>> : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        checkValidate()
+
     }
 
-    private fun checkValidate(){
+    protected fun checkValidate(context: Context){
         validateSubscription = RxBus.default!!.toObservable(ValidateEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe{ (message) ->
-                    showValidateErrorDialog(message)
+                    showValidateErrorDialog(context, message)
                     validateSubscription!!.unsubscribe()
                 }
     }
 
-    private fun  showValidateErrorDialog(message: String) {
-        val dialog: Dialog = AlertDialog.Builder(this).create()
+    private fun  showValidateErrorDialog(context: Context, message: String) {
+        val dialog: Dialog = AlertDialog.Builder(context).create()
         dialog.show()
         dialog.setCancelable(false)
         val window: Window = dialog.window
         window.setContentView(R.layout.dialog_update)
         val tvInfo: TextView = window.findViewById(R.id.tvInfo) as TextView
         val btConfirm: Button = window.findViewById(R.id.btConfirm) as Button
-        val btCancel: Button = window.findViewById(R.id.btCancel) as Button
         tvInfo.text = getString(R.string.authorization_error) + "(" + message + ")"
+        btConfirm.requestFocus()
         btConfirm.setOnClickListener {
+            dialog.dismiss()
             SPUtil.put(Application.context!!, KEY_AUTHORIZATION, "")
             startActivity(Intent(Application.context!!, MainActivity::class.java))
-            finish()
         }
-        btCancel.setOnClickListener { finish() }
     }
 
     override fun onDestroy() {

@@ -14,4 +14,5 @@ const val CODE_SERVER_ERROR = 500
 data class ResultInfo<T>(var code: Int,
                          var status: String,
                          var message: String,
-                         var data: ArrayList<T>)
+                         var data: ArrayList<T>,
+                         var obj: T)

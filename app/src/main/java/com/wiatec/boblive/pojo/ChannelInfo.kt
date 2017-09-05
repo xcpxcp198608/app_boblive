@@ -11,7 +11,8 @@ class ChannelInfo : Serializable {
 
     var id: Int = 0
     var channelId: Int = 0
-    var sequence: Int = 0
+    var skSequence: Int = 0
+    var czSequence: Int = 0
     var tag: String? = null
     var name: String? = null
     var url: String? = null
@@ -19,14 +20,16 @@ class ChannelInfo : Serializable {
     var type: String? = null
     var country: String? = null
     var style: String? = null
-    var visible: Int = 0
+    var visible: Boolean = false
+    var backupStart: Boolean = false
     var locked: Boolean = false
 
     override fun toString(): String {
         return "ChannelInfo{" +
                 "id=" + id +
                 ", channelId=" + channelId +
-                ", sequence=" + sequence +
+                ", skSequence=" + skSequence +
+                ", czSequence=" + czSequence +
                 ", tag='" + tag + '\'' +
                 ", name='" + name + '\'' +
                 ", url='" + url + '\'' +
@@ -35,6 +38,7 @@ class ChannelInfo : Serializable {
                 ", country='" + country + '\'' +
                 ", style='" + style + '\'' +
                 ", visible=" + visible +
+                ", backupStart=" + backupStart +
                 ", locked=" + locked +
                 '}'
     }

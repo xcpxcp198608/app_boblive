@@ -55,6 +55,7 @@
         <activity
             android:name=".view.PlayActivity"
             android:screenOrientation="landscape" />
+        <activity android:name=".view.AdActivity"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -66,7 +67,15 @@
                 android:resource="@xml/path" />
         </provider>
 
-        <activity android:name=".view.AdActivity"></activity>
+        <receiver android:name=".receiver.ApkInstallReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+                <action android:name="android.intent.action.PACKAGE_REPLACED"/>
+                <data android:scheme="package"/>
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

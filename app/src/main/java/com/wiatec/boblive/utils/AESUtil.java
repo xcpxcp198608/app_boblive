@@ -81,7 +81,6 @@ public class AESUtil {
         } catch (BadPaddingException e) {
             e.printStackTrace();
         } catch (InvalidAlgorithmParameterException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return "encrypt_error";
@@ -111,7 +110,6 @@ public class AESUtil {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (InvalidAlgorithmParameterException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return "decrypt_error";

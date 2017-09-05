@@ -23,6 +23,11 @@ class AppsActivity : BaseActivity<ICommon, CommonPresenter>(), ICommon {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_apps)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        checkValidate(this)
         loadApp()
     }
 

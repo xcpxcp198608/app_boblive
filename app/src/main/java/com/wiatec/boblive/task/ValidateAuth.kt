@@ -38,7 +38,7 @@ class ValidateAuth : Runnable {
         if (TextUtils.isEmpty(authorization)) return
         OkMaster.post(URL_VALIDATE)
                 .parames(KEY_KEY, authorization)
-                .parames(KEY_MAC, SysUtil.getWifiMac())
+                .parames(KEY_MAC, SysUtil.getEthernetMac())
                 .enqueue(object: Callback{
                     override fun onFailure(call: Call?, e: IOException?) {
                         if(e != null){
@@ -47,22 +47,25 @@ class ValidateAuth : Runnable {
                     }
 
                     override fun onResponse(call: Call?, response: Response?) {
-                        if(response == null) return
-                        val s:String = response.body().string()
-                        val resultInfo: ResultInfo<AuthorizationInfo> = Gson().fromJson(s, object :TypeToken<ResultInfo<AuthorizationInfo>>(){}.type) ?: return
-//                        Logger.d(resultInfo)
-                        if(resultInfo.code == CODE_OK){
-                            val authorizationInfo: AuthorizationInfo = resultInfo.data[0]
-                            SPUtil.put(Application.context!!, KEY_EXPERIENCE, resultInfo.message)
-                            SPUtil.put(Application.context!!, KEY_LEVEL, authorizationInfo.level.toString())
-                            if(authorizationInfo.level.toInt() == 0 ){
-                                RxBus.default!!.post(ValidateEvent("level limit"))
+                        if (response == null) return
+                        try {
+                            val s: String = response.body().string()
+                            val resultInfo: ResultInfo<AuthorizationInfo> = Gson().fromJson(s, object : TypeToken<ResultInfo<AuthorizationInfo>>() {}.type) ?: return
+//                            Logger.d(resultInfo)
+                            if (resultInfo.code == CODE_OK) {
+                                val authorizationInfo: AuthorizationInfo = resultInfo.obj
+                                SPUtil.put(Application.context!!, KEY_TEMPORARY, authorizationInfo.temporary)
+                                SPUtil.put(Application.context!!, KEY_LEVEL, authorizationInfo.level.toString())
+                                if (!authorizationInfo.effective) {
+                                    RxBus.default!!.post(ValidateEvent("deactivate"))
+                                } else if (resultInfo.code == CODE_UNAUTHORIZED) {
+                                    RxBus.default!!.post(ValidateEvent("key not exists"))
+                                }
                             }
-                        }else if(resultInfo.code == CODE_UNAUTHORIZED){
-                            RxBus.default!!.post(ValidateEvent("key not exists"))
+                        }catch (e: Exception){
+                            if (e.message != null) Logger.d(e.message!!)
                         }
                     }
                 })
-
     }
 }

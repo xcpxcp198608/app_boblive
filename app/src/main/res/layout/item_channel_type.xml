@@ -6,15 +6,16 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:background="@drawable/bg_item_channel_type"
-    android:padding="2dp"
+    android:padding="3dp"
     android:layout_margin="20dp"
-    android:layout_width="400dp"
-    android:layout_height="200dp">
+    android:layout_width="356dp"
+    android:layout_height="206dp">
 
     <ImageView
         android:id="@+id/ivIcon"
+        android:scaleType="centerCrop"
         android:src="@drawable/img_channel_type_hold"
-        android:layout_width="400dp"
+        android:layout_width="350dp"
         android:layout_height="200dp" />
 
     <TextView

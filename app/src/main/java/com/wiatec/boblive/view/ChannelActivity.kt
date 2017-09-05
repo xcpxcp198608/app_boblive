@@ -33,6 +33,11 @@ class ChannelActivity : BaseActivity<IChannel, ChannelPresenter> (), IChannel {
         btRetry.setOnClickListener { presenter!!.loadChannel(type) }
     }
 
+    override fun onStart() {
+        super.onStart()
+        checkValidate(this)
+    }
+
     override fun loadAdImage(execute: Boolean, imagePath: String?) {
         if(execute){
 

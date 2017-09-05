@@ -18,15 +18,20 @@ import kotlinx.android.synthetic.main.activity_channel_type.*
  * create time : 10:18 AM
  */
 class ChannelTypeActivity : BaseActivity<IChannelType, ChannelTypePresenter>() , IChannelType {
-    override fun createPresenter(): ChannelTypePresenter {
-        return ChannelTypePresenter(this)
-    }
+
+    override fun createPresenter(): ChannelTypePresenter = ChannelTypePresenter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_channel_type)
-        presenter!!.loadChannelType()
-        btRetry.setOnClickListener { presenter!!.loadChannelType() }
+        val type = intent.getStringExtra(TYPE_CHANNEL)
+        presenter!!.loadChannelType(type)
+        btRetry.setOnClickListener { presenter!!.loadChannelType(type) }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        checkValidate(this)
     }
 
     override fun loadAdImage(execute: Boolean, imagePath: String?) {
@@ -45,14 +50,14 @@ class ChannelTypeActivity : BaseActivity<IChannelType, ChannelTypePresenter>() ,
             return
         }else{
             llLoading.visibility = View.GONE
-            val channelTypeAdapter: ChannelTypeAdapter = ChannelTypeAdapter(channelTypeList!!)
+            val channelTypeAdapter = ChannelTypeAdapter(channelTypeList!!)
             rcvChannelType.adapter = channelTypeAdapter
             rcvChannelType.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,
                     false)
             channelTypeAdapter.setOnItemClickListener(object: ChannelTypeAdapter.OnItemClickListener{
                 override fun onClick(view: View, position: Int) {
-                    val intent: Intent = Intent(this@ChannelTypeActivity, ChannelActivity::class.java)
-                    intent.putExtra(TYPE_CHANNEL, channelTypeList[position].name)
+                    val intent = Intent(this@ChannelTypeActivity, ChannelActivity::class.java)
+                    intent.putExtra(TYPE_CHANNEL, channelTypeList[position].tag)
                     startActivity(intent)
                 }
             })

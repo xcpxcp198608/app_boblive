@@ -16,7 +16,7 @@ class LoadInstalledApp: Runnable {
     }
 
     private fun load() {
-        val appDao: AppDao = AppDao()
+        val appDao = AppDao()
         val packageManager = Application.context!!.packageManager
         val intent = Intent("android.intent.action.MAIN")
         intent.addCategory("android.intent.category.LAUNCHER")

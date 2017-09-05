@@ -16,6 +16,7 @@ class ChannelTypeAdapter(val channelTypeInfoList: ArrayList<ChannelTypeInfo>)
     private var context: Context? = null
     private var onItemClickListener:OnItemClickListener? = null
     private var onItemFocusListener:OnItemFocusListener? = null
+    private var onItemLongClickListener:OnItemLongClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ChannelTypeAdapterViewHolder {
         context = parent!!.context
@@ -48,6 +49,12 @@ class ChannelTypeAdapter(val channelTypeInfoList: ArrayList<ChannelTypeInfo>)
                 onItemClickListener!!.onClick(v, position)
             }
         }
+        holder.itemView.setOnLongClickListener { v ->
+            if(onItemLongClickListener != null){
+                onItemLongClickListener!!.onLongClick(v, position)
+            }
+            true
+        }
     }
 
     override fun getItemCount(): Int {
@@ -68,6 +75,14 @@ class ChannelTypeAdapter(val channelTypeInfoList: ArrayList<ChannelTypeInfo>)
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener){
         this.onItemClickListener = onItemClickListener
+    }
+
+    interface OnItemLongClickListener{
+        fun onLongClick(view: View, position: Int)
+    }
+
+    fun setOnItemLongClickListener(onItemLongClickListener: OnItemLongClickListener){
+        this.onItemLongClickListener = onItemLongClickListener
     }
 
 }

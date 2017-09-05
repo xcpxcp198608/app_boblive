@@ -13,6 +13,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
+        android:visibility="gone"
         android:src="@drawable/img_channel_hold"
         android:adjustViewBounds="true"
         android:id="@+id/ivIcon"

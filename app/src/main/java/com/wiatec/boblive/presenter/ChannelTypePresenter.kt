@@ -1,9 +1,6 @@
 package com.wiatec.boblive.presenter
 
-import com.wiatec.boblive.model.AdImageProvider
-import com.wiatec.boblive.model.ChannelTypeProvider
-import com.wiatec.boblive.model.ListLoadable
-import com.wiatec.boblive.model.Loadable
+import com.wiatec.boblive.model.*
 import com.wiatec.boblive.pojo.ChannelTypeInfo
 import com.wiatec.boblive.view.IChannelType
 
@@ -13,11 +10,11 @@ import com.wiatec.boblive.view.IChannelType
  */
 class ChannelTypePresenter(val IChannelType: IChannelType) : BasePresenter<IChannelType>() {
 
-    val channelTypeProvider: ChannelTypeProvider = ChannelTypeProvider()
-    val adImageProvider: AdImageProvider = AdImageProvider()
+    private val channelTypeProvider = ChannelTypeProvider()
+    private val adImageProvider = AdImageProvider()
 
-    fun loadChannelType(){
-        channelTypeProvider.onLoad(object : ListLoadable.OnLoadListener<ChannelTypeInfo>{
+    fun loadChannelType(type: String){
+        channelTypeProvider.onLoad(type, object : ListLoadableWithParam.OnLoadListener<ChannelTypeInfo>{
             override fun onSuccess(execute: Boolean, list: ArrayList<ChannelTypeInfo>?) {
                 IChannelType.loadChannelType(execute, list)
             }

@@ -56,7 +56,7 @@ object AppUtil{
     /**
      * get app name by package name
      */
-    fun getLabelName(context: Context, packageName: String): String? {
+    fun getLabelName(context: Context, packageName: String): String {
         val packageManager = context.packageManager
         var applicationInfo: ApplicationInfo? = null
         try {
@@ -68,7 +68,7 @@ object AppUtil{
         if (applicationInfo != null) {
             return applicationInfo.loadLabel(packageManager).toString()
         } else {
-            return null
+            return ""
         }
     }
 

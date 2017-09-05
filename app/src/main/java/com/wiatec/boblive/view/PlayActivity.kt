@@ -33,9 +33,10 @@ import com.wiatec.boblive.instance.*
 class PlayActivity : AppCompatActivity(), SurfaceHolder.Callback, PlayManager.PlayListener,
         View.OnClickListener{
 
-    var mediaPlayer: MediaPlayer? = null
-    var surfaceHolder:SurfaceHolder? =null
-    var playManager: PlayManager? = null
+    private var mediaPlayer: MediaPlayer? = null
+    private var surfaceHolder:SurfaceHolder? =null
+    private var playManager: PlayManager? = null
+    private var currentUrlPosition: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +72,7 @@ class PlayActivity : AppCompatActivity(), SurfaceHolder.Callback, PlayManager.Pl
     }
 
     override fun play(url: String) {
-        playChannel(url)
+        playChannel(handleUrl(url))
     }
 
     override fun jumpToAd() {
@@ -89,7 +90,7 @@ class PlayActivity : AppCompatActivity(), SurfaceHolder.Callback, PlayManager.Pl
     }
 
     private fun showErrorReportDialog() {
-        var message: String = ""
+        var message = ""
         val dialog: Dialog = AlertDialog.Builder(this).create()
         dialog.show()
         val window: Window = dialog.window
@@ -98,11 +99,11 @@ class PlayActivity : AppCompatActivity(), SurfaceHolder.Callback, PlayManager.Pl
         val btConfirm: Button = window.findViewById(R.id.btSend) as Button
         radioGroup.check(R.id.rbMessage1)
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
-            when(checkedId){
-                R.id.rbMessage1 -> message = getString(R.string.error_msg1)
-                R.id.rbMessage2 -> message = getString(R.string.error_msg1)
-                R.id.rbMessage3 -> message = getString(R.string.error_msg1)
-                else -> message = getString(R.string.error_msg1)
+            message = when(checkedId){
+                R.id.rbMessage1 -> getString(R.string.error_msg1)
+                R.id.rbMessage2 -> getString(R.string.error_msg1)
+                R.id.rbMessage3 -> getString(R.string.error_msg1)
+                else -> getString(R.string.error_msg1)
             }
         }
         btConfirm.setOnClickListener {
@@ -111,7 +112,7 @@ class PlayActivity : AppCompatActivity(), SurfaceHolder.Callback, PlayManager.Pl
         }
     }
 
-    fun sendErrorReport(message: String){
+    private fun sendErrorReport(message: String){
         OkMaster.post(URL_ERROR_REPORT_SEND)
                 .parames("userName", SPUtil.get(Application.context!!, KEY_AUTHORIZATION, "test") as String)
                 .parames("channelName", playManager!!.channelInfo!!.name)
@@ -128,28 +129,52 @@ class PlayActivity : AppCompatActivity(), SurfaceHolder.Callback, PlayManager.Pl
                     }
 
                     override fun onFailure(e: String?) {
-                        if(e != null) Logger.d(e!!)
+                        if(e != null) Logger.d(e)
                     }
                 })
     }
 
-    private fun playChannel(url: String){
+    private fun handleUrl(url: String): ArrayList<String> {
+        var urlList = ArrayList<String>()
+        if(!url.contains("#")){
+            urlList.add(url)
+        }else{
+            urlList = url.split("#") as ArrayList<String>
+        }
+//        Logger.d(urlList)
+        return urlList
+    }
+
+    private fun playChannel(urlList: ArrayList<String>){
         if(mediaPlayer == null){
             mediaPlayer = MediaPlayer()
         }
+//        Logger.d(url)
         progressBar.visibility = View.VISIBLE
         mediaPlayer!!.reset()
-        mediaPlayer!!.setDataSource(url)
+        mediaPlayer!!.setDataSource(urlList[currentUrlPosition])
         mediaPlayer!!.setDisplay(surfaceHolder)
         mediaPlayer!!.prepareAsync()
         mediaPlayer!!.setOnPreparedListener {
             progressBar.visibility = View.GONE
             mediaPlayer!!.start() }
         mediaPlayer!!.setOnErrorListener { _,_,_ ->
-            playChannel(url)
+            Logger.d("error")
+            loopPlay(urlList)
             true
         }
-        mediaPlayer!!.setOnCompletionListener { playChannel(url) }
+        mediaPlayer!!.setOnCompletionListener {
+            Logger.d("complete")
+            loopPlay(urlList)
+        }
+    }
+
+    private fun loopPlay(urlList: ArrayList<String>){
+        currentUrlPosition ++
+        if(currentUrlPosition >= urlList.size){
+            currentUrlPosition = 0
+        }
+        playChannel(urlList)
     }
 
     override fun onDestroy() {

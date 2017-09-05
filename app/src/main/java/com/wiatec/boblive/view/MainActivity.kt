@@ -29,15 +29,13 @@ import com.wiatec.boblive.utils.EmojiToast
 import com.wiatec.boblive.utils.NetUtil
 import com.wiatec.boblive.utils.Zoom
 import kotlinx.android.synthetic.main.activity_main.*
-
+import android.view.WindowManager
 
 class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusChangeListener {
 
-    var isFirstBoot: Boolean = true
+    private var isFirstBoot: Boolean = true
 
-    override fun createPresenter(): MainPresenter {
-        return MainPresenter(this)
-    }
+    override fun createPresenter(): MainPresenter = MainPresenter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,22 +56,25 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
 
     override fun onStart() {
         super.onStart()
+        checkValidate(this)
         presenter!!.checkUpgrade()
         presenter!!.loadAdImage()
     }
 
-    fun makeChannelTypeData(): ArrayList<ChannelTypeInfo> {
-        val c1 = ChannelTypeInfo(0, getString(R.string.basic), "", 1, 0)
-        val c2 = ChannelTypeInfo(0, getString(R.string.premium), "", 1, 0)
-        val c3 = ChannelTypeInfo(0, getString(R.string.adult), "", 1, 0)
+    private fun makeChannelTypeData(): ArrayList<ChannelTypeInfo> {
+        val c1 = ChannelTypeInfo(0, getString(R.string.basic),getString(R.string.basic), "", "", 1, 0)
+        val c2 = ChannelTypeInfo(0, getString(R.string.premium),getString(R.string.premium), "", "", 1, 0)
+        val c3 = ChannelTypeInfo(0, getString(R.string.adult),getString(R.string.adult), "", "", 1, 0)
+        val c4 = ChannelTypeInfo(0, getString(R.string.film), getString(R.string.film), "", "", 1, 0)
         val channelTypeList = ArrayList<ChannelTypeInfo>()
         channelTypeList.add(c1)
         channelTypeList.add(c2)
         channelTypeList.add(c3)
+        channelTypeList.add(c4)
         return channelTypeList
     }
 
-    fun initChannelType(){
+    private fun initChannelType(){
         val channelTypeList = makeChannelTypeData()
         val channelTypeAdapter = ChannelTypeAdapter(channelTypeList)
         rcvMain.adapter = channelTypeAdapter
@@ -81,19 +82,124 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
                 LinearLayoutManager.HORIZONTAL, false)
         channelTypeAdapter.setOnItemClickListener(object: ChannelTypeAdapter.OnItemClickListener{
             override fun onClick(view: View, position: Int) {
+                val type = when(position){
+                    0 -> TYPE_BASIC
+                    1 -> TYPE_PREMIUM
+                    2 -> TYPE_ADULT
+                    3 -> TYPE_FILMY
+                    else -> TYPE_BASIC
+                }
                 val authorization: String = SPUtil.get(this@MainActivity, KEY_AUTHORIZATION, "").toString()
                 if(TextUtils.isEmpty(authorization)){
                     showAuthorizationDialog()
                     return
                 }
-                val intent: Intent = Intent(this@MainActivity, ChannelActivity::class.java)
-                intent.putExtra(TYPE_CHANNEL, channelTypeList[position].name)
-                startActivity(intent)
+                if(TYPE_ADULT == type){
+                    handleProtect(TYPE_ADULT, position)
+                }else {
+                    showChannel(type, position)
+                }
             }
         })
         channelTypeAdapter.setOnItemFocusListener(object: ChannelTypeAdapter.OnItemFocusListener{
             override fun onFocus(view: View, position: Int, hasFocus: Boolean) {
                 presenter!!.loadAdImage()
+            }
+        })
+        channelTypeAdapter.setOnItemLongClickListener(object : ChannelTypeAdapter.OnItemLongClickListener{
+            override fun onLongClick(view: View, position: Int) {
+                if(position == 2){
+                    val isProtect = SPUtil.get(this@MainActivity, TYPE_ADULT, true) as Boolean
+                    if(!isProtect) {
+                        showSettingPasswordDialog(TYPE_ADULT)
+                    }
+                }
+            }
+        })
+    }
+
+    fun showChannel(type: String, position: Int){
+        val intent = when(position){
+            0,1,2 -> Intent(this@MainActivity, ChannelActivity::class.java)
+            3 -> Intent(this@MainActivity, ChannelTypeActivity::class.java)
+            else -> Intent("")
+        }
+        intent.putExtra(TYPE_CHANNEL, type)
+        startActivity(intent)
+    }
+
+    private fun handleProtect(tag: String, position: Int) {
+        val isProtect = SPUtil.get(this@MainActivity, tag, true) as Boolean
+        val isSetting = SPUtil.get(this@MainActivity, tag + "protect", false) as Boolean
+        val password = SPUtil.get(this@MainActivity, "protectpassword", "") as String
+        if (isProtect) {
+            if (TextUtils.isEmpty(password)) {
+                showSettingPasswordDialog(tag)
+            } else {
+                if (isSetting) {
+                    showInputPasswordDialog(tag, position)
+                } else {
+                    showSettingPasswordDialog(tag)
+                }
+            }
+        } else {
+            showChannel(tag, position)
+        }
+    }
+
+    private fun showSettingPasswordDialog(tag: String) {
+        val dialog = AlertDialog.Builder(this).create()
+        dialog.show()
+        val window = dialog.window
+        window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        window.setContentView(R.layout.dialog_parent_control)
+        val etP1 = window.findViewById(R.id.etP1) as EditText
+        val etP2 = window.findViewById(R.id.etP2) as EditText
+        val btConfirm = window.findViewById(R.id.btConfirm) as Button
+        val btCancel = window.findViewById(R.id.btCancel) as Button
+        btConfirm.setOnClickListener(View.OnClickListener {
+            val p1 = etP1.text.toString().trim { it <= ' ' }
+            val p2 = etP2.text.toString().trim { it <= ' ' }
+            if (TextUtils.isEmpty(p1) || TextUtils.isEmpty(p2) || p1 != p2) {
+                EmojiToast.show(getString(R.string.password_format_error), EmojiToast.EMOJI_SAD)
+                return@OnClickListener
+            }
+            SPUtil.put(this@MainActivity, "protectpassword", p1)
+            SPUtil.put(this@MainActivity, tag, true)
+            SPUtil.put(this@MainActivity, tag + "protect", true)
+            dialog.dismiss()
+            EmojiToast.show(getString(R.string.password_setting_success), EmojiToast.EMOJI_SMILE)
+        })
+        btCancel.setOnClickListener {
+            SPUtil.put(this@MainActivity, "protectpassword", "")
+            SPUtil.put(this@MainActivity, tag, false)
+            dialog.dismiss()
+            EmojiToast.show(getString(R.string.parent_control_disabled), EmojiToast.EMOJI_SMILE)
+        }
+    }
+
+    private fun showInputPasswordDialog(tag: String, position: Int) {
+        val dialog = AlertDialog.Builder(this).create()
+        dialog.show()
+        val window = dialog.window
+        window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        window.setContentView(R.layout.dialog_input_password)
+        val etPassword = window.findViewById(R.id.etPassword) as EditText
+        val btConfirm = window.findViewById(R.id.btConfirm) as Button
+        btConfirm.setOnClickListener(View.OnClickListener {
+            val p = etPassword.text.toString().trim { it <= ' ' }
+            if (TextUtils.isEmpty(p)) {
+                EmojiToast.show(getString(R.string.password_format_error), EmojiToast.EMOJI_SAD)
+                return@OnClickListener
+            }
+            val cp = SPUtil.get(this@MainActivity, "protectpassword", "") as String
+            if (cp == p) {
+                showChannel(tag, position)
+                dialog.dismiss()
+            } else {
+                EmojiToast.show(getString(R.string.password_incorrect), EmojiToast.EMOJI_SMILE)
             }
         })
     }
@@ -115,7 +221,7 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
      * Confirm: start update activity and start download
      * Cancel:  exit app
      */
-    fun showUpgradeDialog(upgradeInfo: UpgradeInfo){
+    private fun showUpgradeDialog(upgradeInfo: UpgradeInfo){
         val dialog: Dialog = AlertDialog.Builder(this).create()
         dialog.show()
         dialog.setCancelable(false)
@@ -126,7 +232,7 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         val btCancel: Button = window.findViewById(R.id.btCancel) as Button
         tvInfo.text = upgradeInfo.info
         btConfirm.setOnClickListener {
-            val intent:Intent = Intent(this, UpgradeActivity::class.java)
+            val intent = Intent(this, UpgradeActivity::class.java)
             intent.putExtra(KEY_URL, upgradeInfo.url)
             startActivity(intent)}
         btCancel.setOnClickListener { finish() }
@@ -139,7 +245,7 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
      */
     private fun authorization() {
         val authorization: String = SPUtil.get(this, KEY_AUTHORIZATION, "").toString()
-        Logger.d(authorization)
+//        Logger.d(authorization)
         if(TextUtils.isEmpty(authorization)){
             showAuthorizationDialog()
             return
@@ -153,10 +259,10 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
      * Confirm: checkAuthorization
      */
     private fun showAuthorizationDialog() {
-        val dialog: Dialog = Dialog(this)
+        val dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.show()
-        dialog.setCancelable(false)
+//        dialog.setCancelable(false)
         val window: Window = dialog.window
         window.setContentView(R.layout.dialog_authorization)
         val etAuthorization: EditText = window.findViewById(R.id.etAuthorization) as EditText
@@ -182,7 +288,7 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         if(!execute) return
         Logger.d(resultInfo!!)
         if(resultInfo.code == CODE_OK){
-            val authorizationInfo:AuthorizationInfo = resultInfo.data[0]
+            val authorizationInfo:AuthorizationInfo = resultInfo.obj
             EmojiToast.show(getString(R.string.active_success), EmojiToast.EMOJI_SMILE)
             SPUtil.put(Application.context!!, KEY_AUTHORIZATION, authorizationInfo.key!!)
             SPUtil.put(Application.context!!, KEY_LEVEL, authorizationInfo.level.toString())
@@ -196,10 +302,10 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         if(!execute) return
         Logger.d(resultInfo!!)
         if(resultInfo.code == CODE_OK){
-            val authorizationInfo:AuthorizationInfo = resultInfo.data[0]
+            val authorizationInfo:AuthorizationInfo = resultInfo.obj
             SPUtil.put(Application.context!!, KEY_AUTHORIZATION, authorizationInfo.key!!)
             SPUtil.put(Application.context!!, KEY_LEVEL, authorizationInfo.level.toString())
-            SPUtil.put(Application.context!!, KEY_EXPERIENCE, resultInfo.message)
+            SPUtil.put(Application.context!!, KEY_TEMPORARY, authorizationInfo.temporary)
             if(authorizationInfo.level <= 0) {
                 showAuthorizationDialog()
                 EmojiToast.show(getString(R.string.authorization_error), EmojiToast.EMOJI_SAD)
@@ -219,9 +325,9 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
     override fun onFocusChange(v: View?, hasFocus: Boolean) {
         if(v == null) return
         if(hasFocus){
-            Zoom.zoomIn10to11(v)
+            Zoom.zoomIn10to12(v)
         }else{
-            Zoom.zoomIn11to10(v)
+            Zoom.zoomIn12to10(v)
         }
     }
 }

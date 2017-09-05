@@ -3,6 +3,7 @@ package com.wiatec.boblive.sql
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import com.px.kotlin.utils.Logger
 import com.wiatec.boblive.instance.Application
 import com.wiatec.boblive.pojo.AppInfo
 
@@ -48,6 +49,7 @@ class AppDao {
     }
 
     fun delete(appInfo: AppInfo){
+        Logger.d(appInfo.packageName)
         sql!!.delete(TABLE_APP, "packageName=?", arrayOf(appInfo.packageName))
     }
 

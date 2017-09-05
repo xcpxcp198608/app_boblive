@@ -15,14 +15,15 @@ import com.wiatec.boblive.utils.OkHttp.OkMaster
  * Created by patrick on 13/07/2017.
  * create time : 10:52 AM
  */
-class ChannelTypeProvider : ListLoadable<ChannelTypeInfo> {
+class ChannelTypeProvider : ListLoadableWithParam<ChannelTypeInfo> {
 
-    override fun onLoad(onLoadListener: ListLoadable.OnLoadListener<ChannelTypeInfo>) {
-        OkMaster.get(URL_CHANNEL_TYPE + TOKEN)
+    override fun onLoad(param:String, onLoadListener: ListLoadableWithParam.OnLoadListener<ChannelTypeInfo>) {
+        OkMaster.get(URL_CHANNEL_TYPE+ param + TOKEN)
                 .enqueue(object : StringListener(){
                     override fun onSuccess(s: String?) {
                         val resultInfo: ResultInfo<ChannelTypeInfo> = Gson().fromJson(s,
                                 object: TypeToken<ResultInfo<ChannelTypeInfo>>(){}.type)
+                        Logger.d(resultInfo)
                         if(resultInfo.code == CODE_OK){
                             val channelTypeList: ArrayList<ChannelTypeInfo> = resultInfo.data
                             if(channelTypeList.size > 0){
