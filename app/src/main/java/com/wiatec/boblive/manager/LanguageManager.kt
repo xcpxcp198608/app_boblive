@@ -20,16 +20,9 @@ import java.lang.reflect.Array.setBoolean
  */
 object LanguageManager{
 
-     fun setLanguage(language: String) {
-         val locale: Locale
-         if(LANGUAGE_SK == language){
-            locale = Locale(LANGUAGE_SK, COUNTRY_SK, "")
-         }else if(LANGUAGE_CS == language){
-            locale = Locale(LANGUAGE_CS, COUNTRY_CS, "")
-         }else{
-             locale = Locale.ENGLISH
-         }
-         realSet1(locale)
+     fun setLanguage(language: String, country: String) {
+         val locale = Locale(language, country, "")
+         realSet(locale)
     }
 
     /**
@@ -43,7 +36,7 @@ object LanguageManager{
         resources.updateConfiguration(configuration, displayMetrics)
     }
 
-    fun realSet1(locale: Locale){
+    fun realSet(locale: Locale){
         val amnClass = Class.forName("android.app.ActivityManagerNative")
         val defaultMethod = amnClass.getMethod("getDefault")
         defaultMethod.isAccessible = true

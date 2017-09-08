@@ -76,6 +76,12 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".receiver.LanguageChangeReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.LOCALE_CHANGED"/>
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

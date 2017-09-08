@@ -26,13 +26,13 @@ class LanguageSettingActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_language_setting)
-        btSK.setOnClickListener { onClick(LANGUAGE_SK) }
-        btCZ.setOnClickListener { onClick(LANGUAGE_CS) }
+        btSK.setOnClickListener { onClick(LANGUAGE_SK, COUNTRY_SK) }
+        btCZ.setOnClickListener { onClick(LANGUAGE_CS, COUNTRY_CS) }
     }
 
-    private fun onClick(language: String){
+    private fun onClick(language: String, country: String){
         setCache(language)
-        LanguageManager.setLanguage(language)
+        LanguageManager.setLanguage(language, country)
         if(!NetUtil.isConnected){
             showGoSettingDialog()
         }else {

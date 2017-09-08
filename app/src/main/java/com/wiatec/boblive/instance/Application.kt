@@ -26,7 +26,8 @@ class Application : android.app.Application() {
         Logger.init("----px----")
         context = applicationContext
         val language:  String = SPUtil.get(this@Application, KEY_LANGUAGE, "sk") as String
-        LanguageManager.setLanguage(language)
+        val country:  String = SPUtil.get(this@Application, KEY_COUNTRY, "SK") as String
+        LanguageManager.setLanguage(language, country)
         val executorService:ExecutorService = Executors.newCachedThreadPool()
         executorService.execute(ValidateAuth())
         executorService.execute(DownloadAdImage())

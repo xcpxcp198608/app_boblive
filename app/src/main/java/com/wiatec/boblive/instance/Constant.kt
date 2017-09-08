@@ -31,6 +31,7 @@ const val KEY_CHANNEL_LIST = "channelInfoList"
 const val KEY_EXPERIENCE = "experience"
 const val KEY_TEMPORARY = "temporary"
 const val KEY_LANGUAGE = "language"
+const val KEY_COUNTRY = "country"
 const val KEY_FIRST_BOOT = "isFirstBoot"
 const val KEY_AUTHORIZATION = "authorization"
 
