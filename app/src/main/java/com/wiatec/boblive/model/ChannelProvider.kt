@@ -1,5 +1,6 @@
 package com.wiatec.boblive.model
 
+import android.text.TextUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.px.kotlin.utils.Logger
@@ -18,13 +19,21 @@ class ChannelProvider : ListLoadableWithParam<ChannelInfo>{
 
     override fun onLoad(param: String, onLoadListener: ListLoadableWithParam.OnLoadListener<ChannelInfo>) {
         val language: String = SPUtil.get(Application.context!!, KEY_LANGUAGE, LANGUAGE_SK) as String
-        OkMaster.get(URL_CHANNEL + language + "/" + param + TOKEN)
+        val authorization: String = SPUtil.get(Application.context!!, KEY_AUTHORIZATION, "").toString()
+        var visible = "0"
+        if(!TextUtils.isEmpty(authorization)){
+            visible = "1"
+        }
+        val url = "$URL_CHANNEL$language/$param/$visible$TOKEN"
+        Logger.d(url)
+        OkMaster.get(url)
                 .enqueue(object: StringListener(){
                     override fun onSuccess(s: String?) {
                         val resultInfo: ResultInfo<ChannelInfo> = Gson().fromJson(s,
                                 object : TypeToken<ResultInfo<ChannelInfo>>(){}.type)
                         if(resultInfo.code == CODE_OK){
                             val channelList: ArrayList<ChannelInfo> = resultInfo.data
+                            Logger.d(channelList)
                             if(channelList.size > 0){
                                 onLoadListener.onSuccess(true, channelList)
                             }else{

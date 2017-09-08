@@ -45,7 +45,8 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
             finish()
         }else {
             setContentView(R.layout.activity_main)
-            authorization()
+//            authorization()
+            showAgreement()
             initChannelType()
             btMenu.setOnClickListener { startActivity(Intent(this, AppsActivity::class.java)) }
             btSetting.setOnClickListener { AppUtil.launchApp(this, PACKAGE_NAME_SETTINGS) }
@@ -91,8 +92,10 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
                 }
                 val authorization: String = SPUtil.get(this@MainActivity, KEY_AUTHORIZATION, "").toString()
                 if(TextUtils.isEmpty(authorization)){
-                    showAuthorizationDialog()
-                    return
+                    if(TYPE_BASIC != type) {
+                        showAuthorizationDialog()
+                        return
+                    }
                 }
                 if(TYPE_ADULT == type){
                     handleProtect(TYPE_ADULT, position)
@@ -251,6 +254,33 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
             return
         }else{
             presenter!!.validateAuthorization(authorization)
+        }
+    }
+
+    private fun showAgreement() {
+        val agree = SPUtil.get(this@MainActivity, "agree", false) as Boolean
+        if(agree) return
+        val alertDialog = AlertDialog.Builder(this@MainActivity).create()
+        alertDialog.show()
+        alertDialog.setCancelable(false)
+        val window = alertDialog.window ?: return
+        window.setContentView(R.layout.dialog_update)
+        val btConfirm = window.findViewById(R.id.btConfirm) as Button
+        val btCancel = window.findViewById(R.id.btCancel) as Button
+        val tvTitle = window.findViewById(R.id.tvTitle) as TextView
+        val textView = window.findViewById(R.id.tvInfo) as TextView
+        btCancel.visibility = View.GONE
+        btConfirm.text = getString(R.string.agree)
+        btCancel.text = getString(R.string.reject)
+        tvTitle.text = getString(R.string.agreement)
+        textView.textSize = 16f
+        textView.text = getString(R.string.n1)
+        btConfirm.setOnClickListener {
+            SPUtil.put(this@MainActivity, "agree", true)
+            alertDialog.dismiss()
+        }
+        btCancel.setOnClickListener {
+            SPUtil.put(this@MainActivity, "agree", false)
         }
     }
 

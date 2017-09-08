@@ -62,4 +62,10 @@
     <string name="password_setting_success">password setting successfully</string>
     <string name="parent_control_disabled">Parental Control disabled</string>
     <string name="password_incorrect">password incorrect</string>
+    <string name="n1">BobLive je úplne legálny a obsahuje len odkazy na iné dostupné weby na internete (Youtube, ZStream, Dizimag, TheVideo, atď.). Neukladá ani nenahráva žiadne videá, filmy alebo mediálne súbory. BobLive jednoducho zhromažďuje odkazy v pohodlnom, užívateľsky prívetivom rozhraní. Spoločnosť BobLive nezodpovedá za presnosť, dodržiavanie, autorské práva, zákonnosť, slušnosť alebo akýkoľvek iný aspekt obsahu iných prepojených stránok. Ak máte akékoľvek právne problémy, obráťte sa prosím na príslušných vlastníkov multimediálnych súborov alebo hostiteľské stránky. Všetky právne otázky týkajúce sa bezplatných televíznych relácií a filmov v tejto aplikácii by mali byť prevzaté zo strany samotných hostiteľov a poskytovateľov súborov, keďže s nimi nie sme spojení.
+V prípade porušenia autorských práv priamo kontaktujte zodpovedné osoby. BobLive funguje ako vyhľadávač filmových a televíznych relácií, ktoré sa verejne nachádzajú na internete a ktoré sa v zásade riadia samé ako Google. BobLive verí v ochranu duševného vlastníctva a je ochotný pomôcť, ak je to možné. BobLive nepreberá zodpovednosť za obsah na hosťovaných webových stránkach tretích strán, ani sám nenahráva videá ani nepomáha ostatným, aby tak urobili. Videá sú streamované priamo z vyššie uvedených služieb zdieľaním videa tretích strán. Všetky ostatné ochranné známky, logá a obrázky sú vlastníctvom ich príslušných a oprávnených vlastníkov.
+Použite BobLive na vlastné nebezpečenstvo.</string>
+    <string name="agree">Agree</string>
+    <string name="reject">Reject</string>
+    <string name="agreement">Agreement</string>
 </resources>
