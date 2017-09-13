@@ -12,7 +12,7 @@ import com.wiatec.boblive.utils.OkHttp.OkMaster
  * Created by patrick on 08/08/2017.
  * create time : 1:50 PM
  */
-class PlayManager (var channelInfoList:List<ChannelInfo>, var currentPosition: Int){
+class PlayManager (private var channelInfoList:List<ChannelInfo>, var currentPosition: Int){
 
     var channelInfo: ChannelInfo? = null
     var playListener: PlayListener? = null
@@ -32,7 +32,7 @@ class PlayManager (var channelInfoList:List<ChannelInfo>, var currentPosition: I
                     playListener!!.play(url)
                 }
             }else{
-                when (channelInfo!!.country){
+                when (channelInfo!!.country!!.toUpperCase()){
                     TYPE_BASIC -> {
                         if(playListener != null){
                             playListener!!.play(url)

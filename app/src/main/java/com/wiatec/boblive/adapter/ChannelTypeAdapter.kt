@@ -10,7 +10,7 @@ import com.wiatec.boblive.R
 import com.wiatec.boblive.pojo.ChannelTypeInfo
 import com.wiatec.boblive.utils.Zoom
 
-class ChannelTypeAdapter(val channelTypeInfoList: ArrayList<ChannelTypeInfo>)
+class ChannelTypeAdapter(var channelTypeInfoList: ArrayList<ChannelTypeInfo>)
     : RecyclerView.Adapter<ChannelTypeAdapterViewHolder>() {
 
     private var context: Context? = null
@@ -83,6 +83,11 @@ class ChannelTypeAdapter(val channelTypeInfoList: ArrayList<ChannelTypeInfo>)
 
     fun setOnItemLongClickListener(onItemLongClickListener: OnItemLongClickListener){
         this.onItemLongClickListener = onItemLongClickListener
+    }
+
+    fun notifyDataChange(channelTypeInfoList: ArrayList<ChannelTypeInfo>){
+        this.channelTypeInfoList = channelTypeInfoList
+        notifyDataSetChanged()
     }
 
 }

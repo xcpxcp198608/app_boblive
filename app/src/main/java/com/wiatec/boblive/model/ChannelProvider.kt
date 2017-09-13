@@ -20,12 +20,8 @@ class ChannelProvider : ListLoadableWithParam<ChannelInfo>{
     override fun onLoad(param: String, onLoadListener: ListLoadableWithParam.OnLoadListener<ChannelInfo>) {
         val language: String = SPUtil.get(Application.context!!, KEY_LANGUAGE, LANGUAGE_SK) as String
         val authorization: String = SPUtil.get(Application.context!!, KEY_AUTHORIZATION, "").toString()
-        var visible = "0"
-        if(!TextUtils.isEmpty(authorization)){
-            visible = "1"
-        }
-        val url = "$URL_CHANNEL$language/$param/$visible$TOKEN"
-        Logger.d(url)
+        val url = "$URL_CHANNEL$language/$param/$TOKEN"
+//        Logger.d(url)
         OkMaster.get(url)
                 .enqueue(object: StringListener(){
                     override fun onSuccess(s: String?) {
@@ -33,7 +29,7 @@ class ChannelProvider : ListLoadableWithParam<ChannelInfo>{
                                 object : TypeToken<ResultInfo<ChannelInfo>>(){}.type)
                         if(resultInfo.code == CODE_OK){
                             val channelList: ArrayList<ChannelInfo> = resultInfo.data
-                            Logger.d(channelList)
+//                            Logger.d(channelList)
                             if(channelList.size > 0){
                                 onLoadListener.onSuccess(true, channelList)
                             }else{

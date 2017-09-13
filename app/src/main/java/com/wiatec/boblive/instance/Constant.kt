@@ -14,6 +14,7 @@ const val URL_VALIDATE = URL_BASE + "auth/validate"
 const val TOKEN = "/9B67E88314F416F2092AB8ECA6A7C8EDCCE3D6D85A816E6E6F9F919B2E6C277D"
 
 const val TYPE_LIVE = "live"
+const val TYPE_MINI = "MINI"
 const val TYPE_BASIC = "BASIC"
 const val TYPE_PREMIUM = "PREMIUM"
 const val TYPE_ADULT = "ADULT"

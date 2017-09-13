@@ -5,6 +5,7 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.app.AlertDialog
 import android.view.KeyEvent
 import android.view.SurfaceHolder
@@ -28,6 +29,11 @@ import com.google.gson.reflect.TypeToken
 import com.px.kotlin.utils.SPUtil
 import com.wiatec.boblive.entity.CODE_OK
 import com.wiatec.boblive.instance.*
+import android.os.Looper
+import android.os.Message
+import com.wiatec.boblive.R.string.send
+import com.wiatec.boblive.utils.SysUtil
+import java.text.DecimalFormat
 
 
 class PlayActivity : AppCompatActivity(), SurfaceHolder.Callback, PlayManager.PlayListener,
@@ -37,6 +43,8 @@ class PlayActivity : AppCompatActivity(), SurfaceHolder.Callback, PlayManager.Pl
     private var surfaceHolder:SurfaceHolder? =null
     private var playManager: PlayManager? = null
     private var currentUrlPosition: Int = 0
+    private var send = true
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -146,25 +154,41 @@ class PlayActivity : AppCompatActivity(), SurfaceHolder.Callback, PlayManager.Pl
     }
 
     private fun playChannel(urlList: ArrayList<String>){
+        sendNetSpeed()
         if(mediaPlayer == null){
             mediaPlayer = MediaPlayer()
         }
-//        Logger.d(url)
+        val url = urlList[currentUrlPosition]
+        Logger.d(url)
         progressBar.visibility = View.VISIBLE
         mediaPlayer!!.reset()
-        mediaPlayer!!.setDataSource(urlList[currentUrlPosition])
+        mediaPlayer!!.setDataSource(url)
         mediaPlayer!!.setDisplay(surfaceHolder)
         mediaPlayer!!.prepareAsync()
         mediaPlayer!!.setOnPreparedListener {
             progressBar.visibility = View.GONE
+            tvNetSpeed.visibility = View.GONE
             mediaPlayer!!.start() }
+        mediaPlayer!!.setOnInfoListener { mp, what, extra ->
+            if(what == MediaPlayer.MEDIA_INFO_BUFFERING_START){
+                progressBar.visibility = View.VISIBLE
+                tvNetSpeed.visibility = View.VISIBLE
+            }
+            if(what == MediaPlayer.MEDIA_INFO_BUFFERING_END){
+                progressBar.visibility = View.GONE
+                tvNetSpeed.visibility = View.GONE
+            }
+            false
+        }
         mediaPlayer!!.setOnErrorListener { _,_,_ ->
             Logger.d("error")
+            tvNetSpeed.visibility = View.VISIBLE
             loopPlay(urlList)
             true
         }
         mediaPlayer!!.setOnCompletionListener {
             Logger.d("complete")
+            tvNetSpeed.visibility = View.VISIBLE
             loopPlay(urlList)
         }
     }
@@ -184,13 +208,14 @@ class PlayActivity : AppCompatActivity(), SurfaceHolder.Callback, PlayManager.Pl
             mediaPlayer!!.release()
             mediaPlayer = null
         }
+        send = false
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if(event!!.keyCode == KeyEvent.KEYCODE_DPAD_LEFT || event.keyCode == KeyEvent.KEYCODE_MEDIA_PREVIOUS){
+        if(event!!.keyCode == KeyEvent.KEYCODE_DPAD_UP || event.keyCode == KeyEvent.KEYCODE_MEDIA_PREVIOUS){
             playManager!!.previousChannel()
         }
-        if(event.keyCode == KeyEvent.KEYCODE_DPAD_RIGHT || event.keyCode == KeyEvent.KEYCODE_MEDIA_NEXT){
+        if(event.keyCode == KeyEvent.KEYCODE_DPAD_DOWN || event.keyCode == KeyEvent.KEYCODE_MEDIA_NEXT){
             playManager!!.nextChannel()
         }
         if(event.keyCode == KeyEvent.KEYCODE_BACK){
@@ -200,5 +225,35 @@ class PlayActivity : AppCompatActivity(), SurfaceHolder.Callback, PlayManager.Pl
             }
         }
         return super.onKeyDown(keyCode, event)
+    }
+
+    private fun sendNetSpeed() {
+        Thread(Runnable {
+            while (send) {
+                val s1 = SysUtil.getNetSpeedBytes()
+                try {
+                    Thread.sleep(2000)
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
+                }
+
+                val s2 = SysUtil.getNetSpeedBytes()
+                val f = (s2 - s1).toFloat() / 2f / 1024f
+                val decimalFormat = DecimalFormat("##0.00")
+                val s = decimalFormat.format(f)
+                val m = handler.obtainMessage()
+                m.obj = s
+                handler.sendMessage(m)
+            }
+        }).start()
+    }
+
+    private val handler = object : Handler(Looper.getMainLooper()) {
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+            val s = msg.obj.toString()
+//            Logger.d(s)
+            tvNetSpeed.text = s + "kbs"
+        }
     }
 }

@@ -2,6 +2,12 @@
     <string name="app_name">BobLive</string>
 
     <string name="app_name1">BOBLIVE</string>
+    <string name="mini_tag">MINI</string>
+    <string name="basic_tag">BASIC</string>
+    <string name="premium_tag">PREMIUM</string>
+    <string name="adult_tag">ADULT</string>
+    <string name="film_tag">FILMY</string>
+    <string name="mini">MINI</string>
     <string name="basic">BASIC</string>
     <string name="premium">PREMIUM</string>
     <string name="adult">PRO DOSPĚLÉ</string>
@@ -65,8 +71,8 @@
     <string name="n1">BobLive je naprosto legální a obsahuje pouze odkazy na jiné weby na Internetu (youtube, ZStream, Dizimag, TheVideo, atd.). Neukládá ani nenahrává žádná videa, filmy nebo mediální soubory. BobLive jednoduše shromažďuje odkazy v pohodlném, uživatelsky přívětivém rozhraní. Společnost BobLive nezodpovídá za přesnost, dodržování, autorská práva, zákonnost, slušnost nebo jakýkoli jiný aspekt obsahu jiných propojených stránek. Máte-li jakékoli právní problémy, obraťte se prosím na příslušné vlastníky multimediálních souborů nebo hostitelské stránky. Veškeré právní otázky týkající se bezplatných televizních pořadů, televizních pořadů a filmů v této aplikaci by měly být převzaty ze strany samotných hostitelů a poskytovatelů souborů, protože s nimi nejsme spojeni.
 V případě porušení autorských práv přímo kontaktujte odpovědné osoby. Společnost BobLive funguje jako vyhledávač filmových a televizních pořadů, které se veřejně nacházejí na internetu a které se v zásadě řídí samy jako Google. Společnost BobLive však pevně věří v ochranu duševního vlastnictví a je ochoten pomoci, pokud je to možné. Společnost BobLive nepřebírá zodpovědnost za obsah na hostovaných webových stránkách třetích stran, ani sami nenahráva  videa ani nepomáhá ostatním, aby tak učinili. Videa jsou streamovány přímo z výše uvedených služeb sdílením videa třetích stran. Všechny ostatní ochranné známky, loga a obrázky jsou vlastnictvím jejich příslušných a oprávněných vlastníků.
 Použijte BobLive na vlastní nebezpečí.</string>
-    <string name="agree">Agree</string>
-    <string name="reject">Reject</string>
-    <string name="agreement">Agreement</string>
+    <string name="agree">souhlasit</string>
+    <string name="reject">odmítají</string>
+    <string name="agreement">dohoda</string>
 
 </resources>

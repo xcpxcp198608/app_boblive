@@ -77,4 +77,39 @@ public class SysUtil {
         return language+"_"+country;
     }
 
+    public static int getNetSpeedBytes() {
+        String line;
+        String[] segs;
+        int received = 0;
+        int i;
+        int tmp = 0;
+        boolean isNum;
+        try {
+            FileReader fr = new FileReader("/proc/net/dev");
+            BufferedReader in = new BufferedReader(fr, 500);
+            while ((line = in.readLine()) != null) {
+                line = line.trim();
+                if (line.startsWith("rmnet") || line.startsWith("eth") || line.startsWith("wlan")) {
+                    segs = line.split(":")[1].split(" ");
+                    for (i = 0; i < segs.length; i++) {
+                        isNum = true;
+                        try {
+                            tmp = Integer.parseInt(segs[i]);
+                        } catch (Exception e) {
+                            isNum = false;
+                        }
+                        if (isNum) {
+                            received = received + tmp;
+                            break;
+                        }
+                    }
+                }
+            }
+            in.close();
+        } catch (IOException e) {
+            return -1;
+        }
+        return received;
+    }
+
 }

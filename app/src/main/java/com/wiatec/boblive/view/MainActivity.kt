@@ -45,11 +45,11 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
             finish()
         }else {
             setContentView(R.layout.activity_main)
-//            authorization()
             showAgreement()
             initChannelType()
             btMenu.setOnClickListener { startActivity(Intent(this, AppsActivity::class.java)) }
             btSetting.setOnClickListener { AppUtil.launchApp(this, PACKAGE_NAME_SETTINGS) }
+            btPerson.setOnClickListener { authorization() }
             btMenu.onFocusChangeListener = this
             btSetting.onFocusChangeListener = this
         }
@@ -62,37 +62,37 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         presenter!!.loadAdImage()
     }
 
-    private fun makeChannelTypeData(): ArrayList<ChannelTypeInfo> {
-        val c1 = ChannelTypeInfo(0, getString(R.string.basic),getString(R.string.basic), "", "", 1, 0)
-        val c2 = ChannelTypeInfo(0, getString(R.string.premium),getString(R.string.premium), "", "", 1, 0)
-        val c3 = ChannelTypeInfo(0, getString(R.string.adult),getString(R.string.adult), "", "", 1, 0)
-        val c4 = ChannelTypeInfo(0, getString(R.string.film), getString(R.string.film), "", "", 1, 0)
+    private fun makeChannelTypeData(auth: String): ArrayList<ChannelTypeInfo> {
         val channelTypeList = ArrayList<ChannelTypeInfo>()
-        channelTypeList.add(c1)
-        channelTypeList.add(c2)
-        channelTypeList.add(c3)
-        channelTypeList.add(c4)
+        if(TextUtils.isEmpty(auth)) {
+            val c0 = ChannelTypeInfo(0, getString(R.string.mini_tag), getString(R.string.mini), "", "", 1, 0)
+            channelTypeList.add(c0)
+        }else {
+            val c1 = ChannelTypeInfo(0, getString(R.string.basic_tag), getString(R.string.basic), "", "", 1, 0)
+            val c2 = ChannelTypeInfo(0, getString(R.string.premium_tag), getString(R.string.premium), "", "", 1, 0)
+            val c3 = ChannelTypeInfo(0, getString(R.string.adult_tag), getString(R.string.adult), "", "", 1, 0)
+            val c4 = ChannelTypeInfo(0, getString(R.string.film_tag), getString(R.string.film), "", "", 1, 0)
+            channelTypeList.add(c1)
+            channelTypeList.add(c2)
+            channelTypeList.add(c3)
+            channelTypeList.add(c4)
+        }
         return channelTypeList
     }
 
     private fun initChannelType(){
-        val channelTypeList = makeChannelTypeData()
+        val auth = SPUtil.get(this@MainActivity, KEY_AUTHORIZATION, "") as String
+        val channelTypeList = makeChannelTypeData(auth)
         val channelTypeAdapter = ChannelTypeAdapter(channelTypeList)
         rcvMain.adapter = channelTypeAdapter
         rcvMain.layoutManager = LinearLayoutManager(this@MainActivity,
                 LinearLayoutManager.HORIZONTAL, false)
         channelTypeAdapter.setOnItemClickListener(object: ChannelTypeAdapter.OnItemClickListener{
             override fun onClick(view: View, position: Int) {
-                val type = when(position){
-                    0 -> TYPE_BASIC
-                    1 -> TYPE_PREMIUM
-                    2 -> TYPE_ADULT
-                    3 -> TYPE_FILMY
-                    else -> TYPE_BASIC
-                }
+                val type = channelTypeList[position].tag
                 val authorization: String = SPUtil.get(this@MainActivity, KEY_AUTHORIZATION, "").toString()
                 if(TextUtils.isEmpty(authorization)){
-                    if(TYPE_BASIC != type) {
+                    if(TYPE_MINI != type) {
                         showAuthorizationDialog()
                         return
                     }
@@ -111,20 +111,26 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         })
         channelTypeAdapter.setOnItemLongClickListener(object : ChannelTypeAdapter.OnItemLongClickListener{
             override fun onLongClick(view: View, position: Int) {
-                if(position == 2){
+                val targetPosition =  if(TextUtils.isEmpty(auth)){
+                    3
+                }else{
+                    2
+                }
+                if(position == targetPosition){
                     val isProtect = SPUtil.get(this@MainActivity, TYPE_ADULT, true) as Boolean
                     if(!isProtect) {
                         showSettingPasswordDialog(TYPE_ADULT)
                     }
                 }
+
             }
         })
     }
 
     fun showChannel(type: String, position: Int){
         val intent = when(position){
-            0,1,2 -> Intent(this@MainActivity, ChannelActivity::class.java)
-            3 -> Intent(this@MainActivity, ChannelTypeActivity::class.java)
+            0,1,2,3 -> Intent(this@MainActivity, ChannelActivity::class.java)
+            4 -> Intent(this@MainActivity, ChannelTypeActivity::class.java)
             else -> Intent("")
         }
         intent.putExtra(TYPE_CHANNEL, type)
@@ -322,6 +328,7 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
             EmojiToast.show(getString(R.string.active_success), EmojiToast.EMOJI_SMILE)
             SPUtil.put(Application.context!!, KEY_AUTHORIZATION, authorizationInfo.key!!)
             SPUtil.put(Application.context!!, KEY_LEVEL, authorizationInfo.level.toString())
+            initChannelType()
         }else{
             EmojiToast.show(resultInfo.message, EmojiToast.EMOJI_SAD)
             showAuthorizationDialog()

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
+import com.px.kotlin.utils.Logger
 import com.wiatec.boblive.instance.KEY_CHANNEL_LIST
 import com.wiatec.boblive.instance.KEY_POSITION
 import com.wiatec.boblive.R
@@ -57,12 +58,12 @@ class ChannelActivity : BaseActivity<IChannel, ChannelPresenter> (), IChannel {
         tvPosition.text = "1"
         tvSplit.visibility = View.VISIBLE
         tvTotal.text = channelList!!.size.toString()
-        val channelAdapter: ChannelAdapter = ChannelAdapter(channelList!!)
+        val channelAdapter = ChannelAdapter(channelList)
         rcvChannel.adapter = channelAdapter
         rcvChannel.layoutManager = GridLayoutManager(this, 5, GridLayoutManager.VERTICAL, false)
         channelAdapter.setOnItemClickListener(object: ChannelAdapter.OnItemClickListener{
             override fun onItemClick(view: View, position: Int) {
-                val intent: Intent = Intent(this@ChannelActivity, PlayActivity::class.java)
+                val intent = Intent(this@ChannelActivity, PlayActivity::class.java)
                 intent.putExtra(KEY_CHANNEL_LIST, channelList as Serializable)
                 intent.putExtra(KEY_POSITION, position)
                 startActivity(intent)

@@ -12,8 +12,8 @@ import com.wiatec.boblive.view.IChannel
  */
 class ChannelPresenter(val iChannel: IChannel): BasePresenter<IChannel>(){
 
-    val channelProvider: ChannelProvider = ChannelProvider()
-    val adImageProvider: AdImageProvider = AdImageProvider()
+    private val channelProvider = ChannelProvider()
+    private val adImageProvider = AdImageProvider()
 
     fun loadChannel(country: String){
         channelProvider.onLoad(country, object : ListLoadableWithParam.OnLoadListener<ChannelInfo>{
