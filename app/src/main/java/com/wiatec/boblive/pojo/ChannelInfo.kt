@@ -17,9 +17,9 @@ class ChannelInfo : Serializable {
     var name: String? = null
     var url: String? = null
     var icon: String? = null
-    var type: String? = null
     var country: String? = null
-    var style: String? = null
+    var type: Int = 0
+    var style: Int = 0
     var visible: Boolean = false
     var backupStart: Boolean = false
     var locked: Boolean = false

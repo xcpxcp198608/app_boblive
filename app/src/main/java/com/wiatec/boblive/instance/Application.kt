@@ -7,6 +7,7 @@ import com.wiatec.boblive.manager.LanguageManager
 import com.wiatec.boblive.task.DownloadAdImage
 import com.wiatec.boblive.task.LoadInstalledApp
 import com.wiatec.boblive.task.ValidateAuth
+import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -34,5 +35,8 @@ class Application : android.app.Application() {
         executorService.execute(LoadInstalledApp())
     }
 
-
+    private fun startTask(){
+        val timer = Timer()
+        val timeTask = 0
+    }
 }

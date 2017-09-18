@@ -52,6 +52,7 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
             btPerson.setOnClickListener { authorization() }
             btMenu.onFocusChangeListener = this
             btSetting.onFocusChangeListener = this
+            btPerson.onFocusChangeListener = this
         }
     }
 
@@ -315,7 +316,6 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
                     presenter!!.activeAuthorization(activeKey)
                 }
                 dialog.dismiss()
-
             }
         }
     }

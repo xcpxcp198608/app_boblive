@@ -22,11 +22,11 @@ class PlayManager (private var channelInfoList:List<ChannelInfo>, var currentPos
     }
 
     fun dispatchChannel(){
-        val type: String = channelInfo!!.type!!
+        val type: Int = channelInfo!!.type
         val url: String = AESUtil.decrypt(channelInfo!!.url, AESUtil.KEY)
         val level: Int = Integer.parseInt(SPUtil.get(Application.context!!, KEY_LEVEL, "1") as String)
         val temporary: Boolean = SPUtil.get(Application.context!!, KEY_TEMPORARY, false) as Boolean
-        if(type == KEY_LIVE){
+        if(type == 1){
             if(temporary){
                 if(playListener != null){
                     playListener!!.play(url)
@@ -73,7 +73,7 @@ class PlayManager (private var channelInfoList:List<ChannelInfo>, var currentPos
                     }
                 }
             }
-        }else if (type == KEY_RELAY){
+        }else if (type == 3){
             if(temporary){
                 relayUrl(url)
             }else{

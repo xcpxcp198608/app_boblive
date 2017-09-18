@@ -25,13 +25,13 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".view.MainActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            android:clearTaskOnLaunch="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.HOME" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.MONKEY" />
+                <category android:name="android.intent.category.HOME"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.MONKEY"/>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
