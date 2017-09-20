@@ -17,6 +17,7 @@
     <string name="notice">Poznámka</string>
     <string name="confirm">Potvrdit</string>
     <string name="cancel">Zrušit</string>
+    <string name="reset">Reset</string>
     <string name="yes">Áno</string>
     <string name="no">Ne</string>
     <string name="ad">Reklama</string>
@@ -74,5 +75,10 @@ Použijte BobLive na vlastní nebezpečí.</string>
     <string name="agree">souhlasit</string>
     <string name="reject">odmítají</string>
     <string name="agreement">dohoda</string>
+    <string name="ok">OK</string>
+    <string name="consent_title">CONSENT</string>
+    <string name="consent_content">CONTENT</string>
+    <string name="notice_reset">type in activate code</string>
+    <string name="notice_reset_error">Activate code error</string>
 
 </resources>

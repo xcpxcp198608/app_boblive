@@ -2,18 +2,24 @@ package com.wiatec.boblive.task
 
 import android.text.TextUtils
 import com.px.kotlin.utils.Logger
+import com.px.kotlin.utils.SPUtil
+import com.wiatec.boblive.instance.Application
 import com.wiatec.boblive.utils.OkHttp.Listener.StringListener
 import com.wiatec.boblive.utils.OkHttp.OkMaster
 import com.wiatec.boblive.utils.AESUtil
+import org.json.JSONException
+import org.json.JSONObject
+import java.util.*
+
 /**
  * Created by patrick on 18/09/2017.
  * create time : 6:12 PM
  */
-private val URL = "http://apius.protv.company/v1/get_token.do?"
-private val PRE = "BTVi35C41E7"
-private val PWD = "Ho2oMcqUZMMvFzqb"
+private val URL = "http://apieu.protv.company/v1/get_token.do?"
+private val PRE = "B0015C41E7"
+private val PWD = "Dfuk5ygo8AelWvGj"
 
-class PlayTokenTask: Runnable {
+class PlayTokenTask: TimerTask() {
     override fun run() {
         start()
     }
@@ -28,6 +34,15 @@ class PlayTokenTask: Runnable {
                     override fun onSuccess(s: String?) {
                         if(TextUtils.isEmpty(s)) return
                         Logger.d(s!!)
+                        try {
+                            val jsonObject = JSONObject(s)
+                            val data = jsonObject.getJSONObject("data")
+                            val streamToken = data.getString("token")
+                            Logger.d(streamToken)
+                            SPUtil.put(Application.context!!, "streamToken", streamToken)
+                        } catch (e: JSONException) {
+                            Logger.d("token json format error")
+                        }
                     }
 
                     override fun onFailure(e: String?) {

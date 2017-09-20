@@ -45,7 +45,8 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
             finish()
         }else {
             setContentView(R.layout.activity_main)
-            showAgreement()
+            showAgreementDialog()
+            showConsentDataDialog()
             initChannelType()
             btMenu.setOnClickListener { startActivity(Intent(this, AppsActivity::class.java)) }
             btSetting.setOnClickListener { AppUtil.launchApp(this, PACKAGE_NAME_SETTINGS) }
@@ -120,7 +121,7 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
                 if(position == targetPosition){
                     val isProtect = SPUtil.get(this@MainActivity, TYPE_ADULT, true) as Boolean
                     if(!isProtect) {
-                        showSettingPasswordDialog(TYPE_ADULT)
+                        showInputPasswordDialog(TYPE_ADULT, position)
                     }
                 }
 
@@ -198,6 +199,7 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         window.setContentView(R.layout.dialog_input_password)
         val etPassword = window.findViewById(R.id.etPassword) as EditText
         val btConfirm = window.findViewById(R.id.btConfirm) as Button
+        val btReset = window.findViewById(R.id.btReset) as Button
         btConfirm.setOnClickListener(View.OnClickListener {
             val p = etPassword.text.toString().trim { it <= ' ' }
             if (TextUtils.isEmpty(p)) {
@@ -210,6 +212,36 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
                 dialog.dismiss()
             } else {
                 EmojiToast.show(getString(R.string.password_incorrect), EmojiToast.EMOJI_SMILE)
+            }
+        })
+        btReset.setOnClickListener({
+            showResetPasswordDialog(tag)
+            dialog.dismiss()
+        })
+    }
+
+    private fun showResetPasswordDialog(tag: String) {
+        val dialog = AlertDialog.Builder(this).create()
+        dialog.show()
+        val window = dialog.window
+        window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        window.setContentView(R.layout.dialog_input_password)
+        val etPassword = window.findViewById(R.id.etPassword) as EditText
+        val btConfirm = window.findViewById(R.id.btConfirm) as Button
+        val btReset = window.findViewById(R.id.btReset) as Button
+        btReset.visibility = View.GONE
+        etPassword.hint = getString(R.string.notice_reset)
+        btConfirm.setOnClickListener({
+            val code = etPassword.text.toString().trim()
+            val currentCode = SPUtil.get(this@MainActivity, KEY_AUTHORIZATION, "-1") as String
+            Logger.d(code)
+            Logger.d(currentCode)
+            if(currentCode.equals(code)){
+                showSettingPasswordDialog(tag)
+                dialog.dismiss()
+            }else{
+                EmojiToast.show(getString(R.string.notice_reset_error), EmojiToast.EMOJI_SAD)
             }
         })
     }
@@ -264,7 +296,7 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         }
     }
 
-    private fun showAgreement() {
+    private fun showAgreementDialog() {
         val agree = SPUtil.get(this@MainActivity, "agree", false) as Boolean
         if(agree) return
         val alertDialog = AlertDialog.Builder(this@MainActivity).create()
@@ -288,6 +320,33 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         }
         btCancel.setOnClickListener {
             SPUtil.put(this@MainActivity, "agree", false)
+        }
+    }
+
+
+    private fun showConsentDataDialog() {
+        val agree = SPUtil.get(this@MainActivity, "consent", false) as Boolean
+        if(agree) return
+        val alertDialog = AlertDialog.Builder(this@MainActivity).create()
+        alertDialog.show()
+        alertDialog.setCancelable(false)
+        val window = alertDialog.window ?: return
+        window.setContentView(R.layout.dialog_update)
+        val btConfirm = window.findViewById(R.id.btConfirm) as Button
+        val btCancel = window.findViewById(R.id.btCancel) as Button
+        val tvTitle = window.findViewById(R.id.tvTitle) as TextView
+        val textView = window.findViewById(R.id.tvInfo) as TextView
+        btConfirm.text = getString(R.string.ok)
+        btCancel.text = getString(R.string.cancel)
+        tvTitle.text = getString(R.string.consent_title)
+        textView.textSize = 16f
+        textView.text = getString(R.string.consent_content)
+        btConfirm.setOnClickListener {
+            SPUtil.put(this@MainActivity, "consent", true)
+            alertDialog.dismiss()
+        }
+        btCancel.setOnClickListener {
+            SPUtil.put(this@MainActivity, "consent", false)
         }
     }
 

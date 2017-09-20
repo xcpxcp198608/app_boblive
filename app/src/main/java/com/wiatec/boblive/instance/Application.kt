@@ -6,6 +6,7 @@ import com.px.kotlin.utils.SPUtil
 import com.wiatec.boblive.manager.LanguageManager
 import com.wiatec.boblive.task.DownloadAdImage
 import com.wiatec.boblive.task.LoadInstalledApp
+import com.wiatec.boblive.task.PlayTokenTask
 import com.wiatec.boblive.task.ValidateAuth
 import java.util.*
 import java.util.concurrent.ExecutorService
@@ -33,10 +34,11 @@ class Application : android.app.Application() {
         executorService.execute(ValidateAuth())
         executorService.execute(DownloadAdImage())
         executorService.execute(LoadInstalledApp())
+        startTask()
     }
 
     private fun startTask(){
         val timer = Timer()
-        val timeTask = 0
+        timer.schedule(PlayTokenTask(), 0, 18000000)
     }
 }

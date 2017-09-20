@@ -49,7 +49,8 @@ class PlayActivity : AppCompatActivity(), SurfaceHolder.Callback, PlayManager.Pl
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play)
-        val channelInfoList: ArrayList<ChannelInfo> = intent.getSerializableExtra(KEY_CHANNEL_LIST) as ArrayList<ChannelInfo>
+        val channelInfoList: ArrayList<ChannelInfo> = intent.getSerializableExtra(KEY_CHANNEL_LIST)
+                as ArrayList<ChannelInfo>
         val position: Int = intent.getIntExtra(KEY_POSITION, -1)
         if(position < 0){
             return
@@ -149,8 +150,17 @@ class PlayActivity : AppCompatActivity(), SurfaceHolder.Callback, PlayManager.Pl
         }else{
             urlList = url.split("#") as ArrayList<String>
         }
-//        Logger.d(urlList)
-        return urlList
+        val urlList1 = ArrayList<String>()
+        for(u in urlList){
+            if (u.contains("protv.company")) {
+                val streamToken = SPUtil.get(this, "streamToken", "123") as String
+                val u1 = u.trim() + "?token=" + streamToken
+                urlList1.add(u1)
+            }else {
+                urlList1.add(u.trim())
+            }
+        }
+        return urlList1
     }
 
     private fun playChannel(urlList: ArrayList<String>){
@@ -159,7 +169,7 @@ class PlayActivity : AppCompatActivity(), SurfaceHolder.Callback, PlayManager.Pl
             mediaPlayer = MediaPlayer()
         }
         val url = urlList[currentUrlPosition]
-        Logger.d(url)
+//        Logger.d(url)
         progressBar.visibility = View.VISIBLE
         mediaPlayer!!.reset()
         mediaPlayer!!.setDataSource(url)
@@ -169,7 +179,7 @@ class PlayActivity : AppCompatActivity(), SurfaceHolder.Callback, PlayManager.Pl
             progressBar.visibility = View.GONE
             tvNetSpeed.visibility = View.GONE
             mediaPlayer!!.start() }
-        mediaPlayer!!.setOnInfoListener { mp, what, extra ->
+        mediaPlayer!!.setOnInfoListener { _, what, _ ->
             if(what == MediaPlayer.MEDIA_INFO_BUFFERING_START){
                 progressBar.visibility = View.VISIBLE
                 tvNetSpeed.visibility = View.VISIBLE
