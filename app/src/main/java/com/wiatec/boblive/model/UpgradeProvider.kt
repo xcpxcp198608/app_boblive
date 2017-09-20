@@ -22,7 +22,7 @@ class UpgradeProvider : Loadable<UpgradeInfo>{
                     override fun onSuccess(s: String?) {
                         val upgradeInfo: UpgradeInfo = Gson().fromJson(s,
                                 object : TypeToken<UpgradeInfo>(){}.type)
-                        Logger.d(upgradeInfo)
+//                        Logger.d(upgradeInfo)
                         val update = AppUtil.isNeedUpdate(Application.context!!, upgradeInfo.code)
                         onLoadListener.onSuccess(update, upgradeInfo)
                     }
