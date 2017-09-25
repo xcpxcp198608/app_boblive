@@ -49,7 +49,7 @@ class AppDao {
     }
 
     fun delete(appInfo: AppInfo){
-        Logger.d(appInfo.packageName)
+//        Logger.d(appInfo.packageName)
         sql!!.delete(TABLE_APP, "packageName=?", arrayOf(appInfo.packageName))
     }
 

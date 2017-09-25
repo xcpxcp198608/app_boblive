@@ -34,7 +34,7 @@ class ApkInstallReceiver: BroadcastReceiver() {
                 appDao.insertOrUpdate(appInfo)
             }
         }else if (Intent.ACTION_PACKAGE_REMOVED == intent.action){
-            Logger.d("remove")
+//            Logger.d("remove")
             appDao.delete(appInfo)
         }
     }

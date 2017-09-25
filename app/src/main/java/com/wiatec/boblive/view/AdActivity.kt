@@ -1,6 +1,5 @@
 package com.wiatec.boblive.view
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.bumptech.glide.Glide
 
@@ -10,13 +9,12 @@ import kotlinx.android.synthetic.main.activity_ad.*
 
 class AdActivity : BaseActivity<ICommon, AdPresenter>(), ICommon {
 
-    override fun createPresenter(): AdPresenter {
-        return AdPresenter(this)
-    }
+    override fun createPresenter(): AdPresenter = AdPresenter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ad)
+        presenter!!.loadAdImage()
     }
 
     override fun onStart() {
@@ -26,7 +24,11 @@ class AdActivity : BaseActivity<ICommon, AdPresenter>(), ICommon {
 
     override fun loadAdImage(execute: Boolean, imagePath: String?) {
         if(execute){
-            Glide.with(this@AdActivity).load(imagePath).into(ivAd)
+            Glide.with(this@AdActivity)
+                    .load(imagePath)
+                    .placeholder(R.drawable.img_main)
+                    .error(R.drawable.img_main)
+                    .into(ivAd)
         }
     }
 }

@@ -33,12 +33,12 @@ class PlayTokenTask: TimerTask() {
                 .enqueue(object : StringListener(){
                     override fun onSuccess(s: String?) {
                         if(TextUtils.isEmpty(s)) return
-                        Logger.d(s!!)
+//                        Logger.d(s!!)
                         try {
                             val jsonObject = JSONObject(s)
                             val data = jsonObject.getJSONObject("data")
                             val streamToken = data.getString("token")
-                            Logger.d(streamToken)
+//                            Logger.d(streamToken)
                             SPUtil.put(Application.context!!, "streamToken", streamToken)
                         } catch (e: JSONException) {
                             Logger.d("token json format error")

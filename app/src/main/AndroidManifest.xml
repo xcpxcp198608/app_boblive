@@ -55,7 +55,12 @@
         <activity
             android:name=".view.PlayActivity"
             android:screenOrientation="landscape" />
-        <activity android:name=".view.AdActivity"/>
+        <activity
+            android:name=".view.AdActivity"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".view.PlayerActivity"
+            android:screenOrientation="landscape" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

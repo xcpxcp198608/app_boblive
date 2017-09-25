@@ -235,9 +235,7 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         btConfirm.setOnClickListener({
             val code = etPassword.text.toString().trim()
             val currentCode = SPUtil.get(this@MainActivity, KEY_AUTHORIZATION, "-1") as String
-            Logger.d(code)
-            Logger.d(currentCode)
-            if(currentCode.equals(code)){
+            if(currentCode == code){
                 showSettingPasswordDialog(tag)
                 dialog.dismiss()
             }else{

@@ -12,7 +12,7 @@ import com.wiatec.boblive.utils.OkHttp.OkMaster
  * Created by patrick on 08/08/2017.
  * create time : 1:50 PM
  */
-class PlayManager (private var channelInfoList:List<ChannelInfo>, var currentPosition: Int){
+class PlayManager (private var channelInfoList:List<ChannelInfo>, private var currentPosition: Int){
 
     var channelInfo: ChannelInfo? = null
     var playListener: PlayListener? = null

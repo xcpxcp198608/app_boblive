@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
-import com.px.kotlin.utils.Logger
 import com.wiatec.boblive.instance.KEY_CHANNEL_LIST
 import com.wiatec.boblive.instance.KEY_POSITION
 import com.wiatec.boblive.R
@@ -31,7 +30,12 @@ class ChannelActivity : BaseActivity<IChannel, ChannelPresenter> (), IChannel {
         val type: String = intent.getStringExtra(TYPE_CHANNEL)
         presenter!!.loadChannel(type)
         presenter!!.loadAdImage()
-        btRetry.setOnClickListener { presenter!!.loadChannel(type) }
+        btRetry.setOnClickListener {
+            tvLoading.text = getString(R.string.data_loading)
+            pbLoading.visibility = View.VISIBLE
+            btRetry.visibility = View.GONE
+            presenter!!.loadChannel(type)
+        }
     }
 
     override fun onStart() {
@@ -63,7 +67,7 @@ class ChannelActivity : BaseActivity<IChannel, ChannelPresenter> (), IChannel {
         rcvChannel.layoutManager = GridLayoutManager(this, 5, GridLayoutManager.VERTICAL, false)
         channelAdapter.setOnItemClickListener(object: ChannelAdapter.OnItemClickListener{
             override fun onItemClick(view: View, position: Int) {
-                val intent = Intent(this@ChannelActivity, PlayActivity::class.java)
+                val intent = Intent(this@ChannelActivity, PlayerActivity::class.java)
                 intent.putExtra(KEY_CHANNEL_LIST, channelList as Serializable)
                 intent.putExtra(KEY_POSITION, position)
                 startActivity(intent)

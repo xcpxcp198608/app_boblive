@@ -26,7 +26,12 @@ class ChannelTypeActivity : BaseActivity<IChannelType, ChannelTypePresenter>() ,
         setContentView(R.layout.activity_channel_type)
         val type = intent.getStringExtra(TYPE_CHANNEL)
         presenter!!.loadChannelType(type)
-        btRetry.setOnClickListener { presenter!!.loadChannelType(type) }
+        btRetry.setOnClickListener {
+            tvLoading.text = getString(R.string.data_loading)
+            pbLoading.visibility = View.VISIBLE
+            btRetry.visibility = View.GONE
+            presenter!!.loadChannelType(type)
+        }
     }
 
     override fun onStart() {
