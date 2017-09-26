@@ -39,11 +39,6 @@ abstract class BaseActivity<V, T : BasePresenter<V>> : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-
-    }
-
     protected fun checkValidate(context: Context){
         validateSubscription = RxBus.default!!.toObservable(ValidateEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())

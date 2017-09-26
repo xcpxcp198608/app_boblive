@@ -139,7 +139,6 @@ class PlayerActivity : AppCompatActivity() , IVLCVout.Callback, MediaPlayer.Even
             super.onDestroy()
             send = false
             pausePlay()
-            mediaPlayer!!.stop()
             mediaPlayer!!.release()
         } catch (e: Exception) {
             Logger.d(e.toString())

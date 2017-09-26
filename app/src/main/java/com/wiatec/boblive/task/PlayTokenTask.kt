@@ -7,6 +7,7 @@ import com.wiatec.boblive.instance.Application
 import com.wiatec.boblive.utils.OkHttp.Listener.StringListener
 import com.wiatec.boblive.utils.OkHttp.OkMaster
 import com.wiatec.boblive.utils.AESUtil
+import com.wiatec.boblive.utils.NetUtil
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
@@ -21,7 +22,9 @@ private val PWD = "Dfuk5ygo8AelWvGj"
 
 class PlayTokenTask: TimerTask() {
     override fun run() {
-        start()
+        do{
+            start()
+        }while (!NetUtil.isConnected)
     }
 
     private fun start() {
@@ -38,7 +41,7 @@ class PlayTokenTask: TimerTask() {
                             val jsonObject = JSONObject(s)
                             val data = jsonObject.getJSONObject("data")
                             val streamToken = data.getString("token")
-//                            Logger.d(streamToken)
+                            Logger.d(streamToken)
                             SPUtil.put(Application.context!!, "streamToken", streamToken)
                         } catch (e: JSONException) {
                             Logger.d("token json format error")
