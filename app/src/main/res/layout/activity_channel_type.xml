@@ -34,7 +34,8 @@
             android:textColor="@android:color/white"
             android:background="@drawable/bg_button_retry"
             android:text="@string/retry"
-            android:layout_width="150dp"
+            android:minWidth="150dp"
+            android:layout_width="wrap_content"
             android:layout_height="60dp" />
 
         <ProgressBar

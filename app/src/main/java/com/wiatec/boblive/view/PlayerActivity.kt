@@ -78,7 +78,6 @@ class PlayerActivity : AppCompatActivity() , IVLCVout.Callback, MediaPlayer.Even
     }
 
     override fun play(url: String) {
-//        Logger.d(url)
         urlPosition = 0
         urlList = handleUrl(url)
         playVideo(urlList[urlPosition])
@@ -111,7 +110,6 @@ class PlayerActivity : AppCompatActivity() , IVLCVout.Callback, MediaPlayer.Even
 
     private fun playVideo(url: String){
         try {
-            Logger.d(url)
             media = null
             if(media == null) {
                 media = Media(libvlc, Uri.parse(url))

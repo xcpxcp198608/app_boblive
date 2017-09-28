@@ -2,6 +2,7 @@ package com.wiatec.boblive.view
 
 import android.app.Dialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
@@ -45,9 +46,10 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
             finish()
         }else {
             setContentView(R.layout.activity_main)
-            showAgreementDialog()
             showConsentDataDialog()
+            showAgreementDialog()
             initChannelType()
+            tvVersion.text = AppUtil.getVersionName(this@MainActivity, packageName)
             btMenu.setOnClickListener { startActivity(Intent(this, AppsActivity::class.java)) }
             btSetting.setOnClickListener { AppUtil.launchApp(this, PACKAGE_NAME_SETTINGS) }
             btPerson.setOnClickListener { authorization() }
@@ -113,12 +115,8 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         })
         channelTypeAdapter.setOnItemLongClickListener(object : ChannelTypeAdapter.OnItemLongClickListener{
             override fun onLongClick(view: View, position: Int) {
-                val targetPosition =  if(TextUtils.isEmpty(auth)){
-                    3
-                }else{
-                    2
-                }
-                if(position == targetPosition){
+                val type = channelTypeList[position].tag
+                if(type == TYPE_ADULT){
                     val isProtect = SPUtil.get(this@MainActivity, TYPE_ADULT, true) as Boolean
                     if(!isProtect) {
                         showInputPasswordDialog(TYPE_ADULT, position)
@@ -131,8 +129,8 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
 
     fun showChannel(type: String, position: Int){
         val intent = when(position){
-            0,1,2,3 -> Intent(this@MainActivity, ChannelActivity::class.java)
-            4 -> Intent(this@MainActivity, ChannelTypeActivity::class.java)
+            0,1,2 -> Intent(this@MainActivity, ChannelActivity::class.java)
+            3 -> Intent(this@MainActivity, ChannelTypeActivity::class.java)
             else -> Intent("")
         }
         intent.putExtra(TYPE_CHANNEL, type)
@@ -162,7 +160,8 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         val dialog = AlertDialog.Builder(this).create()
         dialog.show()
         val window = dialog.window
-        window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+        window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager
+                .LayoutParams.FLAG_ALT_FOCUSABLE_IM)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         window.setContentView(R.layout.dialog_parent_control)
         val etP1 = window.findViewById(R.id.etP1) as EditText
@@ -194,7 +193,8 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         val dialog = AlertDialog.Builder(this).create()
         dialog.show()
         val window = dialog.window
-        window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+        window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager
+                .LayoutParams.FLAG_ALT_FOCUSABLE_IM)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         window.setContentView(R.layout.dialog_input_password)
         val etPassword = window.findViewById(R.id.etPassword) as EditText
@@ -224,7 +224,8 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         val dialog = AlertDialog.Builder(this).create()
         dialog.show()
         val window = dialog.window
-        window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+        window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager
+                .LayoutParams.FLAG_ALT_FOCUSABLE_IM)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         window.setContentView(R.layout.dialog_input_password)
         val etPassword = window.findViewById(R.id.etPassword) as EditText
@@ -363,11 +364,13 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         val btConfirm:Button = window.findViewById(R.id.btConfirm) as Button
         btConfirm.setOnClickListener {
             val activeKey = etAuthorization.text.toString()
-            if(activeKey != TEST_ACTIVITY_KEY && (TextUtils.isEmpty(activeKey) || activeKey.length < 16)){
+            if(activeKey != TEST_ACTIVITY_KEY && (TextUtils.isEmpty(activeKey) ||
+                    activeKey.length < 16)){
                 EmojiToast.show(getString(R.string.error_key_format), EmojiToast.EMOJI_SAD)
             }else {
                 if(!NetUtil.isConnected){
-                    EmojiToast.show(getString(R.string.no_network), EmojiToast.EMOJI_SAD)
+                    EmojiToast.show(getString(R.string.no_network),
+                            EmojiToast.EMOJI_SAD)
                     AppUtil.launchApp(this@MainActivity, PACKAGE_NAME_SETTINGS)
                 }else {
                     presenter!!.activeAuthorization(activeKey)
@@ -402,7 +405,8 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
             SPUtil.put(Application.context!!, KEY_TEMPORARY, authorizationInfo.temporary)
             if(authorizationInfo.level <= 0) {
                 showAuthorizationDialog()
-                EmojiToast.show(getString(R.string.authorization_error), EmojiToast.EMOJI_SAD)
+                EmojiToast.show(getString(R.string.authorization_error),
+                        EmojiToast.EMOJI_SAD)
             }
         }else{
             EmojiToast.show(resultInfo.message, EmojiToast.EMOJI_SAD)

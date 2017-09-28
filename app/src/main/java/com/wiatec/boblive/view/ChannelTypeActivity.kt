@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.bumptech.glide.Glide
+import com.px.kotlin.utils.Logger
 import com.wiatec.boblive.R
 import com.wiatec.boblive.instance.TYPE_CHANNEL
 import com.wiatec.boblive.adapter.ChannelTypeAdapter
@@ -41,7 +42,7 @@ class ChannelTypeActivity : BaseActivity<IChannelType, ChannelTypePresenter>() ,
 
     override fun loadAdImage(execute: Boolean, imagePath: String?) {
         if(execute){
-            Glide.with(this@ChannelTypeActivity).load(imagePath).dontAnimate().into(ivBackground)
+//            Glide.with(this@ChannelTypeActivity).load(imagePath).dontAnimate().into(ivBackground)
         }
     }
 
