@@ -77,8 +77,6 @@
     <string name="reject">Zamietnuté</string>
     <string name="agreement">Dohoda</string>
     <string name="ok">OK</string>
-    <string name="consent_title">SÚHLAS</string>
-    <string name="consent_content">OBSAH</string>
     <string name="notice_reset">Zadajte aktivačný kód</string>
     <string name="notice_reset_error">Aktivačný kód nie je správny.</string>
 

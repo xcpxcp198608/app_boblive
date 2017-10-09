@@ -46,7 +46,6 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
             finish()
         }else {
             setContentView(R.layout.activity_main)
-            showConsentDataDialog()
             showAgreementDialog()
             initChannelType()
             tvVersion.text = AppUtil.getVersionName(this@MainActivity, packageName)
@@ -319,33 +318,6 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         }
         btCancel.setOnClickListener {
             SPUtil.put(this@MainActivity, "agree", false)
-        }
-    }
-
-
-    private fun showConsentDataDialog() {
-        val agree = SPUtil.get(this@MainActivity, "consent", false) as Boolean
-        if(agree) return
-        val alertDialog = AlertDialog.Builder(this@MainActivity).create()
-        alertDialog.show()
-        alertDialog.setCancelable(false)
-        val window = alertDialog.window ?: return
-        window.setContentView(R.layout.dialog_update)
-        val btConfirm = window.findViewById(R.id.btConfirm) as Button
-        val btCancel = window.findViewById(R.id.btCancel) as Button
-        val tvTitle = window.findViewById(R.id.tvTitle) as TextView
-        val textView = window.findViewById(R.id.tvInfo) as TextView
-        btConfirm.text = getString(R.string.ok)
-        btCancel.text = getString(R.string.cancel)
-        tvTitle.text = getString(R.string.consent_title)
-        textView.textSize = 16f
-        textView.text = getString(R.string.consent_content)
-        btConfirm.setOnClickListener {
-            SPUtil.put(this@MainActivity, "consent", true)
-            alertDialog.dismiss()
-        }
-        btCancel.setOnClickListener {
-            SPUtil.put(this@MainActivity, "consent", false)
         }
     }
 

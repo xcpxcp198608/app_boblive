@@ -76,8 +76,6 @@ Použite BobLive na vlastné nebezpečenstvo.</string>
     <string name="reject">Reject</string>
     <string name="agreement">Agreement</string>
     <string name="ok">OK</string>
-    <string name="consent_title">CONSENT</string>
-    <string name="consent_content">CONTENT</string>
     <string name="notice_reset">type in activate code</string>
     <string name="notice_reset_error">Activate code error</string>
 </resources>

@@ -1,13 +1,15 @@
 package com.wiatec.boblive.manager
 
+import android.app.Activity
 import android.content.Context
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.os.Build
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.util.DisplayMetrics
-import com.wiatec.boblive.instance.COUNTRY_CS
-import com.wiatec.boblive.instance.COUNTRY_SK
-import com.wiatec.boblive.instance.LANGUAGE_CS
-import com.wiatec.boblive.instance.LANGUAGE_SK
+import com.wiatec.boblive.instance.*
 import java.util.*
 import java.lang.reflect.AccessibleObject.setAccessible
 import java.lang.reflect.Array.setBoolean
@@ -22,13 +24,13 @@ object LanguageManager{
 
      fun setLanguage(language: String, country: String) {
          val locale = Locale(language, country, "")
-         realSet(locale)
+         realSet(Application.context!!, locale)
     }
 
     /**
      * use this set under android 7.0 and more
      */
-    fun realSet(context: Context, locale: Locale){
+    private fun realSet(context: Context, locale: Locale){
         val resources: Resources = context.resources
         val displayMetrics: DisplayMetrics = resources.displayMetrics
         val configuration: Configuration = resources.configuration
@@ -36,7 +38,7 @@ object LanguageManager{
         resources.updateConfiguration(configuration, displayMetrics)
     }
 
-    fun realSet(locale: Locale){
+    private fun realSet(locale: Locale){
         val amnClass = Class.forName("android.app.ActivityManagerNative")
         val defaultMethod = amnClass.getMethod("getDefault")
         defaultMethod.isAccessible = true
