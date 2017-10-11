@@ -24,6 +24,11 @@ class UpgradeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_upgrade)
         path = getExternalFilesDir("download").absolutePath
         url = intent.getStringExtra(KEY_URL)
+
+    }
+
+    override fun onStart() {
+        super.onStart()
         if(url != null){
             startDownload()
         }

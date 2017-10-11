@@ -39,7 +39,6 @@ import org.videolan.libvlc.Media
 import org.videolan.libvlc.MediaPlayer
 import java.text.DecimalFormat
 
-
 class PlayerActivity : AppCompatActivity() , IVLCVout.Callback, MediaPlayer.EventListener,
         View.OnClickListener, PlayManager.PlayListener{
     private var vlcVout: IVLCVout? = null
@@ -136,23 +135,18 @@ class PlayerActivity : AppCompatActivity() , IVLCVout.Callback, MediaPlayer.Even
         try {
             super.onDestroy()
             send = false
-            pausePlay()
-            mediaPlayer!!.release()
+            release()
         } catch (e: Exception) {
             Logger.d(e.toString())
         }
     }
 
-    private fun pausePlay() {
-        if (mediaPlayer!!.isPlaying) {
-            mediaPlayer!!.pause()
-            mediaPlayer!!.stop()
-        }
-        media!!.release()
-        media = null
+    private fun release() {
+        mediaPlayer!!.stop()
         vlcVout!!.detachViews()
         vlcVout!!.removeCallback(this)
         mediaPlayer!!.setEventListener(null)
+        mediaPlayer!!.release()
     }
 
     override fun onSurfacesCreated(p0: IVLCVout?) {
@@ -192,7 +186,7 @@ class PlayerActivity : AppCompatActivity() , IVLCVout.Callback, MediaPlayer.Even
                 progressBar.visibility = View.VISIBLE
                 mediaPlayer!!.time = 0
                 mediaPlayer!!.stop()
-                playNextUrl()
+//                playNextUrl()
             }
         } catch (e: Exception) {
             Logger.d(e.toString())
