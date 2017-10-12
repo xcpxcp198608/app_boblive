@@ -142,10 +142,11 @@ class PlayerActivity : AppCompatActivity() , IVLCVout.Callback, MediaPlayer.Even
     }
 
     private fun release() {
-        mediaPlayer!!.stop()
+        if (media != null)media!!.release()
         vlcVout!!.detachViews()
         vlcVout!!.removeCallback(this)
         mediaPlayer!!.setEventListener(null)
+        mediaPlayer!!.stop()
         mediaPlayer!!.release()
     }
 
@@ -181,12 +182,12 @@ class PlayerActivity : AppCompatActivity() , IVLCVout.Callback, MediaPlayer.Even
                 playNextUrl()
             }
             if (mediaPlayer!!.playerState == Media.State.Ended) {
-                Logger.d("end")
+                Logger.d("end-error")
                 tvNetSpeed.visibility = View.VISIBLE
                 progressBar.visibility = View.VISIBLE
                 mediaPlayer!!.time = 0
                 mediaPlayer!!.stop()
-//                playNextUrl()
+                playNextUrl()
             }
         } catch (e: Exception) {
             Logger.d(e.toString())
@@ -221,7 +222,7 @@ class PlayerActivity : AppCompatActivity() , IVLCVout.Callback, MediaPlayer.Even
     }
 
     private fun showErrorReportDialog() {
-        var message = ""
+        var message = getString(R.string.error_msg1)
         val dialog: Dialog = AlertDialog.Builder(this).create()
         dialog.show()
         val window: Window = dialog.window
@@ -232,8 +233,8 @@ class PlayerActivity : AppCompatActivity() , IVLCVout.Callback, MediaPlayer.Even
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
             message = when(checkedId){
                 R.id.rbMessage1 -> getString(R.string.error_msg1)
-                R.id.rbMessage2 -> getString(R.string.error_msg1)
-                R.id.rbMessage3 -> getString(R.string.error_msg1)
+                R.id.rbMessage2 -> getString(R.string.error_msg2)
+                R.id.rbMessage3 -> getString(R.string.error_msg3)
                 else -> getString(R.string.error_msg1)
             }
         }
@@ -246,7 +247,7 @@ class PlayerActivity : AppCompatActivity() , IVLCVout.Callback, MediaPlayer.Even
     private fun sendErrorReport(message: String){
         OkMaster.post(URL_ERROR_REPORT_SEND)
                 .parames("userName", SPUtil.get(Application.context!!, KEY_AUTHORIZATION, "test") as String)
-                .parames("channelName", playManager!!.channelInfo!!.name)
+                .parames("channelName", playManager!!.channelInfo!!.country + "-" +playManager!!.channelInfo!!.name)
                 .parames("message", message)
                 .enqueue(object : StringListener(){
                     override fun onSuccess(s: String?) {

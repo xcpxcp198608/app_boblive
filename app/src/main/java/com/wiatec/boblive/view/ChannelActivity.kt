@@ -67,7 +67,7 @@ class ChannelActivity : BaseActivity<IChannel, ChannelPresenter> (), IChannel {
         rcvChannel.layoutManager = GridLayoutManager(this, 5, GridLayoutManager.VERTICAL, false)
         channelAdapter.setOnItemClickListener(object: ChannelAdapter.OnItemClickListener{
             override fun onItemClick(view: View, position: Int) {
-                val intent = Intent(this@ChannelActivity, PlayerActivity::class.java)
+                val intent = Intent(this@ChannelActivity, PlayActivity::class.java)
                 intent.putExtra(KEY_CHANNEL_LIST, channelList as Serializable)
                 intent.putExtra(KEY_POSITION, position)
                 startActivity(intent)

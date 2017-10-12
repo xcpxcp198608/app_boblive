@@ -24,7 +24,7 @@ object LanguageManager{
 
      fun setLanguage(language: String, country: String) {
          val locale = Locale(language, country, "")
-         realSet(Application.context!!, locale)
+         realSet(locale)
     }
 
     /**

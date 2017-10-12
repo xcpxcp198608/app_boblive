@@ -99,7 +99,7 @@ class PlayActivity : AppCompatActivity(), SurfaceHolder.Callback, PlayManager.Pl
     }
 
     private fun showErrorReportDialog() {
-        var message = ""
+        var message = getString(R.string.error_msg1)
         val dialog: Dialog = AlertDialog.Builder(this).create()
         dialog.show()
         val window: Window = dialog.window
@@ -110,8 +110,8 @@ class PlayActivity : AppCompatActivity(), SurfaceHolder.Callback, PlayManager.Pl
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
             message = when(checkedId){
                 R.id.rbMessage1 -> getString(R.string.error_msg1)
-                R.id.rbMessage2 -> getString(R.string.error_msg1)
-                R.id.rbMessage3 -> getString(R.string.error_msg1)
+                R.id.rbMessage2 -> getString(R.string.error_msg2)
+                R.id.rbMessage3 -> getString(R.string.error_msg3)
                 else -> getString(R.string.error_msg1)
             }
         }
@@ -124,7 +124,7 @@ class PlayActivity : AppCompatActivity(), SurfaceHolder.Callback, PlayManager.Pl
     private fun sendErrorReport(message: String){
         OkMaster.post(URL_ERROR_REPORT_SEND)
                 .parames("userName", SPUtil.get(Application.context!!, KEY_AUTHORIZATION, "test") as String)
-                .parames("channelName", playManager!!.channelInfo!!.name)
+                .parames("channelName", playManager!!.channelInfo!!.country + "-" + playManager!!.channelInfo!!.name)
                 .parames("message", message)
                 .enqueue(object : StringListener(){
                     override fun onSuccess(s: String?) {
