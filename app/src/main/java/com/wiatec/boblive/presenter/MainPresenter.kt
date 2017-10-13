@@ -16,10 +16,10 @@ import com.wiatec.boblive.view.IMain
  */
 class MainPresenter(val iMain: IMain): BasePresenter<IMain>() {
 
-    val upgradeProvider: UpgradeProvider = UpgradeProvider()
-    val authorizationProvider: AuthorizationProvider = AuthorizationProvider()
-    val channelTypeProvider: ChannelTypeProvider = ChannelTypeProvider()
-    val adImageProvider: AdImageProvider = AdImageProvider()
+    private val upgradeProvider: UpgradeProvider = UpgradeProvider()
+    private val authorizationProvider: AuthorizationProvider = AuthorizationProvider()
+    private val channelTypeProvider: ChannelTypeProvider = ChannelTypeProvider()
+    private val adImageProvider: AdImageProvider = AdImageProvider()
 
     fun checkUpgrade(){
         upgradeProvider.onLoad(object : Loadable.OnLoadListener<UpgradeInfo>{

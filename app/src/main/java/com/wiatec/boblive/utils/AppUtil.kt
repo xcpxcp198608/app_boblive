@@ -123,11 +123,11 @@ object AppUtil{
      * check current version is last version or not
      */
     fun isNeedUpdate(context: Context, versionCode: Int): Boolean {
-        if (isInstalled(context, context.packageName)) {
+        return if (isInstalled(context, context.packageName)) {
             val localVersionCode = getVersionCode(context, context.packageName)
-            return localVersionCode < versionCode
+            localVersionCode < versionCode
         } else {
-            return false
+            false
         }
     }
 
