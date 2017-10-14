@@ -9,6 +9,7 @@ import com.wiatec.boblive.*
 import com.wiatec.boblive.instance.*
 
 import com.wiatec.boblive.utils.AppUtil
+import com.wiatec.boblive.utils.FileUtils
 import com.wiatec.boblive.utils.OkHttp.Bean.DownloadInfo
 import com.wiatec.boblive.utils.OkHttp.Listener.DownloadListener
 import com.wiatec.boblive.utils.OkHttp.OkMaster
@@ -24,7 +25,8 @@ class UpgradeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_upgrade)
         path = getExternalFilesDir("download").absolutePath
         url = intent.getStringExtra(KEY_URL)
-
+        FileUtils.delete(path, packageName)
+        FileUtils.delete(path, packageName+".apk")
     }
 
     override fun onStart() {
