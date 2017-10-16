@@ -16,8 +16,8 @@
     <string name="language">Zvolte jazyk:</string>
     <string name="wifi">Zvolte Wifi:</string>
     <string name="notice">Poznámka</string>
-    <string name="confirm">Potvrdit</string>
-    <string name="cancel">Zrušit</string>
+    <string name="confirm">POTVRDIT</string>
+    <string name="cancel">ZRUŠIT</string>
     <string name="reset">Vymazat</string>
     <string name="yes">Áno</string>
     <string name="no">Ne</string>

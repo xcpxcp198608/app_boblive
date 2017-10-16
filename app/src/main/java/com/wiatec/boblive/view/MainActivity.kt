@@ -27,6 +27,7 @@ import com.wiatec.boblive.pojo.ChannelTypeInfo
 import com.wiatec.boblive.pojo.UpgradeInfo
 import kotlinx.android.synthetic.main.activity_main.*
 import android.view.WindowManager
+import com.wiatec.boblive.task.PlayTokenTask
 import com.wiatec.boblive.utils.*
 
 class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusChangeListener {
@@ -57,6 +58,7 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
 
     override fun onStart() {
         super.onStart()
+        Thread(PlayTokenTask()).start()
         checkValidate(this)
         presenter!!.checkUpgrade()
         presenter!!.loadAdImage()

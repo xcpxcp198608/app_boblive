@@ -39,6 +39,6 @@ class Application : android.app.Application() {
 
     private fun startTask(){
         val timer = Timer()
-        timer.schedule(PlayTokenTask(), 0, 18000000)
+        timer.schedule(PlayTokenTask(), 0, 3600000)
     }
 }
