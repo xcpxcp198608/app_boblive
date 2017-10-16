@@ -25,12 +25,9 @@ import com.wiatec.boblive.instance.*
 import com.wiatec.boblive.pojo.AuthorizationInfo
 import com.wiatec.boblive.pojo.ChannelTypeInfo
 import com.wiatec.boblive.pojo.UpgradeInfo
-import com.wiatec.boblive.utils.AppUtil
-import com.wiatec.boblive.utils.EmojiToast
-import com.wiatec.boblive.utils.NetUtil
-import com.wiatec.boblive.utils.Zoom
 import kotlinx.android.synthetic.main.activity_main.*
 import android.view.WindowManager
+import com.wiatec.boblive.utils.*
 
 class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusChangeListener {
 
@@ -247,6 +244,10 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
     override fun checkUpgrade(execute: Boolean, upgradeInfo: UpgradeInfo?) {
         if(execute){
             showUpgradeDialog(upgradeInfo!!)
+        }else{
+            if(upgradeInfo != null) {
+                FileUtils.delete(getExternalFilesDir("download").absolutePath, upgradeInfo.packageName)
+            }
         }
     }
 
