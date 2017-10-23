@@ -50,9 +50,11 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
             btMenu.setOnClickListener { startActivity(Intent(this, AppsActivity::class.java)) }
             btSetting.setOnClickListener { AppUtil.launchApp(this, PACKAGE_NAME_SETTINGS) }
             btPerson.setOnClickListener { authorization() }
+            btCloud.setOnClickListener { startActivity(Intent(this, CloudActivity::class.java)) }
             btMenu.onFocusChangeListener = this
             btSetting.onFocusChangeListener = this
             btPerson.onFocusChangeListener = this
+            btCloud.onFocusChangeListener = this
         }
     }
 
