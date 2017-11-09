@@ -26,7 +26,7 @@ class UpgradeActivity : AppCompatActivity() {
         path = getExternalFilesDir("download").absolutePath
         url = intent.getStringExtra(KEY_URL)
         FileUtils.delete(path, packageName)
-        FileUtils.delete(path, packageName+".apk")
+        FileUtils.delete(path, packageName + ".apk")
     }
 
     override fun onStart() {

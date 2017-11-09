@@ -80,7 +80,7 @@ public class FileUtils {
      * @param fileName 文件名称
      * @return 是否删除成功
      */
-    public static boolean delete(String filePath ,String fileName ) {
+    public static boolean delete(String filePath, String fileName ) {
         try {
             return new File(filePath + "/" + fileName).delete();
         } catch (Exception e) {

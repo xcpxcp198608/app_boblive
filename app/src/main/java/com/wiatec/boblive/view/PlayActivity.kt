@@ -223,9 +223,11 @@ class PlayActivity : AppCompatActivity(), SurfaceHolder.Callback, PlayManager.Pl
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if(event!!.keyCode == KeyEvent.KEYCODE_DPAD_UP || event.keyCode == KeyEvent.KEYCODE_MEDIA_PREVIOUS){
+            currentUrlPosition = 0
             playManager!!.previousChannel()
         }
         if(event.keyCode == KeyEvent.KEYCODE_DPAD_DOWN || event.keyCode == KeyEvent.KEYCODE_MEDIA_NEXT){
+            currentUrlPosition = 0
             playManager!!.nextChannel()
         }
         if(event.keyCode == KeyEvent.KEYCODE_BACK){
