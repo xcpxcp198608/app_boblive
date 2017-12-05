@@ -92,7 +92,8 @@
         </receiver>
 
         <activity android:name=".view.Player1Activity" />
-        <activity android:name=".view.CloudActivity"></activity>
+        <activity android:name=".view.CloudActivity" />
+        <activity android:name=".view.VoucherActivity"></activity>
     </application>
 
 </manifest>

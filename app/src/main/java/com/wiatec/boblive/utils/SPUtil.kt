@@ -1,14 +1,17 @@
 package com.px.kotlin.utils
 
-import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import java.security.PrivateKey
+import com.wiatec.boblive.instance.Application
 
 /**
  * shared preferences util
  */
 object SPUtil{
+
+    fun put(key:String , value:Any){
+        put(Application.context!!, key, value)
+    }
 
     fun put(context:Context, key:String , value:Any){
         val sharedPreferences:SharedPreferences = context.getSharedPreferences("sp" , Context.MODE_PRIVATE)
@@ -24,15 +27,19 @@ object SPUtil{
         editor.apply()
     }
 
+    fun get(key:String, defaultValue:Any): Any{
+        return get(Application.context!!, key, defaultValue)
+    }
+
     fun get(context: Context, key:String, defaultValue:Any): Any{
         val sharedPreferences:SharedPreferences = context.getSharedPreferences("sp" , Context.MODE_PRIVATE)
-        when(defaultValue){
-            is String -> return sharedPreferences.getString(key, defaultValue)
-            is Int -> return sharedPreferences.getInt(key, defaultValue)
-            is Float -> return sharedPreferences.getFloat(key, defaultValue)
-            is Long -> return sharedPreferences.getLong(key, defaultValue)
-            is Boolean -> return sharedPreferences.getBoolean(key, defaultValue)
-            else -> return ""
+        return when(defaultValue){
+            is String -> sharedPreferences.getString(key, defaultValue)
+            is Int -> sharedPreferences.getInt(key, defaultValue)
+            is Float -> sharedPreferences.getFloat(key, defaultValue)
+            is Long -> sharedPreferences.getLong(key, defaultValue)
+            is Boolean -> sharedPreferences.getBoolean(key, defaultValue)
+            else -> ""
         }
     }
 }

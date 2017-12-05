@@ -2,7 +2,6 @@ package com.wiatec.boblive.view
 
 import android.app.Dialog
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
@@ -287,13 +286,16 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
      *  NO:  showAuthorizationDialog
      */
     private fun authorization() {
-        val authorization: String = SPUtil.get(this, KEY_AUTHORIZATION, "").toString()
+        val authorization: String = SPUtil.get(KEY_AUTHORIZATION, "").toString()
+        val isVoucher: Boolean = SPUtil.get(KEY_IS_VOUCHER, false) as Boolean
 //        Logger.d(authorization)
         if(TextUtils.isEmpty(authorization)){
             showAuthorizationDialog()
             return
         }else{
-            presenter!!.validateAuthorization(authorization)
+            if(!isVoucher) {
+                presenter!!.validateAuthorization(authorization)
+            }
         }
     }
 
@@ -337,6 +339,7 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         window.setContentView(R.layout.dialog_authorization)
         val etAuthorization: EditText = window.findViewById(R.id.etAuthorization) as EditText
         val btConfirm:Button = window.findViewById(R.id.btConfirm) as Button
+        val btVoucher:Button = window.findViewById(R.id.btVoucher) as Button
         btConfirm.setOnClickListener {
             val activeKey = etAuthorization.text.toString()
             if(activeKey != TEST_ACTIVITY_KEY && (TextUtils.isEmpty(activeKey) ||
@@ -352,6 +355,10 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
                 }
                 dialog.dismiss()
             }
+        }
+        btVoucher.setOnClickListener{
+            startActivity(Intent(this, VoucherActivity::class.java))
+            dialog.dismiss()
         }
     }
 

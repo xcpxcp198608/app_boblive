@@ -28,4 +28,14 @@
         android:layout_width="100dp"
         android:layout_height="50dp" />
 
+    <Button
+        android:id="@+id/btVoucher"
+        android:text="@string/voucher"
+        android:textSize="18sp"
+        android:layout_marginLeft="10dp"
+        android:textColor="@drawable/text_login"
+        android:textAllCaps="false"
+        android:background="@drawable/bg_confirm"
+        android:layout_width="200dp"
+        android:layout_height="50dp" />
 </LinearLayout>

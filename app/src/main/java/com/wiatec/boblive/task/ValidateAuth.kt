@@ -10,6 +10,7 @@ import com.wiatec.boblive.entity.CODE_UNAUTHORIZED
 import com.wiatec.boblive.entity.ResultInfo
 import com.wiatec.boblive.instance.*
 import com.wiatec.boblive.pojo.AuthorizationInfo
+import com.wiatec.boblive.pojo.VoucherUserInfo
 import com.wiatec.boblive.rxevent.ValidateEvent
 import com.wiatec.boblive.utils.NetUtil
 import com.wiatec.boblive.utils.OkHttp.OkMaster
@@ -28,7 +29,12 @@ class ValidateAuth : Runnable {
     override fun run() {
         while (true) {
             Thread.sleep(10000)
-            check()
+            val isVoucher = SPUtil.get(KEY_IS_VOUCHER, false) as Boolean
+            if(isVoucher){
+                voucherCheck()
+            }else {
+                check()
+            }
         }
     }
 
@@ -61,6 +67,38 @@ class ValidateAuth : Runnable {
                                 } else if (resultInfo.code == CODE_UNAUTHORIZED) {
                                     RxBus.default!!.post(ValidateEvent("key not exists"))
                                 }
+                            }
+                        }catch (e: Exception){
+                            if (e.message != null) Logger.d(e.message!!)
+                        }
+                    }
+                })
+    }
+
+    private fun voucherCheck(){
+        if(!NetUtil.isConnected) return
+        val authorization: String = SPUtil.get(Application.context!!, KEY_AUTHORIZATION, "").toString()
+        if (TextUtils.isEmpty(authorization)) return
+        OkMaster.get(URL_VOUCHER_VALIDATE + SysUtil.getEthernetMac())
+                .enqueue(object: Callback{
+                    override fun onFailure(call: Call?, e: IOException?) {
+                        if(e != null){
+                            Logger.d(e)
+                        }
+                    }
+
+                    override fun onResponse(call: Call?, response: Response?) {
+                        if (response == null) return
+                        try {
+                            val s: String = response.body().string()
+                            val resultInfo: com.wiatec.boblive.pojo.ResultInfo<VoucherUserInfo> =
+                                    Gson().fromJson(s, object : TypeToken< com.wiatec.boblive.pojo.ResultInfo<VoucherUserInfo>>() {}.type) ?: return
+                            Logger.d(resultInfo)
+                            if (resultInfo.code == 200) {
+                                val voucherUserInfo: VoucherUserInfo = resultInfo.data
+                                SPUtil.put(Application.context!!, KEY_LEVEL, voucherUserInfo.level.toString())
+                            }else{
+                                RxBus.default!!.post(ValidateEvent("validate fail"))
                             }
                         }catch (e: Exception){
                             if (e.message != null) Logger.d(e.message!!)

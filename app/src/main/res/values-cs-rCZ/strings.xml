@@ -17,6 +17,7 @@
     <string name="wifi">Zvolte Wifi:</string>
     <string name="notice">Poznámka</string>
     <string name="confirm">POTVRDIT</string>
+    <string name="voucher">Activate by voucher</string>
     <string name="cancel">ZRUŠIT</string>
     <string name="reset">Vymazat</string>
     <string name="yes">Áno</string>
@@ -79,5 +80,9 @@
     <string name="ok">OK</string>
     <string name="notice_reset">Zadajte aktivační kód</string>
     <string name="notice_reset_error">Aktivační kód neni správny.</string>
+    <string name="total_amount">Total amount =</string>
+    <string name="plan_description">Plan Description</string>
+    <string name="type_in_voucher_id">type in voucher id</string>
+    <string name="activate">Activate</string>
 
 </resources>

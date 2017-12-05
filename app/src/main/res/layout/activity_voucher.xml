@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.wiatec.boblive.view.VoucherActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="@string/plan_description"
+        android:textColor="@color/colorAccent"
+        android:textSize="25sp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rcvCategory"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/tvAmount"
+        android:background="@drawable/bg_focus"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:textSize="22sp"
+        android:textColor="@color/colorAccent"
+        tools:text="TextView" />
+
+    <Spinner
+        android:id="@+id/spPlan"
+        android:background="@drawable/bg_focus"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="250dp"
+        android:layout_marginRight="250dp"
+        android:layout_marginTop="8dp" />
+
+    <Spinner
+        android:id="@+id/spMonth"
+        android:background="@drawable/bg_focus"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="250dp"
+        android:layout_marginRight="250dp"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:id="@+id/etVoucherId"
+        android:background="@drawable/bg_focus"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="250dp"
+        android:layout_marginRight="250dp"
+        android:gravity="center"
+        android:hint="@string/type_in_voucher_id"
+        android:inputType="number"
+        android:textColor="@color/colorWhite"
+        android:textColorHint="@color/colorGray" />
+
+    <Button
+        android:id="@+id/btActivate"
+        android:layout_width="match_parent"
+        android:textColor="@color/colorWhite"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginLeft="250dp"
+        android:layout_marginRight="250dp"
+        android:background="@drawable/bg_button_activate"
+        android:text="@string/activate"/>
+
+</LinearLayout>

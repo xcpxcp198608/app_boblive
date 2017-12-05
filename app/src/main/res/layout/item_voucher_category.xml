@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:focusable="true"
+    android:layout_margin="10dp"
+    android:padding="2dp"
+    android:focusableInTouchMode="true"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:layout_width="250dp"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tvPlan"
+        android:padding="3dp"
+        android:gravity="center"
+        tool:text="PLAN1"
+        android:textSize="16sp"
+        android:singleLine="true"
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/bg_item_voucher"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:id="@+id/tvPrice"
+        android:padding="3dp"
+        android:gravity="center"
+        tool:text="10.00"
+        android:textSize="16sp"
+        android:singleLine="true"
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/bg_item_voucher"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:padding="3dp"
+        android:gravity="center"
+        tool:text="PLA234234234324324324324324324324324234234N1"
+        android:textSize="16sp"
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/bg_item_voucher"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+
+</LinearLayout>

@@ -16,6 +16,7 @@
     <string name="wifi">Choose Wifi:</string>
     <string name="notice">Notice</string>
     <string name="confirm">Confirm</string>
+    <string name="voucher">Activate by voucher</string>
     <string name="cancel">Cancel</string>
     <string name="reset">Reset</string>
     <string name="yes">Yes</string>
@@ -78,4 +79,8 @@ Použite BobLive na vlastné nebezpečenstvo.</string>
     <string name="ok">OK</string>
     <string name="notice_reset">type in activate code</string>
     <string name="notice_reset_error">Activate code error</string>
+    <string name="total_amount">Total amount =</string>
+    <string name="plan_description">Plan Description</string>
+    <string name="type_in_voucher_id">type in voucher id</string>
+    <string name="activate">Activate</string>
 </resources>

@@ -7,7 +7,7 @@ import com.wiatec.boblive.pojo.AuthorizationInfo
  */
 interface LoadableWithParams<T> {
 
-    fun onLoad(url: String, authorization: String, onLoadListener: OnLoadListener<T>)
+    fun onLoad(param1: String, param2: String, onLoadListener: OnLoadListener<T>)
     interface OnLoadListener<T>{
         fun onSuccess(execute: Boolean, t: T?)
     }
