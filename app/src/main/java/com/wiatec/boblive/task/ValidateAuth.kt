@@ -5,11 +5,10 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.px.kotlin.utils.Logger
 import com.px.kotlin.utils.SPUtil
-import com.wiatec.boblive.entity.CODE_OK
-import com.wiatec.boblive.entity.CODE_UNAUTHORIZED
-import com.wiatec.boblive.entity.ResultInfo
 import com.wiatec.boblive.instance.*
 import com.wiatec.boblive.pojo.AuthorizationInfo
+import com.wiatec.boblive.pojo.CODE_OK
+import com.wiatec.boblive.pojo.ResultInfo
 import com.wiatec.boblive.pojo.VoucherUserInfo
 import com.wiatec.boblive.rxevent.ValidateEvent
 import com.wiatec.boblive.utils.NetUtil
@@ -57,16 +56,16 @@ class ValidateAuth : Runnable {
                         try {
                             val s: String = response.body().string()
                             val resultInfo: ResultInfo<AuthorizationInfo> = Gson().fromJson(s, object : TypeToken<ResultInfo<AuthorizationInfo>>() {}.type) ?: return
-//                            Logger.d(resultInfo)
+                            Logger.d(resultInfo)
                             if (resultInfo.code == CODE_OK) {
-                                val authorizationInfo: AuthorizationInfo = resultInfo.obj
-                                SPUtil.put(Application.context!!, KEY_TEMPORARY, authorizationInfo.temporary)
-                                SPUtil.put(Application.context!!, KEY_LEVEL, authorizationInfo.level.toString())
+                                val authorizationInfo: AuthorizationInfo = resultInfo.data!!
+                                SPUtil.put(KEY_TEMPORARY, authorizationInfo.temporary)
+                                SPUtil.put(KEY_LEVEL, authorizationInfo.level.toString())
                                 if (!authorizationInfo.effective) {
                                     RxBus.default!!.post(ValidateEvent("deactivate"))
-                                } else if (resultInfo.code == CODE_UNAUTHORIZED) {
-                                    RxBus.default!!.post(ValidateEvent("key not exists"))
                                 }
+                            } else{
+                                RxBus.default!!.post(ValidateEvent("key not exists"))
                             }
                         }catch (e: Exception){
                             if (e.message != null) Logger.d(e.message!!)
@@ -95,8 +94,11 @@ class ValidateAuth : Runnable {
                                     Gson().fromJson(s, object : TypeToken< com.wiatec.boblive.pojo.ResultInfo<VoucherUserInfo>>() {}.type) ?: return
                             Logger.d(resultInfo)
                             if (resultInfo.code == 200) {
-                                val voucherUserInfo: VoucherUserInfo = resultInfo.data
-                                SPUtil.put(Application.context!!, KEY_LEVEL, voucherUserInfo.level.toString())
+                                val voucherUserInfo: VoucherUserInfo = resultInfo.data!!
+                                SPUtil.put(KEY_LEVEL, voucherUserInfo.level.toString())
+                                val expiresTime = voucherUserInfo.expiresTime!!
+                                val remainTime = ""
+
                             }else{
                                 RxBus.default!!.post(ValidateEvent("validate fail"))
                             }

@@ -1,9 +1,7 @@
 package com.wiatec.boblive.view
 
-import com.wiatec.boblive.entity.ResultInfo
 import com.wiatec.boblive.pojo.AuthorizationInfo
-import com.wiatec.boblive.pojo.ChannelInfo
-import com.wiatec.boblive.pojo.ChannelTypeInfo
+import com.wiatec.boblive.pojo.ResultInfo
 import com.wiatec.boblive.pojo.UpgradeInfo
 
 /**

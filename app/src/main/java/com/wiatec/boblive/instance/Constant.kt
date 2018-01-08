@@ -4,6 +4,7 @@ package com.wiatec.boblive.instance
  * constant
  */
 const val URL_BASE = "http://boblive.protv.company:8080/boblive/"
+//const val URL_BASE = "http://172.27.0.106:8080/boblive/"
 const val URL_UPDATE = URL_BASE + "upgrade/"
 const val URL_CHANNEL_TYPE = URL_BASE + "channel_type/"
 const val URL_CHANNEL = URL_BASE + "channel/"

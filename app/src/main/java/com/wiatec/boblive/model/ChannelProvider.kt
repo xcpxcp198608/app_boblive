@@ -5,10 +5,10 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.px.kotlin.utils.Logger
 import com.px.kotlin.utils.SPUtil
-import com.wiatec.boblive.entity.CODE_OK
-import com.wiatec.boblive.entity.ResultInfo
 import com.wiatec.boblive.instance.*
+import com.wiatec.boblive.pojo.CODE_OK
 import com.wiatec.boblive.pojo.ChannelInfo
+import com.wiatec.boblive.pojo.ResultInfo
 import com.wiatec.boblive.utils.OkHttp.Listener.StringListener
 import com.wiatec.boblive.utils.OkHttp.OkMaster
 
@@ -28,7 +28,7 @@ class ChannelProvider : ListLoadableWithParam<ChannelInfo>{
                         val resultInfo: ResultInfo<ChannelInfo> = Gson().fromJson(s,
                                 object : TypeToken<ResultInfo<ChannelInfo>>(){}.type)
                         if(resultInfo.code == CODE_OK){
-                            val channelList: ArrayList<ChannelInfo> = resultInfo.data
+                            val channelList: ArrayList<ChannelInfo> = resultInfo.dataList as ArrayList<ChannelInfo>
 //                            Logger.d(channelList)
                             if(channelList.size > 0){
                                 onLoadListener.onSuccess(true, channelList)

@@ -37,6 +37,10 @@ class Application : android.app.Application() {
         startTask()
     }
 
+    private fun getContext(): Context? {
+        return context
+    }
+
     private fun startTask(){
         val timer = Timer()
         timer.schedule(PlayTokenTask(), 0, 3600000)

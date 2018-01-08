@@ -1,8 +1,10 @@
 package com.wiatec.boblive.utils.OkHttp.Request;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 
+import com.px.kotlin.utils.SPUtil;
 import com.wiatec.boblive.utils.OkHttp.Bean.DownloadInfo;
 import com.wiatec.boblive.utils.OkHttp.Listener.DownloadCallback;
 import com.wiatec.boblive.utils.OkHttp.Listener.DownloadListener;
@@ -28,6 +30,10 @@ public abstract class RequestMaster {
     public RequestMaster() {
         parameters = new Parameters();
         header = new Header();
+//        String cookie = (String) SPUtil.get("cookie", "");
+//        if(!TextUtils.isEmpty(cookie)){
+//            header.put("Cookie", cookie);
+//        }
     }
 
     public RequestMaster tag(Object tag){

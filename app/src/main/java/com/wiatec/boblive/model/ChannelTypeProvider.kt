@@ -5,9 +5,9 @@ import com.google.gson.reflect.TypeToken
 import com.px.kotlin.utils.Logger
 import com.wiatec.boblive.instance.TOKEN
 import com.wiatec.boblive.instance.URL_CHANNEL_TYPE
-import com.wiatec.boblive.entity.CODE_OK
-import com.wiatec.boblive.entity.ResultInfo
+import com.wiatec.boblive.pojo.CODE_OK
 import com.wiatec.boblive.pojo.ChannelTypeInfo
+import com.wiatec.boblive.pojo.ResultInfo
 import com.wiatec.boblive.utils.OkHttp.Listener.StringListener
 import com.wiatec.boblive.utils.OkHttp.OkMaster
 
@@ -25,7 +25,7 @@ class ChannelTypeProvider : ListLoadableWithParam<ChannelTypeInfo> {
                                 object: TypeToken<ResultInfo<ChannelTypeInfo>>(){}.type)
                         Logger.d(resultInfo)
                         if(resultInfo.code == CODE_OK){
-                            val channelTypeList: ArrayList<ChannelTypeInfo> = resultInfo.data
+                            val channelTypeList: ArrayList<ChannelTypeInfo> = resultInfo.dataList as ArrayList<ChannelTypeInfo>
                             if(channelTypeList.size > 0){
                                 onLoadListener.onSuccess(true, channelTypeList)
                             }else{

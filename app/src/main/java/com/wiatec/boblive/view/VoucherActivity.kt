@@ -7,7 +7,6 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import com.px.kotlin.utils.Logger
 import com.px.kotlin.utils.SPUtil
 import com.wiatec.boblive.R
 import com.wiatec.boblive.adapter.VoucherCategoryAdapter
@@ -67,6 +66,7 @@ class VoucherActivity :  BaseActivity<IVoucher, VoucherPresenter>(), IVoucher,
             spMonth.adapter = spMonthAdapter
             spPlan.onItemSelectedListener = this
             spMonth.onItemSelectedListener = this
+            spPlan.requestFocus()
         }
     }
 
@@ -79,7 +79,7 @@ class VoucherActivity :  BaseActivity<IVoucher, VoucherPresenter>(), IVoucher,
             R.id.spPlan -> {
                 if(position > 0) {
                     currentPrice = voucherUserCategoryInfoList!![position -1].price
-                    currentCategory = voucherUserCategoryInfoList!![position -1].category
+                    currentCategory = voucherUserCategoryInfoList!![position -1].category!!
                 }else{
                     currentPrice = 0f
                     currentCategory = ""
@@ -113,21 +113,25 @@ class VoucherActivity :  BaseActivity<IVoucher, VoucherPresenter>(), IVoucher,
                     EmojiToast.show("plan choose error", EmojiToast.EMOJI_SAD)
                     return
                 }
+                progressBar.visibility = View.VISIBLE
+                btActivate.visibility = View.GONE
                 presenter!!.activate(voucherId, currentCategory, currentMonth.toString())
             }
         }
     }
 
     override fun onActivate(execute: Boolean, resultInfo: ResultInfo<VoucherUserInfo>?) {
+        progressBar.visibility = View.GONE
+        btActivate.visibility = View.VISIBLE
         if(execute){
             if(resultInfo!!.code != 200){
-                EmojiToast.show(resultInfo.message, EmojiToast.EMOJI_SAD)
+                EmojiToast.show(resultInfo.message!!, EmojiToast.EMOJI_SAD)
                 return
             }
-            EmojiToast.show(resultInfo.message, EmojiToast.EMOJI_SMILE)
+            EmojiToast.show(resultInfo.message!!, EmojiToast.EMOJI_SMILE)
             val voucherUserInfo = resultInfo.data
             SPUtil.put(KEY_IS_VOUCHER, true)
-            SPUtil.put(KEY_LEVEL, voucherUserInfo.level)
+            SPUtil.put(KEY_LEVEL, voucherUserInfo!!.level)
             SPUtil.put(KEY_AUTHORIZATION, "voucher")
             startActivity(Intent(this, MainActivity::class.java))
             finish()

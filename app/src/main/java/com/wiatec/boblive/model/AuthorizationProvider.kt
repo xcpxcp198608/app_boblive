@@ -5,8 +5,8 @@ import com.google.gson.reflect.TypeToken
 import com.px.kotlin.utils.Logger
 import com.wiatec.boblive.instance.KEY_KEY
 import com.wiatec.boblive.instance.KEY_MAC
-import com.wiatec.boblive.entity.ResultInfo
 import com.wiatec.boblive.pojo.AuthorizationInfo
+import com.wiatec.boblive.pojo.ResultInfo
 import com.wiatec.boblive.utils.OkHttp.Listener.StringListener
 import com.wiatec.boblive.utils.OkHttp.OkMaster
 import com.wiatec.boblive.utils.SysUtil

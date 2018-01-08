@@ -18,14 +18,10 @@ import com.wiatec.boblive.presenter.MainPresenter
 import com.px.kotlin.utils.SPUtil
 import com.wiatec.boblive.*
 import com.wiatec.boblive.adapter.ChannelTypeAdapter
-import com.wiatec.boblive.entity.CODE_OK
-import com.wiatec.boblive.entity.ResultInfo
 import com.wiatec.boblive.instance.*
-import com.wiatec.boblive.pojo.AuthorizationInfo
-import com.wiatec.boblive.pojo.ChannelTypeInfo
-import com.wiatec.boblive.pojo.UpgradeInfo
 import kotlinx.android.synthetic.main.activity_main.*
 import android.view.WindowManager
+import com.wiatec.boblive.pojo.*
 import com.wiatec.boblive.task.PlayTokenTask
 import com.wiatec.boblive.utils.*
 
@@ -291,10 +287,11 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
 //        Logger.d(authorization)
         if(TextUtils.isEmpty(authorization)){
             showAuthorizationDialog()
-            return
         }else{
             if(!isVoucher) {
                 presenter!!.validateAuthorization(authorization)
+            }else{
+                showAuthorizationDialog()
             }
         }
     }
@@ -318,11 +315,11 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         textView.textSize = 16f
         textView.text = getString(R.string.n1)
         btConfirm.setOnClickListener {
-            SPUtil.put(this@MainActivity, "agree", true)
+            SPUtil.put("agree", true)
             alertDialog.dismiss()
         }
         btCancel.setOnClickListener {
-            SPUtil.put(this@MainActivity, "agree", false)
+            SPUtil.put("agree", false)
         }
     }
 
@@ -366,13 +363,14 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         if(!execute) return
         Logger.d(resultInfo!!)
         if(resultInfo.code == CODE_OK){
-            val authorizationInfo:AuthorizationInfo = resultInfo.obj
+            val authorizationInfo:AuthorizationInfo = resultInfo.data!!
             EmojiToast.show(getString(R.string.active_success), EmojiToast.EMOJI_SMILE)
-            SPUtil.put(Application.context!!, KEY_AUTHORIZATION, authorizationInfo.key!!)
-            SPUtil.put(Application.context!!, KEY_LEVEL, authorizationInfo.level.toString())
+            SPUtil.put(KEY_AUTHORIZATION, authorizationInfo.key!!)
+            SPUtil.put(KEY_LEVEL, authorizationInfo.level.toString())
+            SPUtil.put(KEY_IS_VOUCHER, false)
             initChannelType()
         }else{
-            EmojiToast.show(resultInfo.message, EmojiToast.EMOJI_SAD)
+            EmojiToast.show(resultInfo.message!!, EmojiToast.EMOJI_SAD)
             showAuthorizationDialog()
         }
     }
@@ -381,7 +379,7 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         if(!execute) return
         Logger.d(resultInfo!!)
         if(resultInfo.code == CODE_OK){
-            val authorizationInfo:AuthorizationInfo = resultInfo.obj
+            val authorizationInfo:AuthorizationInfo = resultInfo.data!!
             SPUtil.put(Application.context!!, KEY_AUTHORIZATION, authorizationInfo.key!!)
             SPUtil.put(Application.context!!, KEY_LEVEL, authorizationInfo.level.toString())
             SPUtil.put(Application.context!!, KEY_TEMPORARY, authorizationInfo.temporary)
@@ -391,7 +389,7 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
                         EmojiToast.EMOJI_SAD)
             }
         }else{
-            EmojiToast.show(resultInfo.message, EmojiToast.EMOJI_SAD)
+            EmojiToast.show(resultInfo.message!!, EmojiToast.EMOJI_SAD)
         }
     }
 

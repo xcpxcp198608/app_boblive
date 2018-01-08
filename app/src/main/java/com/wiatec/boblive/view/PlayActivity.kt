@@ -13,7 +13,6 @@ import android.view.View
 import android.view.Window
 import android.widget.Button
 import android.widget.RadioGroup
-import android.widget.TextView
 import com.px.kotlin.utils.Logger
 
 import com.wiatec.boblive.R
@@ -23,15 +22,14 @@ import com.wiatec.boblive.utils.OkHttp.Listener.StringListener
 import com.wiatec.boblive.utils.OkHttp.OkMaster
 import kotlinx.android.synthetic.main.activity_play.*
 import com.wiatec.boblive.utils.EmojiToast
-import com.wiatec.boblive.entity.ResultInfo
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.px.kotlin.utils.SPUtil
-import com.wiatec.boblive.entity.CODE_OK
 import com.wiatec.boblive.instance.*
 import android.os.Looper
 import android.os.Message
-import com.wiatec.boblive.R.string.send
+import com.wiatec.boblive.pojo.CODE_OK
+import com.wiatec.boblive.pojo.ResultInfo
 import com.wiatec.boblive.utils.SysUtil
 import java.text.DecimalFormat
 
@@ -131,9 +129,9 @@ class PlayActivity : AppCompatActivity(), SurfaceHolder.Callback, PlayManager.Pl
                         val resultInfo: ResultInfo<String> = Gson().fromJson(s,
                                 object: TypeToken<ResultInfo<String>>(){}.type)
                         if (resultInfo.code == CODE_OK) {
-                            EmojiToast.show(resultInfo.message, EmojiToast.EMOJI_SMILE)
+                            EmojiToast.show(resultInfo.message!!, EmojiToast.EMOJI_SMILE)
                         } else {
-                            EmojiToast.show(resultInfo.message, EmojiToast.EMOJI_SAD)
+                            EmojiToast.show(resultInfo.message!!, EmojiToast.EMOJI_SAD)
                         }
                     }
 
@@ -169,7 +167,7 @@ class PlayActivity : AppCompatActivity(), SurfaceHolder.Callback, PlayManager.Pl
             mediaPlayer = MediaPlayer()
         }
         val url = urlList[currentUrlPosition]
-//        Logger.d(url)
+        Logger.d(url)
         progressBar.visibility = View.VISIBLE
         mediaPlayer!!.reset()
         mediaPlayer!!.setDataSource(url)
@@ -217,6 +215,9 @@ class PlayActivity : AppCompatActivity(), SurfaceHolder.Callback, PlayManager.Pl
             mediaPlayer!!.stop()
             mediaPlayer!!.release()
             mediaPlayer = null
+        }
+        if(playManager != null){
+            playManager = null
         }
         send = false
     }
