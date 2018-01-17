@@ -3,6 +3,9 @@ package com.wiatec.boblive.view
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
@@ -15,7 +18,6 @@ import android.widget.TextView
 import com.px.kotlin.utils.Logger
 
 import com.wiatec.boblive.presenter.MainPresenter
-import com.px.kotlin.utils.SPUtil
 import com.wiatec.boblive.*
 import com.wiatec.boblive.adapter.ChannelTypeAdapter
 import com.wiatec.boblive.instance.*
@@ -24,6 +26,11 @@ import android.view.WindowManager
 import com.wiatec.boblive.pojo.*
 import com.wiatec.boblive.task.PlayTokenTask
 import com.wiatec.boblive.utils.*
+import com.px.kotlin.utils.SPUtil
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusChangeListener {
 
@@ -41,6 +48,7 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
             setContentView(R.layout.activity_main)
             showAgreementDialog()
             initChannelType()
+            showTimeAndData()
             tvVersion.text = AppUtil.getVersionName(this@MainActivity, packageName)
             btMenu.setOnClickListener { startActivity(Intent(this, AppsActivity::class.java)) }
             btSetting.setOnClickListener { AppUtil.launchApp(this, PACKAGE_NAME_SETTINGS) }
@@ -57,6 +65,22 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         checkValidate(this)
         presenter!!.checkUpgrade()
         presenter!!.loadAdImage()
+        showVoucherNoticeWillOutExpires()
+    }
+
+    private fun showVoucherNoticeWillOutExpires(){
+        val leftMillsSeconds = SPUtil.get(KEY_VOUCHER_LEFT_MILLS_SECOND, 0L) as Long
+        if (leftMillsSeconds in 1..259200999) {
+            val alertDialog = AlertDialog.Builder(this, R.style.dialog).create()
+            alertDialog.setCancelable(false)
+            alertDialog.show()
+            val window = alertDialog.window ?: return
+            window.setContentView(R.layout.dialog_notice)
+            val tvInfo = window.findViewById(R.id.tvInfo) as TextView
+            val btnConfirm = window.findViewById(R.id.btConfirm)
+            tvInfo.text = getString(R.string.out_expires)
+            btnConfirm.setOnClickListener { alertDialog.dismiss() }
+        }
     }
 
     private fun makeChannelTypeData(auth: String): ArrayList<ChannelTypeInfo> {
@@ -65,14 +89,24 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
             val c0 = ChannelTypeInfo(0, getString(R.string.mini_tag), getString(R.string.mini), "", "", 1, 0)
             channelTypeList.add(c0)
         }else {
-            val c1 = ChannelTypeInfo(0, getString(R.string.basic_tag), getString(R.string.basic), "", "", 1, 0)
-            val c2 = ChannelTypeInfo(0, getString(R.string.premium_tag), getString(R.string.premium), "", "", 1, 0)
-            val c3 = ChannelTypeInfo(0, getString(R.string.adult_tag), getString(R.string.adult), "", "", 1, 0)
-            val c4 = ChannelTypeInfo(0, getString(R.string.film_tag), getString(R.string.film), "", "", 1, 0)
-            channelTypeList.add(c1)
-            channelTypeList.add(c2)
-            channelTypeList.add(c3)
-            channelTypeList.add(c4)
+            val isVoucher = SPUtil.get(KEY_IS_VOUCHER, false) as Boolean
+            if(isVoucher){
+                val c1 = ChannelTypeInfo(0, getString(R.string.basic_tag), getString(R.string.basic), "", "", 1, 0)
+                val c2 = ChannelTypeInfo(0, getString(R.string.premium_tag), getString(R.string.premium), "", "", 1, 0)
+                val c3 = ChannelTypeInfo(0, getString(R.string.film_tag), getString(R.string.film), "", "", 1, 0)
+                channelTypeList.add(c1)
+                channelTypeList.add(c2)
+                channelTypeList.add(c3)
+            }else {
+                val c1 = ChannelTypeInfo(0, getString(R.string.basic_tag), getString(R.string.basic), "", "", 1, 0)
+                val c2 = ChannelTypeInfo(0, getString(R.string.premium_tag), getString(R.string.premium), "", "", 1, 0)
+                val c3 = ChannelTypeInfo(0, getString(R.string.adult_tag), getString(R.string.adult), "", "", 1, 0)
+                val c4 = ChannelTypeInfo(0, getString(R.string.film_tag), getString(R.string.film), "", "", 1, 0)
+                channelTypeList.add(c1)
+                channelTypeList.add(c2)
+                channelTypeList.add(c3)
+                channelTypeList.add(c4)
+            }
         }
         return channelTypeList
     }
@@ -121,13 +155,24 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
     }
 
     fun showChannel(type: String, position: Int){
-        val intent = when(position){
-            0,1,2 -> Intent(this@MainActivity, ChannelActivity::class.java)
-            3 -> Intent(this@MainActivity, ChannelTypeActivity::class.java)
-            else -> Intent("")
+        val isVoucher = SPUtil.get(KEY_IS_VOUCHER, false) as Boolean
+        if(isVoucher) {
+            val intent = when (position) {
+                0, 1-> Intent(this@MainActivity, ChannelActivity::class.java)
+                2 -> Intent(this@MainActivity, ChannelTypeActivity::class.java)
+                else -> Intent("")
+            }
+            intent.putExtra(TYPE_CHANNEL, type)
+            startActivity(intent)
+        }else{
+            val intent = when (position) {
+                0, 1, 2-> Intent(this@MainActivity, ChannelActivity::class.java)
+                3 -> Intent(this@MainActivity, ChannelTypeActivity::class.java)
+                else -> Intent("")
+            }
+            intent.putExtra(TYPE_CHANNEL, type)
+            startActivity(intent)
         }
-        intent.putExtra(TYPE_CHANNEL, type)
-        startActivity(intent)
     }
 
     private fun handleProtect(tag: String, position: Int) {
@@ -407,5 +452,73 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         }else{
             Zoom.zoomIn12to10(v)
         }
+    }
+
+    private val handler = object : Handler(Looper.getMainLooper()) {
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+            when (msg.what) {
+                1 -> {
+                    val isVoucher = SPUtil.get(KEY_IS_VOUCHER, false) as Boolean
+                    val auth = SPUtil.get(KEY_AUTHORIZATION, "") as String
+                    if (isVoucher && !TextUtils.isEmpty(auth)) {
+                        tvLeftTime.text = msg.obj as String
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showTimeAndData() {
+        Application.executorService!!.execute(Runnable {
+            try {
+                while (true) {
+                    Thread.sleep(1000)
+                    val expiresTime = SPUtil.get(KEY_VOUCHER_EXPIRES_TIME, "") as String
+                    val leftTime = getLeftTimeToExpires(expiresTime)
+                    handler.obtainMessage(1, leftTime).sendToTarget()
+                }
+            } catch (e: Exception) {
+                Logger.e(e.message!!)
+            }
+        })
+    }
+
+    private fun getUnixFromStr(time: String): Long {
+        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
+                Locale("en"))
+        val date: Date
+        try {
+            date = simpleDateFormat.parse(time)
+        } catch (e: ParseException) {
+            return 0
+        }
+        return date.time
+    }
+
+    private fun getLeftTimeToExpires(expiresTime: String): String {
+        if(TextUtils.isEmpty(expiresTime)) return ""
+        val exTime = getUnixFromStr(expiresTime)
+        val now = System.currentTimeMillis()
+        val lTime = exTime - now
+        if (lTime <= 0) {
+            return ""
+        }
+        var day = 0
+        var hour = 0
+        var minute = 0
+        val second = lTime / 1000
+        if (second > 60) {
+            minute = (second / 60).toInt()
+        }
+        if (minute > 60) {
+            hour = minute / 60
+            minute %= 60
+        }
+        if (hour > 24) {
+            day = hour / 24
+            hour %= 24
+        }
+        return day.toString() + "D--" + hour + "H--" + minute + "M"
     }
 }

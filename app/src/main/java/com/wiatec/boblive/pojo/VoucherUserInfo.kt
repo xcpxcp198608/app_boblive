@@ -4,10 +4,10 @@ class VoucherUserInfo {
 
     var id: Int = 0
     var mac: String? = null
-    var category: String? = null
     var voucherId: String? = null
     var level: Int = 0
-    var month: Int = 0
+    var days: Int = 0
+    var price: Float = 0F
     var activateTime: String? = null
     var expiresTime: String? = null
     var createTime: String? = null
@@ -16,10 +16,10 @@ class VoucherUserInfo {
         return "VoucherUserInfo{" +
                 "id=" + id +
                 ", mac='" + mac + '\'' +
-                ", category='" + category + '\'' +
                 ", voucherId='" + voucherId + '\'' +
                 ", level=" + level +
-                ", month=" + month +
+                ", month=" + days +
+                ", price=" + price +
                 ", activateTime='" + activateTime + '\'' +
                 ", expiresTime='" + expiresTime + '\'' +
                 ", createTime='" + createTime + '\'' +

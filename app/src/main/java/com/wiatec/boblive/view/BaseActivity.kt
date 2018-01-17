@@ -13,6 +13,7 @@ import com.px.kotlin.utils.SPUtil
 import com.wiatec.boblive.instance.Application
 import com.wiatec.boblive.instance.KEY_AUTHORIZATION
 import com.wiatec.boblive.R
+import com.wiatec.boblive.instance.KEY_IS_VOUCHER
 
 import com.wiatec.boblive.presenter.BasePresenter
 import com.wiatec.boblive.rxevent.ValidateEvent

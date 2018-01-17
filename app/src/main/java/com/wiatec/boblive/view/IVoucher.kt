@@ -11,6 +11,5 @@ import com.wiatec.boblive.pojo.VoucherUserInfo
  */
 interface IVoucher {
 
-    fun onCategory(execute: Boolean, resultInfo: ResultInfo<VoucherUserCategoryInfo>?)
     fun onActivate(execute: Boolean, resultInfo: ResultInfo<VoucherUserInfo>?)
 }

@@ -41,7 +41,7 @@ class PlayTokenTask: TimerTask() {
                             val jsonObject = JSONObject(s)
                             val data = jsonObject.getJSONObject("data")
                             val streamToken = data.getString("token")
-                            Logger.d(streamToken)
+//                            Logger.d(streamToken)
                             if(!TextUtils.isEmpty(streamToken)) {
                                 SPUtil.put(Application.context!!, "streamToken", streamToken)
                             }

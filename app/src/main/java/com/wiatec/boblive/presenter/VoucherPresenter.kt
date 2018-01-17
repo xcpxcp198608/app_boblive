@@ -17,16 +17,8 @@ class VoucherPresenter(val iVoucher: IVoucher): BasePresenter<IVoucher>() {
 
     private val voucherProvider: VoucherProvider = VoucherProvider()
 
-    fun getCategory(){
-        voucherProvider.getCategory(object : Loadable.OnLoadListener<ResultInfo<VoucherUserCategoryInfo>>{
-            override fun onSuccess(execute: Boolean, t: ResultInfo<VoucherUserCategoryInfo>?) {
-                iVoucher.onCategory(execute, t)
-            }
-        })
-    }
-
-    fun activate(voucherId: String, category: String, month: String){
-        voucherProvider.activate(voucherId, category, month,
+    fun activate(voucherId: String, days: String, price: String){
+        voucherProvider.activate(voucherId, days, price,
                 object : LoadableWithParams.OnLoadListener<ResultInfo<VoucherUserInfo>>{
                     override fun onSuccess(execute: Boolean, t: ResultInfo<VoucherUserInfo>?) {
                         iVoucher.onActivate(execute, t)

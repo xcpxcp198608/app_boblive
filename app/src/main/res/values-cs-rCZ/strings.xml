@@ -17,7 +17,6 @@
     <string name="wifi">Zvolte Wifi:</string>
     <string name="notice">Poznámka</string>
     <string name="confirm">POTVRDIT</string>
-    <string name="voucher">Activate by voucher</string>
     <string name="cancel">ZRUŠIT</string>
     <string name="reset">Vymazat</string>
     <string name="yes">Áno</string>
@@ -80,9 +79,22 @@
     <string name="ok">OK</string>
     <string name="notice_reset">Zadajte aktivační kód</string>
     <string name="notice_reset_error">Aktivační kód neni správny.</string>
-    <string name="total_amount">Total amount =</string>
-    <string name="plan_description">Plan Description</string>
-    <string name="type_in_voucher_id">type in voucher id</string>
-    <string name="activate">Activate</string>
+
+
+    <string name="please_choose_plan">Prosím zvolte si svůj tarif:</string>
+    <string name="choose_plan">Vyberte si svůj tarif</string>
+    <string name="plan11"><![CDATA[11 dnů -> 100 CZK]]></string>
+    <string name="plan22"><![CDATA[22 dnů -> 200 CZK]]></string>
+    <string name="plan33"><![CDATA[33 dnů -> 300 CZK]]></string>
+    <string name="plan66"><![CDATA[66 dnů -> 600 CZK]]></string>
+    <string name="plan111"><![CDATA[111 dnů -> 1000 CZK]]></string>
+    <string name="type_in_voucher_id">Zadejte kód svého voucheru</string>
+    <string name="activate">Aktivovat</string>
+
+
+    <string name="voucher">Activate by voucher</string>
+    <string name="out_expires">Your voucher time will be out expires soon, please activate</string>
+    <string name="voucher_input_error">voucher id input error</string>
+    <string name="plan_choose_error">plan choose error</string>
 
 </resources>

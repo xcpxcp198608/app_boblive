@@ -3,8 +3,8 @@ package com.wiatec.boblive.instance
 /**
  * constant
  */
-const val URL_BASE = "http://boblive.protv.company:8080/boblive/"
-//const val URL_BASE = "http://172.27.0.106:8080/boblive/"
+//const val URL_BASE = "http://boblive.protv.company:8080/boblive/"
+const val URL_BASE = "http://172.27.0.106:8080/boblive/"
 const val URL_UPDATE = URL_BASE + "upgrade/"
 const val URL_CHANNEL_TYPE = URL_BASE + "channel_type/"
 const val URL_CHANNEL = URL_BASE + "channel/"
@@ -12,7 +12,6 @@ const val URL_AD_IMAGE = URL_BASE + "adimage/"
 const val URL_ERROR_REPORT_SEND = URL_BASE + "report/send"
 const val URL_ACTIVE = URL_BASE + "auth/active"
 const val URL_VALIDATE = URL_BASE + "auth/validate"
-const val URL_VOUCHER_CATEGORY = URL_BASE + "voucher/user/category"
 const val URL_VOUCHER_ACTIVATE = URL_BASE + "voucher/user/activate"
 const val URL_VOUCHER_VALIDATE = URL_BASE + "voucher/user/validate/"
 const val TOKEN = "/9B67E88314F416F2092AB8ECA6A7C8EDCCE3D6D85A816E6E6F9F919B2E6C277D"
@@ -40,6 +39,8 @@ const val KEY_COUNTRY = "country"
 const val KEY_FIRST_BOOT = "isFirstBoot"
 const val KEY_AUTHORIZATION = "authorization"
 const val KEY_IS_VOUCHER = "isVoucher"
+const val KEY_VOUCHER_EXPIRES_TIME = "VoucherExpiresTime"
+const val KEY_VOUCHER_LEFT_MILLS_SECOND = "LeftMillsSeconds"
 
 const val LANGUAGE_SK = "sk"
 const val LANGUAGE_CS = "cs"

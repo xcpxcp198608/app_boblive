@@ -19,6 +19,10 @@ import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
 import java.io.IOException
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 /**
  * check user login status
@@ -90,15 +94,14 @@ class ValidateAuth : Runnable {
                         if (response == null) return
                         try {
                             val s: String = response.body().string()
-                            val resultInfo: com.wiatec.boblive.pojo.ResultInfo<VoucherUserInfo> =
-                                    Gson().fromJson(s, object : TypeToken< com.wiatec.boblive.pojo.ResultInfo<VoucherUserInfo>>() {}.type) ?: return
-                            Logger.d(resultInfo)
+                            val resultInfo: ResultInfo<VoucherUserInfo> =
+                                    Gson().fromJson(s, object : TypeToken<ResultInfo<VoucherUserInfo>>() {}.type) ?: return
+//                            Logger.d(resultInfo)
                             if (resultInfo.code == 200) {
                                 val voucherUserInfo: VoucherUserInfo = resultInfo.data!!
                                 SPUtil.put(KEY_LEVEL, voucherUserInfo.level.toString())
                                 val expiresTime = voucherUserInfo.expiresTime!!
-                                val remainTime = ""
-
+                                SPUtil.put(KEY_VOUCHER_EXPIRES_TIME, expiresTime)
                             }else{
                                 RxBus.default!!.post(ValidateEvent("validate fail"))
                             }
@@ -108,4 +111,6 @@ class ValidateAuth : Runnable {
                     }
                 })
     }
+
+
 }

@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import com.px.kotlin.utils.Logger
 import com.px.kotlin.utils.SPUtil
 import com.wiatec.boblive.R
 import com.wiatec.boblive.adapter.VoucherCategoryAdapter
@@ -23,12 +24,11 @@ import kotlinx.android.synthetic.main.activity_voucher.*
 class VoucherActivity :  BaseActivity<IVoucher, VoucherPresenter>(), IVoucher,
         AdapterView.OnItemSelectedListener, View.OnClickListener {
 
-    private val monthArray = arrayOf("choose month", "1", "2", "3", "6", "12", "24", "36")
+
+    private val daysArray = arrayOf(11, 22, 33, 66, 111)
+    private val priceArray = arrayOf(100F, 200F, 300F, 600F, 1000F)
     private var currentPrice = 0f
-    private var currentMonth = 0
-    private var currentAmount = 0f
-    private var currentCategory = ""
-    private var voucherUserCategoryInfoList: ArrayList<VoucherUserCategoryInfo>? = null
+    private var currentDays = 0
 
     override fun createPresenter(): VoucherPresenter {
         return VoucherPresenter(this)
@@ -38,36 +38,20 @@ class VoucherActivity :  BaseActivity<IVoucher, VoucherPresenter>(), IVoucher,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_voucher)
         btActivate.setOnClickListener(this)
-        presenter!!.getCategory()
+        initSpinner()
     }
 
-    override fun onCategory(execute: Boolean, resultInfo: ResultInfo<VoucherUserCategoryInfo>?) {
-        if(execute){
-            if(resultInfo!!.code != 200){
-                return
-            }
-            val list: ArrayList<VoucherUserCategoryInfo> = resultInfo.dataList as ArrayList<VoucherUserCategoryInfo>
-            if(list.size <= 0) return
-            voucherUserCategoryInfoList = list
-            val voucherCategoryAdapter = VoucherCategoryAdapter(list)
-            rcvCategory.adapter = voucherCategoryAdapter
-            rcvCategory.layoutManager = GridLayoutManager(this, list.size)
-
-            val planArray = arrayOfNulls<String>(list.size + 1)
-            planArray[0] = "choose plan"
-            for ((index, value) in list.withIndex()){
-                planArray[index + 1] = value.category
-            }
-            val spPlanAdapter = ArrayAdapter<String>(this, R.layout.spinner_item, planArray)
-            spPlanAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
-            spPlan.adapter = spPlanAdapter
-            val spMonthAdapter = ArrayAdapter<String>(this, R.layout.spinner_item, monthArray)
-            spMonthAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
-            spMonth.adapter = spMonthAdapter
-            spPlan.onItemSelectedListener = this
-            spMonth.onItemSelectedListener = this
-            spPlan.requestFocus()
-        }
+    private fun initSpinner(){
+        val planArray = arrayOf(getString(R.string.choose_plan),
+                getString(R.string.plan11),
+                getString(R.string.plan22),
+                getString(R.string.plan33),
+                getString(R.string.plan66),
+                getString(R.string.plan111))
+        val spPlanAdapter = ArrayAdapter<String>(this, R.layout.spinner_item, planArray)
+        spPlanAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
+        spPlan.adapter = spPlanAdapter
+        spPlan.onItemSelectedListener = this
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -78,23 +62,14 @@ class VoucherActivity :  BaseActivity<IVoucher, VoucherPresenter>(), IVoucher,
         when (parent!!.id){
             R.id.spPlan -> {
                 if(position > 0) {
-                    currentPrice = voucherUserCategoryInfoList!![position -1].price
-                    currentCategory = voucherUserCategoryInfoList!![position -1].category!!
+                    currentPrice = priceArray[position -1]
+                    currentDays = daysArray[position -1]
                 }else{
                     currentPrice = 0f
-                    currentCategory = ""
-                }
-            }
-            R.id.spMonth -> {
-                currentMonth = if(position > 0) {
-                    Integer.parseInt(monthArray[position])
-                }else{
-                    0
+                    currentDays = 0
                 }
             }
         }
-        currentAmount = currentMonth * currentPrice
-        tvAmount.text = getString(R.string.total_amount) + currentAmount
     }
 
     override fun onClick(v: View?) {
@@ -102,20 +77,16 @@ class VoucherActivity :  BaseActivity<IVoucher, VoucherPresenter>(), IVoucher,
             R.id.btActivate -> {
                 val voucherId = etVoucherId.text.toString().trim()
                 if(voucherId.isEmpty()){
-                    EmojiToast.show("voucher id input error", EmojiToast.EMOJI_SAD)
+                    EmojiToast.show(getString(R.string.voucher_input_error), EmojiToast.EMOJI_SAD)
                     return
                 }
-                if(currentMonth <= 0){
-                    EmojiToast.show("month choose error", EmojiToast.EMOJI_SAD)
-                    return
-                }
-                if(currentCategory.isEmpty()){
-                    EmojiToast.show("plan choose error", EmojiToast.EMOJI_SAD)
+                if(currentDays <= 0 || currentPrice <=0 ){
+                    EmojiToast.show(getString(R.string.plan_choose_error), EmojiToast.EMOJI_SAD)
                     return
                 }
                 progressBar.visibility = View.VISIBLE
                 btActivate.visibility = View.GONE
-                presenter!!.activate(voucherId, currentCategory, currentMonth.toString())
+                presenter!!.activate(voucherId, currentDays.toString(), currentPrice.toString())
             }
         }
     }

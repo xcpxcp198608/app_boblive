@@ -21,6 +21,7 @@ class Application : android.app.Application() {
 
     companion object {
         var context: Context? = null
+        var executorService: ExecutorService? = null
     }
 
     override fun onCreate() {
@@ -30,10 +31,12 @@ class Application : android.app.Application() {
         val language:  String = SPUtil.get(this@Application, KEY_LANGUAGE, "sk") as String
         val country:  String = SPUtil.get(this@Application, KEY_COUNTRY, "SK") as String
         LanguageManager.setLanguage(language, country)
-        val executorService:ExecutorService = Executors.newCachedThreadPool()
-        executorService.execute(ValidateAuth())
-        executorService.execute(DownloadAdImage())
-        executorService.execute(LoadInstalledApp())
+        executorService = Executors.newCachedThreadPool()
+        if(executorService != null) {
+            executorService!!.execute(ValidateAuth())
+            executorService!!.execute(DownloadAdImage())
+            executorService!!.execute(LoadInstalledApp())
+        }
         startTask()
     }
 
