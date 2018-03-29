@@ -18,8 +18,7 @@ import com.wiatec.boblive.instance.KEY_IS_VOUCHER
 import com.wiatec.boblive.presenter.BasePresenter
 import com.wiatec.boblive.rxevent.ValidateEvent
 import com.wiatec.boblive.utils.RxBus
-import rx.Subscription
-import rx.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 
 /**
  * Created by patrick on 17/06/2017.
@@ -30,7 +29,7 @@ abstract class BaseActivity<V, T : BasePresenter<V>> : AppCompatActivity() {
 
     abstract fun createPresenter(): T
     var presenter: T? = null
-    private var validateSubscription:Subscription? = null
+    private var disposable:Disposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,11 +40,10 @@ abstract class BaseActivity<V, T : BasePresenter<V>> : AppCompatActivity() {
     }
 
     protected fun checkValidate(context: Context){
-        validateSubscription = RxBus.default!!.toObservable(ValidateEvent::class.java)
-                .observeOn(AndroidSchedulers.mainThread())
+        disposable = RxBus.default!!.subscribe(ValidateEvent::class.java)
                 .subscribe{ (message) ->
                     showValidateErrorDialog(context, message)
-                    validateSubscription!!.unsubscribe()
+                    disposable!!.dispose()
                 }
     }
 
@@ -71,8 +69,8 @@ abstract class BaseActivity<V, T : BasePresenter<V>> : AppCompatActivity() {
         if(presenter != null) {
             presenter!!.detach()
         }
-        if(validateSubscription != null){
-            validateSubscription!!.unsubscribe()
+        if(disposable != null){
+            disposable!!.dispose()
         }
     }
 }

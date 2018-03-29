@@ -1,19 +1,26 @@
 package com.wiatec.boblive.utils.OkHttp.Listener;
 
+import android.text.TextUtils;
+
 import com.px.kotlin.utils.SPUtil;
+
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
 import java.io.IOException;
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.subjects.Subject;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Headers;
 import okhttp3.Response;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
 
 /**
  * Created by patrick on 2016/12/22.
@@ -32,9 +39,9 @@ public abstract class StringListener implements Callback {
         }
         Observable.just(e.getMessage())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<String>() {
+                .subscribe(new Consumer<String>() {
                     @Override
-                    public void call(String s) {
+                    public void accept(String s) throws Exception {
                         onFailure(s);
                     }
                 });
@@ -51,22 +58,60 @@ public abstract class StringListener implements Callback {
 //            SPUtil.put("cookie", cookie);
         }
         Observable.just(response)
-                .map(new Func1<Response, String>() {
+                .map(new Function<Response, String>() {
                     @Override
-                    public String call(Response response) {
+                    public String apply(Response response) throws Exception {
                         try {
                             return response.body().string();
                         } catch (IOException e) {
                             e.printStackTrace();
-                            return null;
+                            return "";
                         }
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
+                .subscribe(new Subject<String>() {
                     @Override
-                    public void onCompleted() {
+                    public boolean hasObservers() {
+                        return false;
+                    }
 
+                    @Override
+                    public boolean hasThrowable() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean hasComplete() {
+                        return false;
+                    }
+
+                    @Override
+                    public Throwable getThrowable() {
+                        return null;
+                    }
+
+                    @Override
+                    protected void subscribeActual(Observer<? super String> observer) {
+
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        try {
+                            if(TextUtils.isEmpty(s)) {
+                                onFailure("request result is empty");
+                            }else{
+                                onSuccess(s);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
@@ -77,16 +122,8 @@ public abstract class StringListener implements Callback {
                     }
 
                     @Override
-                    public void onNext(String s) {
-                        try {
-                            if(s!=null) {
-                                onSuccess(s);
-                            }else{
-                                onFailure("request result is empty");
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                    public void onComplete() {
+
                     }
                 });
     }

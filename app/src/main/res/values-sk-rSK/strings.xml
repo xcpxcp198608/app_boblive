@@ -92,9 +92,9 @@
     <string name="activate">Aktivovat</string>
 
 
-    <string name="voucher">Activate by voucher</string>
-    <string name="out_expires">Your voucher time will be out expires soon, please activate</string>
-    <string name="voucher_input_error">voucher id input error</string>
-    <string name="plan_choose_error">plan choose error</string>
+    <string name="voucher">Aktivujte poukazem</string>
+    <string name="out_expires">Váš poukaz vyprší brzy, prosím aktivujte</string>
+    <string name="voucher_input_error">Vaše číslo poukazu je nesprávné</string>
+    <string name="plan_choose_error">Chyba v zadaném tarifu</string>
 
 </resources>

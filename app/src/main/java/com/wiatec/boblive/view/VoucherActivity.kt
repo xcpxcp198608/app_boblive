@@ -14,12 +14,11 @@ import com.wiatec.boblive.adapter.VoucherCategoryAdapter
 import com.wiatec.boblive.instance.KEY_AUTHORIZATION
 import com.wiatec.boblive.instance.KEY_IS_VOUCHER
 import com.wiatec.boblive.instance.KEY_LEVEL
-import com.wiatec.boblive.pojo.ResultInfo
-import com.wiatec.boblive.pojo.VoucherUserCategoryInfo
-import com.wiatec.boblive.pojo.VoucherUserInfo
+import com.wiatec.boblive.pojo.*
 import com.wiatec.boblive.presenter.VoucherPresenter
 import com.wiatec.boblive.utils.EmojiToast
 import kotlinx.android.synthetic.main.activity_voucher.*
+import java.util.regex.Pattern
 
 class VoucherActivity :  BaseActivity<IVoucher, VoucherPresenter>(), IVoucher,
         AdapterView.OnItemSelectedListener, View.OnClickListener {
@@ -80,15 +79,27 @@ class VoucherActivity :  BaseActivity<IVoucher, VoucherPresenter>(), IVoucher,
                     EmojiToast.show(getString(R.string.voucher_input_error), EmojiToast.EMOJI_SAD)
                     return
                 }
-                if(currentDays <= 0 || currentPrice <=0 ){
-                    EmojiToast.show(getString(R.string.plan_choose_error), EmojiToast.EMOJI_SAD)
-                    return
+                if(isNumber(voucherId)) {
+                    if(currentPrice <= 0){
+                        EmojiToast.show(getString(R.string.plan_choose_error), EmojiToast.EMOJI_SAD)
+                        return
+                    }
+                    progressBar.visibility = View.VISIBLE
+                    btActivate.visibility = View.GONE
+                    presenter!!.activate(voucherId, currentDays.toString(), currentPrice.toString())
+                }else{
+                    progressBar.visibility = View.VISIBLE
+                    btActivate.visibility = View.GONE
+                    presenter!!.activeAuthorization(voucherId)
                 }
-                progressBar.visibility = View.VISIBLE
-                btActivate.visibility = View.GONE
-                presenter!!.activate(voucherId, currentDays.toString(), currentPrice.toString())
             }
         }
+    }
+
+    private fun isNumber(s: String): Boolean {
+        val regex = "^[0-9]+$"
+        val pattern = Pattern.compile(regex)
+        return pattern.matcher(s).matches()
     }
 
     override fun onActivate(execute: Boolean, resultInfo: ResultInfo<VoucherUserInfo>?) {
@@ -107,5 +118,24 @@ class VoucherActivity :  BaseActivity<IVoucher, VoucherPresenter>(), IVoucher,
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
+    }
+
+
+    override fun activeAuthorization(execute: Boolean, resultInfo: ResultInfo<AuthorizationInfo>?) {
+        progressBar.visibility = View.GONE
+        btActivate.visibility = View.VISIBLE
+        if(!execute) return
+        Logger.d(resultInfo!!)
+        if(resultInfo.code != CODE_OK){
+            EmojiToast.show(resultInfo.message!!, EmojiToast.EMOJI_SAD)
+            return
+        }
+        val authorizationInfo: AuthorizationInfo = resultInfo.data!!
+        EmojiToast.show(getString(R.string.active_success), EmojiToast.EMOJI_SMILE)
+        SPUtil.put(KEY_AUTHORIZATION, authorizationInfo.key!!)
+        SPUtil.put(KEY_LEVEL, authorizationInfo.level.toString())
+        SPUtil.put(KEY_IS_VOUCHER, false)
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 }

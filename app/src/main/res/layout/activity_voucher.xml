@@ -16,25 +16,25 @@
         android:textColor="@color/colorAccent"
         android:textSize="45sp" />
 
-    <Spinner
-        android:id="@+id/spPlan"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/bg_focus"
-        android:layout_width="400dp"
-        android:layout_height="50dp"/>
-
     <EditText
+        android:layout_marginTop="50dp"
         android:id="@+id/etVoucherId"
         android:background="@drawable/bg_focus"
         android:layout_width="400dp"
         android:layout_height="50dp"
-        android:layout_marginTop="30dp"
         android:gravity="center"
         android:hint="@string/type_in_voucher_id"
-        android:inputType="number"
         android:textSize="30sp"
         android:textColor="@color/colorWhite"
         android:textColorHint="@color/colorGray" />
+
+
+    <Spinner
+        android:id="@+id/spPlan"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/bg_focus"
+        android:layout_width="400dp"
+        android:layout_height="50dp"/>
 
     <Button
         android:id="@+id/btActivate"

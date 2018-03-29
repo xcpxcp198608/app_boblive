@@ -25,7 +25,7 @@ class VoucherProvider{
                 .parames("price", price)
                 .enqueue(object : StringListener(){
                     override fun onSuccess(s: String?) {
-                        Logger.d(s!!)
+//                        Logger.d(s!!)
                         val resultInfo: ResultInfo<VoucherUserInfo> = Gson().fromJson(s,
                                 object : TypeToken<ResultInfo<VoucherUserInfo>>(){}.type)
                         onLoadListener.onSuccess(true, resultInfo)

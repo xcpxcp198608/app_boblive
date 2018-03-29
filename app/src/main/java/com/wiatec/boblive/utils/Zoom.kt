@@ -42,6 +42,17 @@ object Zoom {
         animatorSet.start()
     }
 
+    fun zoomIn01to20to10(view: View) {
+        val animator = ObjectAnimator.ofFloat(view, "scaleX", 0.1f, 2.0f, 1.0f)
+        val animator1 = ObjectAnimator.ofFloat(view, "scaleY", 0.1f, 2.0f, 1.0f)
+        val animator2 = ObjectAnimator.ofFloat(view, "alpha", 0.1f, 1.0f)
+        val animatorSet = AnimatorSet()
+        animatorSet.duration = 1000
+        animatorSet.play(animator).with(animator1).with(animator2)
+        animatorSet.start()
+    }
+
+
     fun zoomIn12to10(view: View) {
         val animator = ObjectAnimator.ofFloat(view, "scaleX", 1.2f, 1.0f)
         val animator1 = ObjectAnimator.ofFloat(view, "scaleY", 1.2f, 1.0f)

@@ -96,12 +96,24 @@ class ValidateAuth : Runnable {
                             val s: String = response.body().string()
                             val resultInfo: ResultInfo<VoucherUserInfo> =
                                     Gson().fromJson(s, object : TypeToken<ResultInfo<VoucherUserInfo>>() {}.type) ?: return
-//                            Logger.d(resultInfo)
+                            Logger.d(resultInfo)
                             if (resultInfo.code == 200) {
                                 val voucherUserInfo: VoucherUserInfo = resultInfo.data!!
                                 SPUtil.put(KEY_LEVEL, voucherUserInfo.level.toString())
                                 val expiresTime = voucherUserInfo.expiresTime!!
+                                val unixTime = getUnixFromStr(expiresTime)
+                                if(unixTime <= System.currentTimeMillis()){
+                                    SPUtil.put(KEY_AUTHORIZATION, "")
+                                }
                                 SPUtil.put(KEY_VOUCHER_EXPIRES_TIME, expiresTime)
+                                var leftMillsSeconds = System.currentTimeMillis() - getUnixFromStr(expiresTime)
+                                if(leftMillsSeconds < 0){leftMillsSeconds = 0}
+                                SPUtil.put(KEY_VOUCHER_LEFT_MILLS_SECOND, leftMillsSeconds)
+
+                                val level = voucherUserInfo.level
+                                if(level <= 0){
+                                    RxBus.default!!.post(ValidateEvent("level 0"))
+                                }
                             }else{
                                 RxBus.default!!.post(ValidateEvent("validate fail"))
                             }
@@ -110,6 +122,18 @@ class ValidateAuth : Runnable {
                         }
                     }
                 })
+    }
+
+    private fun getUnixFromStr(time: String): Long {
+        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
+                Locale("en"))
+        val date: Date
+        try {
+            date = simpleDateFormat.parse(time)
+        } catch (e: ParseException) {
+            return 0
+        }
+        return date.time
     }
 
 

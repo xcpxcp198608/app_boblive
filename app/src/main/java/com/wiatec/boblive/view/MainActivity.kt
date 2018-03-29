@@ -2,6 +2,7 @@ package com.wiatec.boblive.view
 
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -27,14 +28,22 @@ import com.wiatec.boblive.pojo.*
 import com.wiatec.boblive.task.PlayTokenTask
 import com.wiatec.boblive.utils.*
 import com.px.kotlin.utils.SPUtil
+import io.reactivex.Observable
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.function.Consumer
 
 
 class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusChangeListener {
 
     private var isFirstBoot: Boolean = true
+    private var disposable: Disposable? = null
+    private var showDaysAnimate = false
 
     override fun createPresenter(): MainPresenter = MainPresenter(this)
 
@@ -52,7 +61,7 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
             tvVersion.text = AppUtil.getVersionName(this@MainActivity, packageName)
             btMenu.setOnClickListener { startActivity(Intent(this, AppsActivity::class.java)) }
             btSetting.setOnClickListener { AppUtil.launchApp(this, PACKAGE_NAME_SETTINGS) }
-            btPerson.setOnClickListener { authorization() }
+            btPerson.setOnClickListener { showAuthorizationDialog() }
             btMenu.onFocusChangeListener = this
             btSetting.onFocusChangeListener = this
             btPerson.onFocusChangeListener = this
@@ -70,7 +79,7 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
 
     private fun showVoucherNoticeWillOutExpires(){
         val leftMillsSeconds = SPUtil.get(KEY_VOUCHER_LEFT_MILLS_SECOND, 0L) as Long
-        if (leftMillsSeconds in 1..259200999) {
+        if (leftMillsSeconds in 1..259200000) {
             val alertDialog = AlertDialog.Builder(this, R.style.dialog).create()
             alertDialog.setCancelable(false)
             alertDialog.show()
@@ -373,35 +382,37 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
      * Confirm: checkAuthorization
      */
     private fun showAuthorizationDialog() {
-        val dialog = Dialog(this)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.show()
-//        dialog.setCancelable(false)
-        val window: Window = dialog.window
-        window.setContentView(R.layout.dialog_authorization)
-        val etAuthorization: EditText = window.findViewById(R.id.etAuthorization) as EditText
-        val btConfirm:Button = window.findViewById(R.id.btConfirm) as Button
-        val btVoucher:Button = window.findViewById(R.id.btVoucher) as Button
-        btConfirm.setOnClickListener {
-            val activeKey = etAuthorization.text.toString()
-            if(activeKey != TEST_ACTIVITY_KEY && (TextUtils.isEmpty(activeKey) ||
-                    activeKey.length < 16)){
-                EmojiToast.show(getString(R.string.error_key_format), EmojiToast.EMOJI_SAD)
-            }else {
-                if(!NetUtil.isConnected){
-                    EmojiToast.show(getString(R.string.no_network),
-                            EmojiToast.EMOJI_SAD)
-                    AppUtil.launchApp(this@MainActivity, PACKAGE_NAME_SETTINGS)
-                }else {
-                    presenter!!.activeAuthorization(activeKey)
-                }
-                dialog.dismiss()
-            }
-        }
-        btVoucher.setOnClickListener{
-            startActivity(Intent(this, VoucherActivity::class.java))
-            dialog.dismiss()
-        }
+
+        startActivity(Intent(this, VoucherActivity::class.java))
+//        val dialog = Dialog(this)
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+//        dialog.show()
+////        dialog.setCancelable(false)
+//        val window: Window = dialog.window
+//        window.setContentView(R.layout.dialog_authorization)
+//        val etAuthorization: EditText = window.findViewById(R.id.etAuthorization) as EditText
+//        val btConfirm:Button = window.findViewById(R.id.btConfirm) as Button
+//        val btVoucher:Button = window.findViewById(R.id.btVoucher) as Button
+//        btConfirm.setOnClickListener {
+//            val activeKey = etAuthorization.text.toString()
+//            if(activeKey != TEST_ACTIVITY_KEY && (TextUtils.isEmpty(activeKey) ||
+//                    activeKey.length < 16)){
+//                EmojiToast.show(getString(R.string.error_key_format), EmojiToast.EMOJI_SAD)
+//            }else {
+//                if(!NetUtil.isConnected){
+//                    EmojiToast.show(getString(R.string.no_network),
+//                            EmojiToast.EMOJI_SAD)
+//                    AppUtil.launchApp(this@MainActivity, PACKAGE_NAME_SETTINGS)
+//                }else {
+//                    presenter!!.activeAuthorization(activeKey)
+//                }
+//                dialog.dismiss()
+//            }
+//        }
+//        btVoucher.setOnClickListener{
+//            startActivity(Intent(this, VoucherActivity::class.java))
+//            dialog.dismiss()
+//        }
     }
 
     override fun activeAuthorization(execute: Boolean, resultInfo: ResultInfo<AuthorizationInfo>?) {
@@ -457,17 +468,47 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
     private val handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
-            when (msg.what) {
-                1 -> {
-                    val isVoucher = SPUtil.get(KEY_IS_VOUCHER, false) as Boolean
-                    val auth = SPUtil.get(KEY_AUTHORIZATION, "") as String
-                    if (isVoucher && !TextUtils.isEmpty(auth)) {
-                        tvLeftTime.text = msg.obj as String
+            try {
+                when (msg.what) {
+                    1 -> {
+                        val isVoucher = SPUtil.get(KEY_IS_VOUCHER, false) as Boolean
+                        val auth = SPUtil.get(KEY_AUTHORIZATION, "") as String
+                        if (isVoucher && !TextUtils.isEmpty(auth)) {
+                            val expiresTime = msg.obj as String
+                            val leftDays = getLeftDaysToExpires(expiresTime)
+                            tvLeftTime.text = leftDays.toString() + "D"
+                            if(leftDays <= 3){
+                                tvLeftTime.setTextColor(Color.RED)
+                                showDaysAnimate = true
+                            }else{
+                                tvLeftTime.setTextColor(Color.DKGRAY)
+                            }
+                        }
+                    }
+                    2-> {
+                        Zoom.zoomIn01to20to10(tvLeftTime)
                     }
                 }
+            }catch (e: Exception){
+                Logger.e(e)
             }
         }
     }
+
+    override fun onPause() {
+        super.onPause()
+        if(disposable != null){
+            disposable!!.dispose()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if(disposable != null){
+            disposable!!.dispose()
+        }
+    }
+
 
     private fun showTimeAndData() {
         Application.executorService!!.execute(Runnable {
@@ -475,14 +516,28 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
                 while (true) {
                     Thread.sleep(1000)
                     val expiresTime = SPUtil.get(KEY_VOUCHER_EXPIRES_TIME, "") as String
-                    val leftTime = getLeftTimeToExpires(expiresTime)
-                    handler.obtainMessage(1, leftTime).sendToTarget()
+                    handler.obtainMessage(1, expiresTime).sendToTarget()
+                }
+            } catch (e: Exception) {
+                Logger.e(e.message!!)
+            }
+        })
+        Application.executorService!!.execute(Runnable {
+            try {
+                while (true) {
+                    Thread.sleep(4000)
+                    if(showDaysAnimate) {
+                        handler.obtainMessage(2).sendToTarget()
+                    }
                 }
             } catch (e: Exception) {
                 Logger.e(e.message!!)
             }
         })
     }
+
+
+
 
     private fun getUnixFromStr(time: String): Long {
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
@@ -494,6 +549,17 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
             return 0
         }
         return date.time
+    }
+
+    private fun getLeftDaysToExpires(expiresTime: String): Int {
+        if(TextUtils.isEmpty(expiresTime)) return 0
+        val exTime = getUnixFromStr(expiresTime)
+        val now = System.currentTimeMillis()
+        val lTime = exTime - now
+        if (lTime <= 0) {
+            return 0
+        }
+        return (lTime / (3600000 * 24)).toInt()
     }
 
     private fun getLeftTimeToExpires(expiresTime: String): String {
@@ -521,4 +587,6 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         }
         return day.toString() + "D--" + hour + "H--" + minute + "M"
     }
+
+
 }
