@@ -481,6 +481,7 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
                                 tvLeftTime.setTextColor(Color.RED)
                                 showDaysAnimate = true
                             }else{
+                                showDaysAnimate = false
                                 tvLeftTime.setTextColor(Color.DKGRAY)
                             }
                         }
