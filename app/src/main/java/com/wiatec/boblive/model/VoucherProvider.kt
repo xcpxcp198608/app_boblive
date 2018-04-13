@@ -3,6 +3,8 @@ package com.wiatec.boblive.model
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.px.kotlin.utils.Logger
+import com.wiatec.boblive.instance.Application
+import com.wiatec.boblive.instance.KEY_LANG
 import com.wiatec.boblive.instance.URL_VOUCHER_ACTIVATE
 import com.wiatec.boblive.pojo.ResultInfo
 import com.wiatec.boblive.pojo.VoucherUserInfo
@@ -23,6 +25,7 @@ class VoucherProvider{
                 .parames("days", days)
                 .parames("mac", SysUtil.getEthernetMac())
                 .parames("price", price)
+                .parames(KEY_LANG, SysUtil.getLanguage(Application.context))
                 .enqueue(object : StringListener(){
                     override fun onSuccess(s: String?) {
 //                        Logger.d(s!!)

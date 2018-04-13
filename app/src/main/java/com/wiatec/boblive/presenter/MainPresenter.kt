@@ -18,7 +18,6 @@ class MainPresenter(val iMain: IMain): BasePresenter<IMain>() {
 
     private val upgradeProvider: UpgradeProvider = UpgradeProvider()
     private val authorizationProvider: AuthorizationProvider = AuthorizationProvider()
-    private val channelTypeProvider: ChannelTypeProvider = ChannelTypeProvider()
     private val adImageProvider: AdImageProvider = AdImageProvider()
 
     fun checkUpgrade(){

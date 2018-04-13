@@ -3,7 +3,9 @@ package com.wiatec.boblive.model
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.px.kotlin.utils.Logger
+import com.wiatec.boblive.instance.Application
 import com.wiatec.boblive.instance.KEY_KEY
+import com.wiatec.boblive.instance.KEY_LANG
 import com.wiatec.boblive.instance.KEY_MAC
 import com.wiatec.boblive.pojo.AuthorizationInfo
 import com.wiatec.boblive.pojo.ResultInfo
@@ -21,6 +23,7 @@ class AuthorizationProvider : LoadableWithParams<ResultInfo<AuthorizationInfo>>{
         OkMaster.post(url)
                 .parames(KEY_KEY, authorization)
                 .parames(KEY_MAC, SysUtil.getEthernetMac())
+                .parames(KEY_LANG, SysUtil.getLanguage(Application.context))
                 .enqueue(object : StringListener(){
                     override fun onSuccess(s: String?) {
                         val resultInfo:ResultInfo<AuthorizationInfo> = Gson().fromJson(s,

@@ -102,10 +102,8 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
             if(isVoucher){
                 val c1 = ChannelTypeInfo(0, getString(R.string.basic_tag), getString(R.string.basic), "", "", 1, 0)
                 val c2 = ChannelTypeInfo(0, getString(R.string.premium_tag), getString(R.string.premium), "", "", 1, 0)
-                val c3 = ChannelTypeInfo(0, getString(R.string.film_tag), getString(R.string.film), "", "", 1, 0)
                 channelTypeList.add(c1)
                 channelTypeList.add(c2)
-                channelTypeList.add(c3)
             }else {
                 val c1 = ChannelTypeInfo(0, getString(R.string.basic_tag), getString(R.string.basic), "", "", 1, 0)
                 val c2 = ChannelTypeInfo(0, getString(R.string.premium_tag), getString(R.string.premium), "", "", 1, 0)
@@ -168,7 +166,6 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         if(isVoucher) {
             val intent = when (position) {
                 0, 1-> Intent(this@MainActivity, ChannelActivity::class.java)
-                2 -> Intent(this@MainActivity, ChannelTypeActivity::class.java)
                 else -> Intent("")
             }
             intent.putExtra(TYPE_CHANNEL, type)
