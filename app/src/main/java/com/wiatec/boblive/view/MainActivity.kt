@@ -100,9 +100,7 @@ class MainActivity : BaseActivity<IMain, MainPresenter>(), IMain, View.OnFocusCh
         }else {
             val isVoucher = SPUtil.get(KEY_IS_VOUCHER, false) as Boolean
             if(isVoucher){
-                val c1 = ChannelTypeInfo(0, getString(R.string.basic_tag), getString(R.string.basic), "", "", 1, 0)
-                val c2 = ChannelTypeInfo(0, getString(R.string.premium_tag), getString(R.string.premium), "", "", 1, 0)
-                channelTypeList.add(c1)
+                val c2 = ChannelTypeInfo(0, getString(R.string.voucher_tag), getString(R.string.tv), "", "", 1, 0)
                 channelTypeList.add(c2)
             }else {
                 val c1 = ChannelTypeInfo(0, getString(R.string.basic_tag), getString(R.string.basic), "", "", 1, 0)

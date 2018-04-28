@@ -4,12 +4,14 @@
     <string name="app_name1">BOBLIVE</string>
     <string name="mini_tag">MINI</string>
     <string name="basic_tag">BASIC</string>
+    <string name="voucher_tag">VOUCHER</string>
     <string name="premium_tag">PREMIUM</string>
     <string name="adult_tag">ADULT</string>
     <string name="film_tag">FILMY</string>
     <string name="mini">MINI</string>
     <string name="basic">BASIC</string>
     <string name="premium">PREMIUM</string>
+    <string name="tv">TV</string>
     <string name="adult">PRO DOSPĚLÉ</string>
     <string name="film">Seriály</string>
 
